@@ -12,16 +12,16 @@
 *
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
-
+#include <string.h>
 #include <isa.h>
-
+#include <assert.h>
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ,
+  TK_NOTYPE = 256, TK_EQ, TK_NUM
 
   /* TODO: Add more token types */
 
@@ -39,6 +39,12 @@ static struct rule {
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"==", TK_EQ},        // equal
+  {"-",'-'},            //minus
+  {"\\*",'*'},          //multi
+  {"\\/",'/'},
+  {"\\(",'('},
+  {"\\)",')'},
+  {"\\d+",TK_NUM},
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -93,12 +99,39 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-
+        
         switch (rules[i].token_type) {
+          case '+':
+              tokens[nr_token].type = '+';
+              break;
+          case '-':
+              tokens[nr_token].type = '-';
+              break;
+          case '*':
+              tokens[nr_token].type = '*';
+              break;
+          case '/':
+              tokens[nr_token].type = '/';
+              break;
+          case '(':
+              tokens[nr_token].type = '(';
+              break;
+          case ')':
+              tokens[nr_token].type = ')';
+              break;
+          case TK_NOTYPE:
+              break;
+          case TK_EQ:
+              tokens[nr_token].type = TK_EQ;
+              break;
+          case TK_NUM:
+              tokens[nr_token].type = TK_NUM;
+              strncpy(tokens[nr_token].str,substr_start,substr_len);
+              tokens[nr_token].str[substr_len] = '\0';
+              break;
           default: TODO();
         }
-
-        break;
+        nr_token++;
       }
     }
 
@@ -111,6 +144,78 @@ static bool make_token(char *e) {
   return true;
 }
 
+bool check_parentheses(int p,int q){
+  if(tokens[p].type != "(" || tokens[q].type!= ')');
+    return false;
+
+  int match=0;
+  for(int i = p; i<=q; i++){
+    if(tokens[i]->type == '(') match++;
+    if(tokens[i]->type == ")") match--;
+    if(match < 0) return false;
+    if(match==0 && i<q) return false;
+  }
+  if(match != 0) 
+    return false;
+  else 
+    return true;
+}
+ 
+u_int32_t find_op(int p,int q){
+  int match = 0;
+  int32_t priority1 = -1;
+  int32_t priority2 = -1;
+  for(int i = p; i<=q; i++){
+    if(tokens[i].type == '(') match++;
+    if(tokens[i].type == ')') match--;
+
+    if(match ==0 )
+    {
+      switch (tokens[i].type)
+      {
+      case '+':
+      case '-':
+        priority1 = i;
+        break;
+
+      case '*':
+      case '/':
+        priority2 = i;
+      default:
+        break;
+      }
+    }
+  }
+  return (priority1 >=0 ? priority1 : priority2);
+}
+
+int32_t eval(int p, int q){
+  if(p > q){
+    assert(p <= q);
+  }
+  else if (p == q){
+    assert(tokens[p].type == TK_NUM);
+    return atoi(tokens[p].str);
+  }
+  else if (check_parentheses(p,q) == ture){
+
+    return eval(p+1, q-1);
+  }
+  else{
+    u_int32_t op = find_op(p,q);
+    int32_t val1 = eval(p,op-1);
+    int32_t val2 = eval(op+1,q);
+
+    int op_type = tokens[i].type;
+    switch(op_type){
+      case '+':return val1+val2;
+      case '-':return val1-val2;
+      case '*':return val1*val2;
+      case '/':return val1/val2;
+      default : assert(0);
+    }
+  }
+}
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -119,6 +224,9 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
+  int32_t result;
+  result = (0,nr_token);
+  printf("%d",result);
   TODO();
 
   return 0;

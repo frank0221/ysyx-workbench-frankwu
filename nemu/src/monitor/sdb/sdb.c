@@ -18,6 +18,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include <string.h>
+#include <memory/paddr.h>
 
 static int is_batch_mode = false;
 
@@ -54,6 +56,38 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args){
+  char *arg = strtok(NULL," ");
+  int i = atoi(arg);
+  cpu_exec(i);
+  return 0;
+}
+
+static int cmd_info(char *args){
+  char *arg = strtok(NULL," ");
+  if (strcmp(arg, "r") == 0) {
+    isa_reg_display();
+}
+  // else if(arg == 'w')
+  // {
+
+  // }
+  return 0;
+}
+
+static int cmd_x(char *args){
+  char *arg = strtok(NULL," ");
+  int i = atoi(arg);
+  char *addr = strtok(NULL," ");
+  uint32_t add = strtoul(addr, NULL, 16);;
+  for(int j=0;j<i;j++)
+  {
+    printf("0x%X :%d\n",add,paddr_read(add, 4));
+    add = add + 0x4;
+  }
+  return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -62,7 +96,12 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
-
+  { "si","Step through the program",cmd_si},
+  { "info","Print reg status and watchpoint info",cmd_info},
+  { "x","Scan the memory",cmd_x},
+  // { "p","Print the EXPR",cmd_p},
+  // { "w","Set watchpoint",cmd_w},
+  // { "d","Delete the watchpoint",cmd_d}
   /* TODO: Add more commands */
 
 };
