@@ -22,7 +22,7 @@
 #include <memory/paddr.h>
 
 static int is_batch_mode = false;
-
+void test_expr(void);
 void init_regex();
 void init_wp_pool();
 
@@ -78,14 +78,47 @@ static int cmd_info(char *args){
 static int cmd_x(char *args){
   char *arg = strtok(NULL," ");
   int i = atoi(arg);
-  char *addr = strtok(NULL," ");
-  uint32_t add = strtoul(addr, NULL, 16);;
+  // char *addr = strtok(NULL," ");
+  // uint32_t add = strtoul(addr, NULL, 16);;
+  // for(int j=0;j<i;j++)
+  // {
+  //   printf("0x%X :%d\n",add,paddr_read(add, 4));
+  //   add = add + 0x4;
+  // }
+  char *exp = strtok(NULL,"");
+  bool ok;
+  uint32_t result = expr(exp, &ok);
+  assert(ok==true);
+
+  // char *addr;
+  // sprintf(addr,"%d",result);
+  // result = strtoul(addr,NULL,16);
+  uint32_t add = result;
   for(int j=0;j<i;j++)
   {
     printf("0x%X :%d\n",add,paddr_read(add, 4));
     add = add + 0x4;
   }
   return 0;
+}
+
+static int cmd_p(char *args){
+  //char *arg = strtok(NULL," ");
+  //int n = atoi(arg);
+
+  char *exp = strtok(NULL,"");
+  bool ok;
+  int result = expr(exp, &ok);
+  assert(ok==true);
+  printf("expr = %d\n",result);
+  // uint32_t add = result;
+  // for(int j=0;j<n;j++)
+  // {
+  //   printf("0x%X :%d\n",add,paddr_read(add, 4));
+  //   add = add + 0x4;
+  // }
+  return 0;
+
 }
 
 static struct {
@@ -99,7 +132,7 @@ static struct {
   { "si","Step through the program",cmd_si},
   { "info","Print reg status and watchpoint info",cmd_info},
   { "x","Scan the memory",cmd_x},
-  // { "p","Print the EXPR",cmd_p},
+  { "p","Print the EXPR",cmd_p},
   // { "w","Set watchpoint",cmd_w},
   // { "d","Delete the watchpoint",cmd_d}
   /* TODO: Add more commands */
@@ -179,4 +212,6 @@ void init_sdb() {
 
   /* Initialize the watchpoint pool. */
   init_wp_pool();
+
+  test_expr();
 }

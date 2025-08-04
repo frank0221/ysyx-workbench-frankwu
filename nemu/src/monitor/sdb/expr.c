@@ -21,7 +21,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NUM
+  TK_NOTYPE = 256, TK_EQ, TK_NUM, TK_HEX
 
   /* TODO: Add more token types */
 
@@ -44,7 +44,9 @@ static struct rule {
   {"\\/",'/'},
   {"\\(",'('},
   {"\\)",')'},
-  {"\\d+",TK_NUM},
+  {"0[xX][0-9A-Fa-f]+",TK_HEX},
+  {"[0-9]+",TK_NUM}
+  
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -73,7 +75,7 @@ typedef struct token {
   char str[32];
 } Token;
 
-static Token tokens[32] __attribute__((used)) = {};
+static Token tokens[6000] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 static bool make_token(char *e) {
@@ -103,35 +105,49 @@ static bool make_token(char *e) {
         switch (rules[i].token_type) {
           case '+':
               tokens[nr_token].type = '+';
+              nr_token++;
               break;
           case '-':
               tokens[nr_token].type = '-';
+              nr_token++;
               break;
           case '*':
               tokens[nr_token].type = '*';
+              nr_token++;
               break;
           case '/':
               tokens[nr_token].type = '/';
+              nr_token++;
               break;
           case '(':
               tokens[nr_token].type = '(';
+              nr_token++;
               break;
           case ')':
               tokens[nr_token].type = ')';
+              nr_token++;
               break;
           case TK_NOTYPE:
               break;
           case TK_EQ:
               tokens[nr_token].type = TK_EQ;
+              nr_token++;
+              break;
+                    case(TK_HEX):
+              tokens[nr_token].type = TK_HEX;
+              strncpy(tokens[nr_token].str,substr_start,substr_len);
+              tokens[nr_token].str[substr_len] = '\0';
+              nr_token++;
               break;
           case TK_NUM:
               tokens[nr_token].type = TK_NUM;
               strncpy(tokens[nr_token].str,substr_start,substr_len);
               tokens[nr_token].str[substr_len] = '\0';
+              nr_token++;
               break;
           default: TODO();
         }
-        nr_token++;
+        break;
       }
     }
 
@@ -145,13 +161,13 @@ static bool make_token(char *e) {
 }
 
 bool check_parentheses(int p,int q){
-  if(tokens[p].type != "(" || tokens[q].type!= ')');
+  if(tokens[p].type != '(' || tokens[q].type!= ')')
     return false;
 
   int match=0;
   for(int i = p; i<=q; i++){
-    if(tokens[i]->type == '(') match++;
-    if(tokens[i]->type == ")") match--;
+    if(tokens[i].type == '(') match++;
+    if(tokens[i].type == ')') match--;
     if(match < 0) return false;
     if(match==0 && i<q) return false;
   }
@@ -194,10 +210,10 @@ int32_t eval(int p, int q){
     assert(p <= q);
   }
   else if (p == q){
-    assert(tokens[p].type == TK_NUM);
-    return atoi(tokens[p].str);
+   // assert(tokens[p].type == TK_NUM || tokens[p].type == TK_HEX);
+    return strtoul(tokens[p].str,NULL,0);
   }
-  else if (check_parentheses(p,q) == ture){
+  else if (check_parentheses(p,q) == true){
 
     return eval(p+1, q-1);
   }
@@ -206,7 +222,7 @@ int32_t eval(int p, int q){
     int32_t val1 = eval(p,op-1);
     int32_t val2 = eval(op+1,q);
 
-    int op_type = tokens[i].type;
+    int op_type = tokens[op].type;
     switch(op_type){
       case '+':return val1+val2;
       case '-':return val1-val2;
@@ -215,9 +231,10 @@ int32_t eval(int p, int q){
       default : assert(0);
     }
   }
+  return 0;
 }
 
-word_t expr(char *e, bool *success) {
+int32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
     return 0;
@@ -225,9 +242,42 @@ word_t expr(char *e, bool *success) {
 
   /* TODO: Insert codes to evaluate the expression. */
   int32_t result;
-  result = (0,nr_token);
-  printf("%d",result);
-  TODO();
+  result = eval(0,nr_token-1);
+  //printf("%d",result);
+  //TODO();
+  *success =true;
+  return result;
+}
 
-  return 0;
+void test_expr(){
+  FILE *fp = fopen("/home/frank_wu/ysyx-workbench/nemu/tools/gen-expr/input","r");
+  assert(fp != NULL);
+
+  char line[60000];
+  int total=0,pass=0;
+  while(fgets(line,sizeof(line),fp))
+  {
+    line[strlen(line)-1]='\0';
+    char *correct;
+    correct = strtok(line," ");
+
+    int i = atoi(correct);
+    char *arg = strtok(NULL," ");
+
+    // unsigned expect;
+    // char expr[sizeof(line)];
+    // if (sscanf(line, "%u %65535[^\n]", &expect, expr) != 2) continue;
+    int j;
+    bool a;
+    j = expr(arg, &a);
+    ++total;
+    if(i == j && a){
+      printf("pass! expected:%d got:%d\n",i,j);
+      pass++;
+    }
+    else
+      printf("failed");
+  }
+  printf("passed %d total %d\n",pass,total);
+  fclose(fp);
 }

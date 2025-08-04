@@ -31,8 +31,68 @@ static char *code_format =
 "  return 0; "
 "}";
 
-static void gen_rand_expr() {
-  buf[0] = '\0';
+void  gen_num(){
+  char buff[16];
+  snprintf(buff,sizeof(buff),"%d",rand()%100);
+  strcat(buf,buff);
+}
+
+void gen(char arg){
+  size_t len = strlen(buf);
+  buf[len]   = arg;   // 直接写入字符
+  buf[len+1] = '\0';  // 手动补 0
+}
+
+void gen_rand_op(){
+  int i = rand()%4;
+  char j;
+  switch (i)
+  {
+  case 0:
+    j = '+';
+    gen(j);
+    break;
+
+  case 1:
+    j = '-';
+    gen(j);
+    break;
+  
+    case 2:
+    j = '*';
+    gen(j);
+    break;
+
+  case 3:
+    j = '/';
+    gen(j);
+    break;
+
+  default:
+    break;
+  }
+}
+
+
+static void gen_rand_expr(int depth) {
+  
+
+  if(depth>5)
+  {
+    gen_num();
+    return;
+  }
+  int i = rand()%3;
+  switch(i){
+    case 0:
+      gen_num(); break;
+
+    case 1: 
+      gen('('); gen_rand_expr(depth+1); gen(')'); break;
+
+    default: 
+      gen_rand_expr(depth+1); gen_rand_op(); gen_rand_expr(depth+1); break;
+  }
 }
 
 int main(int argc, char *argv[]) {
@@ -44,7 +104,8 @@ int main(int argc, char *argv[]) {
   }
   int i;
   for (i = 0; i < loop; i ++) {
-    gen_rand_expr();
+    buf[0] = '\0';
+    gen_rand_expr(0);
 
     sprintf(code_buf, code_format, buf);
 
