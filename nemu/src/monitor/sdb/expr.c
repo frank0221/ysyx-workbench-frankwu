@@ -15,13 +15,14 @@
 #include <string.h>
 #include <isa.h>
 #include <assert.h>
+#include <memory/paddr.h>
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NUM, TK_HEX
+  TK_NOTYPE = 256, TK_EQ, TK_NUM, TK_HEX,TK_NEQ, TK_AND,DEREF,NEG
 
   /* TODO: Add more token types */
 
@@ -45,8 +46,9 @@ static struct rule {
   {"\\(",'('},
   {"\\)",')'},
   {"0[xX][0-9A-Fa-f]+",TK_HEX},
-  {"[0-9]+",TK_NUM}
-  
+  {"[0-9]+",TK_NUM},
+  {"!=",TK_NEQ},
+  {"&&",TK_AND}
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -133,7 +135,7 @@ static bool make_token(char *e) {
               tokens[nr_token].type = TK_EQ;
               nr_token++;
               break;
-                    case(TK_HEX):
+          case TK_HEX:
               tokens[nr_token].type = TK_HEX;
               strncpy(tokens[nr_token].str,substr_start,substr_len);
               tokens[nr_token].str[substr_len] = '\0';
@@ -143,6 +145,14 @@ static bool make_token(char *e) {
               tokens[nr_token].type = TK_NUM;
               strncpy(tokens[nr_token].str,substr_start,substr_len);
               tokens[nr_token].str[substr_len] = '\0';
+              nr_token++;
+              break;
+          case TK_NEQ:
+              tokens[nr_token].type = TK_NEQ;
+              nr_token++;
+              break;
+          case TK_AND:
+              tokens[nr_token].type = TK_AND;
               nr_token++;
               break;
           default: TODO();
@@ -156,7 +166,18 @@ static bool make_token(char *e) {
       return false;
     }
   }
-
+  for (int i = 0; i < nr_token; i ++) {
+  if (tokens[i].type == '*' && (i == 0 || tokens[i - 1].type == '(' || tokens[i - 1].type == '+' || tokens[i - 1].type == '-'
+  || tokens[i - 1].type == '*' || tokens[i - 1].type == '/' || tokens[i - 1].type == TK_AND || tokens[i - 1].type == TK_EQ || tokens[i - 1].type == TK_NEQ ) ) {
+    tokens[i].type = DEREF;
+    }
+  }
+  for (i = 0; i < nr_token; i ++) {
+  if (tokens[i].type == '-' && (i == 0 || tokens[i - 1].type == '(' || tokens[i - 1].type == '+' || tokens[i - 1].type == '-'
+  || tokens[i - 1].type == '*' || tokens[i - 1].type == '/' || tokens[i - 1].type == TK_AND || tokens[i - 1].type == TK_EQ || tokens[i - 1].type == TK_NEQ ) ) {
+     tokens[i].type = NEG;
+    }
+  }
   return true;
 }
 
@@ -181,6 +202,9 @@ u_int32_t find_op(int p,int q){
   int match = 0;
   int32_t priority1 = -1;
   int32_t priority2 = -1;
+  int32_t priority3 = -1;
+  int32_t priority4 = -1;
+  //int32_t priority5 = -1;
   for(int i = p; i<=q; i++){
     if(tokens[i].type == '(') match++;
     if(tokens[i].type == ')') match--;
@@ -189,20 +213,32 @@ u_int32_t find_op(int p,int q){
     {
       switch (tokens[i].type)
       {
-      case '+':
-      case '-':
-        priority1 = i;
-        break;
+        case '+':
+        case '-':
+          priority1 = i;
+          break;
 
-      case '*':
-      case '/':
-        priority2 = i;
-      default:
-        break;
+        case '*':
+        case '/':
+          priority2 = i;
+          break;
+        case TK_AND:
+          priority3 = i;
+          break;
+        case TK_EQ:
+        case TK_NEQ:
+          priority4 = i;
+          break;
+        // case DEREF:
+        //   priority5 = i;
+        default:
+          break;
       }
     }
   }
-  return (priority1 >=0 ? priority1 : priority2);
+  return priority3 >=0 ? priority3 :
+         priority4 >=0 ? priority4 :
+         priority1 >=0 ? priority1 : priority2;
 }
 
 int32_t eval(int p, int q){
@@ -211,26 +247,45 @@ int32_t eval(int p, int q){
   }
   else if (p == q){
    // assert(tokens[p].type == TK_NUM || tokens[p].type == TK_HEX);
-    return strtoul(tokens[p].str,NULL,0);
+    return strtoul(tokens[p].str,NULL,0); //automatically judge the dec or hex
   }
   else if (check_parentheses(p,q) == true){
 
     return eval(p+1, q-1);
   }
   else{
-    u_int32_t op = find_op(p,q);
-    int32_t val1 = eval(p,op-1);
-    int32_t val2 = eval(op+1,q);
+    int32_t op = find_op(p,q);
+    if(op>0)
+    {
+      int32_t val1 = eval(p,op-1);
+      int32_t val2 = eval(op+1,q);
 
-    int op_type = tokens[op].type;
-    switch(op_type){
-      case '+':return val1+val2;
-      case '-':return val1-val2;
-      case '*':return val1*val2;
-      case '/':return val1/val2;
-      default : assert(0);
+      int op_type = tokens[op].type;
+      switch(op_type){
+        case '+':     return val1+val2;
+        case '-':     return val1-val2;
+        case '*':     return val1*val2;
+        case '/':     return val1/val2;
+        case TK_AND:  return val1 && val2;
+        case TK_EQ:   return val1 == val2;
+        case TK_NEQ:  return val1 != val2;
+        //case DEREF:   return paddr_read(eval(p+1,q), 4);
+        default : assert(0);
+      }
+    }
+    if(op == -1)
+    {
+      if(tokens[p].type == DEREF){
+        return  paddr_read(eval(p+1,q), 4);
+      }
+      else if(tokens[p].type == NEG){
+        return -eval(p+1,q);
+      }
+      assert(0);
     }
   }
+  
+  
   return 0;
 }
 
