@@ -20,9 +20,9 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
-
+#include <assert.h>
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NUM, TK_HEX,TK_NEQ, TK_AND,DEREF,NEG
+  TK_NOTYPE = 256, TK_EQ, TK_NUM, TK_HEX,TK_NEQ, TK_AND, DEREF, NEG, REG
 
   /* TODO: Add more token types */
 
@@ -48,7 +48,8 @@ static struct rule {
   {"0[xX][0-9A-Fa-f]+",TK_HEX},
   {"[0-9]+",TK_NUM},
   {"!=",TK_NEQ},
-  {"&&",TK_AND}
+  {"&&",TK_AND},
+  {"\\$\\w+",REG}
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -139,6 +140,14 @@ static bool make_token(char *e) {
               tokens[nr_token].type = TK_HEX;
               strncpy(tokens[nr_token].str,substr_start,substr_len);
               tokens[nr_token].str[substr_len] = '\0';
+              nr_token++;
+              break;
+          case REG:
+              tokens[nr_token].type = REG;
+              printf("REG\n");
+              strncpy(tokens[nr_token].str,substr_start+1,substr_len-1);
+              tokens[nr_token].str[substr_len-1] = '\0';
+              printf("%s\n",tokens[nr_token].str);
               nr_token++;
               break;
           case TK_NUM:
@@ -247,7 +256,16 @@ int32_t eval(int p, int q){
   }
   else if (p == q){
    // assert(tokens[p].type == TK_NUM || tokens[p].type == TK_HEX);
-    return strtoul(tokens[p].str,NULL,0); //automatically judge the dec or hex
+   if(tokens[p].type == REG){
+        bool ok;
+        printf("%s\n",tokens[p].str);
+        printf("REG_PROCESS\n");
+        uint32_t reg_value= isa_reg_str2val(tokens[p].str, &ok);
+        assert(ok == true);
+        return reg_value;
+      }
+    else 
+      return strtoul(tokens[p].str,NULL,0); //automatically judge the dec or hex
   }
   else if (check_parentheses(p,q) == true){
 
@@ -275,11 +293,20 @@ int32_t eval(int p, int q){
     }
     if(op == -1)
     {
+      printf("%d %d\n",p,q);
+      printf("REG_PROCESS\n");
       if(tokens[p].type == DEREF){
         return  paddr_read(eval(p+1,q), 4);
       }
       else if(tokens[p].type == NEG){
         return -eval(p+1,q);
+      }
+      else if(tokens[p].type == REG){
+        bool ok;
+        printf("%s",tokens[p].str);
+        uint32_t reg_value= isa_reg_str2val(tokens[p].str, &ok);
+        assert(ok == true);
+        return reg_value;
       }
       assert(0);
     }
