@@ -14,19 +14,13 @@
 ***************************************************************************************/
 
 #include "sdb.h"
-
+//#include <commen.h>
 #define NR_WP 32
 
-typedef struct watchpoint {
-  int NO;
-  struct watchpoint *next;
 
-  /* TODO: Add more members if necessary */
-
-} WP;
 
 static WP wp_pool[NR_WP] = {};
-static WP *head = NULL, *free_ = NULL;
+WP *head = NULL, *free_ = NULL;
 
 WP* new_wp();
 void free_wp(WP *wp);
@@ -48,9 +42,18 @@ WP* new_wp(){
   if(free_){
     temp = free_;
     free_ = free_->next;
-    return temp;
+    if(head==NULL){
+      head = temp;
+      head->next = NULL;
+    }
+    else{
+      temp->next = head;
+      head = temp;
+      
+    }
   }
   else assert(0);
+  return temp;
 }
 
 void free_wp(WP *wp){
@@ -58,3 +61,16 @@ void free_wp(WP *wp){
   free_ = wp;
 }
 
+
+int watchpoint_update(){
+  WP* wp = NULL;
+  for(wp = head; wp; wp = wp->next){
+    bool ok;
+    uint32_t new_value = expr(wp->expr,&ok);
+    if(new_value != wp->old_value){
+      nemu_state.state = NEMU_STOP;
+      printf("watchpoint change\n NUM:%d old_value:%d new_value:%d\n",wp->NO,wp->old_value,new_value);
+    }
+  }
+  return 0;
+}

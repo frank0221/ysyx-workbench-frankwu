@@ -35,7 +35,7 @@ void isa_reg_display() {
   //     j =0;
   //  }
   }
-  
+  printf("PC: %d",cpu.pc);
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
@@ -46,6 +46,12 @@ word_t isa_reg_str2val(const char *s, bool *success) {
       return cpu.gpr[i];
     }
   }
+  char pc[3] = "pc";
+  if(strcmp(s,pc) == 0){
+      printf("match\n");
+      *success = true;
+      return cpu.pc;
+    }
   *success =false;
   return 0;
 }

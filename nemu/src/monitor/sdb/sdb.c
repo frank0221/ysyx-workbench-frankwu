@@ -68,10 +68,13 @@ static int cmd_info(char *args){
   if (strcmp(arg, "r") == 0) {
     isa_reg_display();
 }
-  // else if(arg == 'w')
-  // {
-
-  // }
+  else if(strcmp(arg, "w") == 0)
+  {
+    WP* wp;
+    for(wp = head; wp; wp = wp->next){
+      printf("NUM:%d ADDRESS:%s\n",wp->NO,wp->expr);
+    }
+  }
   return 0;
 }
 
@@ -121,6 +124,36 @@ static int cmd_p(char *args){
 
 }
 
+static int cmd_w(char *args){
+  char *watchpoint = strtok(NULL,"");
+  WP* wh =new_wp();
+  strcpy(wh->expr,watchpoint);
+  bool ok;
+  wh->old_value = expr(wh->expr,&ok);
+  assert(ok==true);
+  printf("expr = %s old_value = %d\n",wh->expr,wh->old_value);
+  return 0;
+}
+
+static int cmd_d(char *args){
+  char *d_watchpoint = strtok(NULL," ");
+  int d = atoi(d_watchpoint);
+  WP* wp;
+  WP* prev = NULL;
+  for(wp = head; wp; wp = wp->next){
+    if(wp->NO == d){
+      break;
+    }
+    prev = wp;
+  }
+  if(!wp) printf("no match watchpoint\n");
+  if(prev) prev->next = wp->next;
+  else head = wp->next;
+
+  free_wp(wp);
+  return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -133,8 +166,8 @@ static struct {
   { "info","Print reg status and watchpoint info",cmd_info},
   { "x","Scan the memory",cmd_x},
   { "p","Print the EXPR",cmd_p},
-  // { "w","Set watchpoint",cmd_w},
-  // { "d","Delete the watchpoint",cmd_d}
+  { "w","Set watchpoint",cmd_w},
+  { "d","Delete the watchpoint",cmd_d}
   /* TODO: Add more commands */
 
 };
