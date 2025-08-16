@@ -15,4 +15,11 @@
 
 NAME = gen-expr
 SRCS = gen-expr.c
+NUM  = ?
 include $(NEMU_HOME)/scripts/build.mk
+
+
+# run: build/$(NAME)
+# 	./build/$(NAME) $(NUM) > input
+
+# .PHONY: run

@@ -265,7 +265,7 @@ int32_t eval(int p, int q){
         return reg_value;
       }
     else 
-      return strtoul(tokens[p].str,NULL,0); //automatically judge the dec or hex
+      return strtoul(tokens[p].str,NULL,0);
   }
   else if (check_parentheses(p,q) == true){
 

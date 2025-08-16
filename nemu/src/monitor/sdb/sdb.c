@@ -20,7 +20,7 @@
 #include "sdb.h"
 #include <string.h>
 #include <memory/paddr.h>
-
+#include <utils.h>
 static int is_batch_mode = false;
 void test_expr(void);
 void init_regex();
@@ -51,6 +51,7 @@ static int cmd_c(char *args) {
 
 
 static int cmd_q(char *args) {
+  nemu_state.state = NEMU_QUIT;
   return -1;
 }
 
@@ -113,7 +114,8 @@ static int cmd_p(char *args){
   bool ok;
   int result = expr(exp, &ok);
   assert(ok==true);
-  printf("expr = %d\n",result);
+  printf("expr(dec) = %d\n",result);
+  printf("expr(hex) = 0x%x\n",result);
   // uint32_t add = result;
   // for(int j=0;j<n;j++)
   // {
@@ -246,5 +248,5 @@ void init_sdb() {
   /* Initialize the watchpoint pool. */
   init_wp_pool();
 
-  test_expr();
+  //test_expr();
 }
