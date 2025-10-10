@@ -15,7 +15,7 @@
 
 #include <isa.h>
 #include <memory/paddr.h>
-
+#include <elf.h>
 void init_rand();
 void init_log(const char *log_file);
 void init_mem();
@@ -23,6 +23,8 @@ void init_difftest(char *ref_so_file, long img_size, int port);
 void init_device();
 void init_sdb();
 void init_disasm();
+void init_ftrace(char *elf_file);
+void ftrace(int rd, int src1, vaddr_t dnpc, vaddr_t pc);
 
 static void welcome() {
   Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
@@ -44,6 +46,7 @@ void sdb_set_batch_mode();
 static char *log_file = NULL;
 static char *diff_so_file = NULL;
 static char *img_file = NULL;
+static char *elf_file = NULL;
 static int difftest_port = 1234;
 
 static long load_img() {
@@ -75,15 +78,17 @@ static int parse_args(int argc, char *argv[]) {
     {"diff"     , required_argument, NULL, 'd'},
     {"port"     , required_argument, NULL, 'p'},
     {"help"     , no_argument      , NULL, 'h'},
+    {"elf"      , required_argument, NULL, 'e'},
     {0          , 0                , NULL,  0 },
   };
   int o;
-  while ( (o = getopt_long(argc, argv, "-bhl:d:p:", table, NULL)) != -1) {
+  while ( (o = getopt_long(argc, argv, "-bhl:d:p:e:", table, NULL)) != -1) {
     switch (o) {
       case 'b': sdb_set_batch_mode(); break;
       case 'p': sscanf(optarg, "%d", &difftest_port); break;
       case 'l': log_file = optarg; break;
       case 'd': diff_so_file = optarg; break;
+      case 'e': elf_file = optarg; break;
       case 1: img_file = optarg; return 0;
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
@@ -110,6 +115,9 @@ void init_monitor(int argc, char *argv[]) {
   /* Open the log file. */
   init_log(log_file);
 
+  /* open the elf file. */
+  init_ftrace(elf_file);
+
   /* Initialize memory. */
   init_mem();
 
@@ -133,6 +141,83 @@ void init_monitor(int argc, char *argv[]) {
   /* Display welcome message. */
   welcome();
 }
+
+int strtab_idx=0;
+int symtab_idx = 0;
+Elf32_Ehdr ehdr;
+char *strtab;
+void init_ftrace(char *elf_file){
+  FILE *fp1 = fopen("ftrace_log.txt","w");
+  fclose(fp1);
+  FILE *fp = fopen(elf_file,"rb");
+  if(fp == NULL){
+    perror("fopen");
+    return;
+  }
+
+  if((fread(&ehdr, sizeof(Elf32_Ehdr), 1, fp)) != 1)
+    perror("fread");
+  Elf32_Shdr shdr;
+  fseek(fp, ehdr.e_shoff + ehdr.e_shentsize * ehdr.e_shstrndx, SEEK_SET);
+  if((fread(&shdr,ehdr.e_shentsize,1,fp) != -1))
+    perror("fread");
+
+  char *shstrtab = malloc(shdr.sh_size);
+  fseek(fp, shdr.sh_offset, SEEK_SET);
+  if((fread(shstrtab,shdr.sh_size,1,fp) != -1))
+    perror("fread");
+
+  strtab_idx = -1 ; symtab_idx = -1;
+  for(int i = 0; i < ehdr.e_shnum; i++){
+    Elf32_Shdr shdr;
+    fseek(fp, ehdr.e_shoff + i * ehdr.e_shentsize, SEEK_SET);
+    if((fread(&shdr,ehdr.e_shentsize,1,fp) != 1))
+      perror("fread");
+    char *name = shstrtab + shdr.sh_name;
+    if(strcmp(name,".strtab") == 0){
+      strtab_idx = i;
+      fseek(fp, shdr.sh_offset, SEEK_SET);
+      strtab = malloc(shdr.sh_size);
+      if(fread(strtab,shdr.sh_size,1,fp) != 1)
+        perror("fread");
+    }
+    else if(strcmp(name,".symtab") == 0){
+      symtab_idx = i;
+    }
+  }
+  free(shstrtab);
+}
+
+void ftrace(int rd ,int src1 ,vaddr_t dnpc, vaddr_t pc){
+  FILE *fp = fopen(elf_file,"rb");
+  FILE *fp1 = fopen("ftrace_log.txt","a");
+  Elf32_Sym sym;
+  fseek(fp,ehdr.e_shoff + symtab_idx * ehdr.e_shentsize,SEEK_SET);
+  Elf32_Shdr symtab;
+  if((fread(&symtab,sizeof(Elf32_Shdr),1,fp) != 1))
+    perror("fread");
+  fseek(fp,symtab.sh_offset,SEEK_SET);
+  for(int i = 0; i < symtab.sh_size/sizeof(Elf32_Sym); i++){
+    if((fread(&sym,sizeof(Elf32_Sym),1,fp) != 1))
+      perror("fread");
+    if(rd == 1){
+      if((dnpc >= sym.st_value && dnpc < sym.st_value+sym.st_size) && ELF32_ST_TYPE(sym.st_info) == STT_FUNC){
+        fprintf(fp1,"0x%x  call [%s@0x%x]\n",pc,strtab + sym.st_name,dnpc);
+        fflush(fp1);
+      }
+    }
+    else if(rd == 0 && src1 == 1){
+      if((pc >= sym.st_value && pc < sym.st_value+sym.st_size) && ELF32_ST_TYPE(sym.st_info) == STT_FUNC){
+        fprintf(fp1,"0x%x  ret  [%s]\n",pc,strtab + sym.st_name);
+        fflush(fp1);
+      }
+    }
+    //fseek(fp,sizeof(Elf32_Sym),SEEK_CUR);
+  }
+  fclose(fp1);
+}
+
+
 #else // CONFIG_TARGET_AM
 static long load_img() {
   extern char bin_start, bin_end;

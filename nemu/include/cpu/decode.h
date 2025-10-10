@@ -43,7 +43,8 @@ static inline void pattern_decode(const char *str, int len,
       __shift = (c == '?' ? __shift + 1 : 0); \
     } \
   }
-
+//_key是把opcode正向输入进来
+//把所有与decode无关的位全部变成0
 #define macro2(i)  macro(i);   macro((i) + 1)
 #define macro4(i)  macro2(i);  macro2((i) + 2)
 #define macro8(i)  macro4(i);  macro4((i) + 4)

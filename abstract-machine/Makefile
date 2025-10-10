@@ -63,14 +63,34 @@ LINKAGE   = $(OBJS)  # library archives are added by LIB_TEMPLATE below
 ## 3. General Compilation Flags
 
 ### (Cross) compilers, e.g., mips-linux-gnu-g++
-AS        = $(CROSS_COMPILE)gcc
-CC        = $(CROSS_COMPILE)gcc
-CXX       = $(CROSS_COMPILE)g++
-LD        = $(CROSS_COMPILE)ld
-AR        = $(CROSS_COMPILE)ar
-OBJDUMP   = $(CROSS_COMPILE)objdump
-OBJCOPY   = $(CROSS_COMPILE)objcopy
-READELF   = $(CROSS_COMPILE)readelf
+# AS        = $(CROSS_COMPILE)gcc
+# CC        = $(CROSS_COMPILE)gcc
+# CXX       = $(CROSS_COMPILE)g++
+# LD        = $(CROSS_COMPILE)ld
+# AR        = $(CROSS_COMPILE)ar
+# OBJDUMP   = $(CROSS_COMPILE)objdump
+# OBJCOPY   = $(CROSS_COMPILE)objcopy
+# READELF   = $(CROSS_COMPILE)readelf
+ifeq ($(ARCH),native)
+  AS        = gcc
+  CC        = gcc
+  CXX       = g++
+  LD        = gcc
+  AR        = ar
+  OBJDUMP   = objdump
+  OBJCOPY   = objcopy
+  READELF   = readelf
+else
+  # Default to RISC-V cross compiler for other ARCH
+  AS        = /opt/riscv32/bin/riscv32-unknown-elf-gcc
+  CC        = /opt/riscv32/bin/riscv32-unknown-elf-gcc
+  CXX       = /opt/riscv32/bin/riscv32-unknown-elf-g++
+  LD        = /opt/riscv32/bin/riscv32-unknown-elf-ld
+  AR        = /opt/riscv32/bin/riscv32-unknown-elf-ar
+  OBJDUMP   = /opt/riscv32/bin/riscv32-unknown-elf-objdump
+  OBJCOPY   = /opt/riscv32/bin/riscv32-unknown-elf-objcopy
+  READELF   = /opt/riscv32/bin/riscv32-unknown-elf-readelf
+endif
 
 ### Compilation flags
 INC_PATH += $(WORK_DIR)/include $(addsuffix /include/, $(addprefix $(AM_HOME)/, $(LIBS)))

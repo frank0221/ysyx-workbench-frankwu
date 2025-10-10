@@ -1,6 +1,65 @@
-#include <stdio.h>
+#include "common.h"
+NPCState npc_state = {0};
+extern NPCState npc_state;
+//bool finish_flag;
+//int n = 0;
+extern "C" void halt(){
+  npc_state.state = NPC_END;
+  svSetScope(svGetScopeFromName("TOP.top.IDU_init.ysyx_25080218_GPR_init"));
+  npc_state.halt_ret = get_gpr(10);
+  exit(0);
+};
 
-int main() {
-  printf("Hello, ysyx!\n");
-  return 0;
+
+VerilatedContext* contextp = NULL;
+VerilatedVcdC* tfp = NULL;
+
+Vtop* top;
+
+void step_and_dump_wave(){
+  top->eval();
+  contextp->timeInc(1);
+  tfp->dump(contextp->time());
+}
+void sim_init(){
+  contextp = new VerilatedContext;
+  tfp = new VerilatedVcdC;
+  top = new Vtop;
+  contextp->traceEverOn(true);
+  top->trace(tfp, 0);
+  tfp->open("dump.vcd");
+}
+
+void sim_exit(){
+  step_and_dump_wave();
+  tfp->close();
+}
+
+static void reset(int n) {
+  top->rst = 1;
+  top->clk = 1;
+  top->pc = 0x80000000;
+  while (n -- > 0){  
+    top->eval(); 
+    step_and_dump_wave();  
+    top->clk = !top->clk;
+    top->eval(); 
+    step_and_dump_wave(); 
+  }
+  top->rst = 0;
+  printf("After reset, pc = 0x%08x\n", top->pc);
+}
+
+
+
+int main(int argc, char *argv[]) {
+  sim_init();
+  init_device(argc, argv);
+  uint32_t first_inst = pmem_read(0x80000000);
+  printf("First instruction at 0x80000000: 0x%08x\n", first_inst);
+  //finish_flag = true;
+  npc_state.state = NPC_RUNNING;
+  reset(1);
+  cmd_process();
+  sim_exit();
 }

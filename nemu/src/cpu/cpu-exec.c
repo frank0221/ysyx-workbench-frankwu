@@ -18,6 +18,9 @@
 #include <cpu/difftest.h>
 #include <locale.h>
 #include "../monitor/sdb/sdb.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -25,6 +28,48 @@
  * You can modify this value as you want.
  */
 #define MAX_INST_TO_PRINT 10
+#define INFO_SIZE 128
+
+static int cnt = 0;
+
+typedef struct NODE{
+    char iringbuf[INFO_SIZE];
+    int  num;
+    struct NODE* next;
+}NODE;
+
+NODE* new_node(char *s){
+    NODE *n = (NODE *)malloc(sizeof(NODE));
+    n->next = NULL;
+    strcpy(n->iringbuf,s);
+    n->num = ++cnt;
+    return n;
+}
+
+NODE* create_linkedlist(NODE *p_head,char *s){
+    NODE* temp = p_head;
+    if(p_head == NULL){
+        p_head = new_node(s);
+    }
+    else{
+        while(temp->next != NULL){
+            temp = temp->next;
+        }
+        temp->next = new_node(s);
+    }
+    return p_head;
+}
+
+NODE* delet_linked(NODE*p_head){
+    //NODE* temp = p_head;
+    while(cnt>20){
+        NODE* delet = p_head;
+        p_head = p_head->next;
+        free(delet);
+        cnt--;
+    }
+    return p_head;
+}
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
@@ -42,6 +87,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   watchpoint_update();
 }
 
+NODE* p_head = NULL;
 static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;
   s->snpc = pc;
@@ -71,6 +117,8 @@ static void exec_once(Decode *s, vaddr_t pc) {
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, ilen);
 #endif
+  p_head = create_linkedlist(p_head,s->logbuf);
+  p_head = delet_linked(p_head);
 }
 
 static void execute(uint64_t n) {
@@ -111,7 +159,12 @@ void cpu_exec(uint64_t n) {
   uint64_t timer_start = get_time();
 
   execute(n);
-
+  NODE*p = p_head;
+  while(p->next!=NULL){
+    printf("%s\n",p->iringbuf);
+    p = p->next;
+  }
+  printf("\033[31m%s\033[0m\n",p->iringbuf);
   uint64_t timer_end = get_time();
   g_timer += timer_end - timer_start;
 

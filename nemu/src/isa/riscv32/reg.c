@@ -35,7 +35,7 @@ void isa_reg_display() {
   //     j =0;
   //  }
   }
-  printf("PC: %d",cpu.pc);
+  printf("PC: 0x%x",cpu.pc);
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
