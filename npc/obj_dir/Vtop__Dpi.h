@@ -16,12 +16,16 @@ extern "C" {
 
 
     // DPI EXPORTS
-    // DPI export at vsrc/ysyx_25080218_IDU.v:127:24
+    // DPI export at vsrc/ysyx_25080218_IDU.v:216:24
     extern int get_gpr(int idx);
 
     // DPI IMPORTS
     // DPI import at vsrc/ysyx_25080218_IDU.v:1:30
     extern void halt();
+    // DPI import at vsrc/ysyx_25080218_IFU.v:12:29
+    extern int pmem_read(int raddr);
+    // DPI import at vsrc/ysyx_25080218_MAU.v:2:30
+    extern void pmem_write(int waddr, int wdata, char wmask);
 
 #ifdef __cplusplus
 }

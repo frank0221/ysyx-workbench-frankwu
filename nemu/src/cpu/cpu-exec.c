@@ -116,12 +116,13 @@ static void exec_once(Decode *s, vaddr_t pc) {
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, ilen);
-#endif
   p_head = create_linkedlist(p_head,s->logbuf);
   p_head = delet_linked(p_head);
+#endif
+
 }
 
-static void execute(uint64_t n) {
+void execute(uint64_t n) {
   Decode s;
   for (;n > 0; n --) {
     exec_once(&s, cpu.pc);
@@ -159,12 +160,14 @@ void cpu_exec(uint64_t n) {
   uint64_t timer_start = get_time();
 
   execute(n);
+  #ifdef CONFIG_ITRACE
   NODE*p = p_head;
   while(p->next!=NULL){
     printf("%s\n",p->iringbuf);
     p = p->next;
   }
   printf("\033[31m%s\033[0m\n",p->iringbuf);
+  #endif
   uint64_t timer_end = get_time();
   g_timer += timer_end - timer_start;
 

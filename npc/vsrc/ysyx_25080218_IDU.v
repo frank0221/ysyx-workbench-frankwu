@@ -15,45 +15,55 @@ module ysyx_25080218_IDU(
     output          rd_we,
     output [ 4 : 0] rd,
     output          is_jump,
-    output [31 : 0] next_pc_jump
+    output [31 : 0] next_pc_jump,
+    output [ 4 : 0] load_ctrl,
+    output [ 2 : 0] store_ctrl,
+    output wire [ 5 : 0] branch_ctrl,
+    output wire [31 : 0] rs1,
+    output wire [31 : 0] rs2
 );
 
 wire [ 6 : 0] opcode;
 wire [ 4 : 0] src1;
 wire [ 4 : 0] src2;
-wire [31 : 0] rs1;
-wire [31 : 0] rs2;
+//wire [31 : 0] rs1;
+//wire [31 : 0] rs2;
 //wire [ 4 : 0] rd;
 wire [ 2 : 0] fun3;
 wire [ 6 : 0] fun7;
 
 assign opcode = inst[ 6 :  0];
 assign src1   = inst[19 : 15];
-//assign src2   = inst[24 : 20];
+assign src2   = inst[24 : 20];
 assign rd     = inst[11 :  7];
 assign fun3   = inst[14 : 12];
 assign fun7   = inst[31 : 25];
 
+wire [4:0] shamt = inst[24:20];
+
 wire [31 : 0] imm_J;
 wire [31 : 0] imm_I;
 wire [31 : 0] imm_U;
+wire [31 : 0] imm_S;
+wire [31 : 0] imm_B;
 
 assign imm_J  = {{12{inst[31]}},inst[19 : 12],inst[20],inst[30 : 21],1'b0};
-assign imm_I    = {{20{inst[31]}},inst[31 : 20]};
-assign imm_U    = inst[31 : 12] << 12;
-
+assign imm_I  = {{20{inst[31]}},inst[31 : 20]};
+assign imm_U  = inst[31 : 12] << 12;
+assign imm_S  = {{20{inst[31]}},inst[31:25],inst[11:7]};
+assign imm_B  = {{20{inst[31]}},inst[7],inst[30:25],inst[11:8],1'b0};
 wire          imm_is_I;
 wire          imm_is_J;
-// wire          imm_is_B;
-// wire          imm_is_S;
+wire          imm_is_B;
+wire          imm_is_S;
 wire          imm_is_U;
 wire          imm_is_R;
 
 assign imm_is_I = (opcode == 7'b0000011 || opcode == 7'b0010011 ||
                    opcode == 7'b1100111) ? 1'b1 : 1'b0;
 assign imm_is_J = (opcode == 7'b1101111) ? 1'b1 : 1'b0;
-// assign imm_is_B = (opcode == 7'b1100011) ? 1'b1 : 1'b0;
-// assign imm_is_S = (opcode == 7'b0100011) ? 1'b1 : 1'b0;
+assign imm_is_B = (opcode == 7'b1100011) ? 1'b1 : 1'b0;
+assign imm_is_S = (opcode == 7'b0100011) ? 1'b1 : 1'b0;
 assign imm_is_U = (opcode == 7'b0110111 || opcode == 7'b0010111) ? 1'b1 : 1'b0;
 assign imm_is_R = (opcode == 7'b0110011) ? 1'b1 : 1'b0;
 
@@ -63,28 +73,107 @@ wire          is_auipc;
 wire          is_lui;
 wire          is_jal;
 wire          is_jalr;
+
+wire          is_and;
+wire          is_or;
+wire          is_xor;
+
+wire          is_sub;
+
+wire          is_sll;
+wire          is_srl;
+wire          is_sra;
+wire          is_slt;
+wire          is_sltu;
+
+wire          is_lb;
+wire          is_lh;
+wire          is_lw;
+wire          is_lhu;
+wire          is_lbu;
+
+wire          is_sw;
+wire          is_sh;
+wire          is_sb;
+
+wire          is_bne;
+wire          is_beq;
+wire          is_blt;
+wire          is_bge;
+wire          is_bltu;
+wire          is_bgeu;
       
 assign is_auipc = (opcode == 7'b0010111) ? 1'b1 : 1'b0;
 assign is_lui   = (opcode == 7'b0110111) ? 1'b1 : 1'b0;
-assign is_jalr  = (opcode == 7'b1100111) ? 1'b1 : 1'b0;
+assign is_jalr  = (opcode == 7'b1100111 && fun3 == 3'h00) ? 1'b1 : 1'b0;
 assign is_jal   = (opcode == 7'b1101111) ? 1'b1 : 1'b0;
 assign is_jump  = is_jal || is_jalr;
 assign next_pc_jump = is_jal ? pc  + imm_J :
                       is_jalr? rs1 + imm_I :32'b0;
+//R类型 I类型都包括
+assign is_and   = (imm_is_R && (fun3 == 3'h7) && fun7 ==7'b0) || (opcode == 7'b0010011 && (fun3 == 3'h7)) ? 1'b1 : 1'b0;
+assign is_or    = (imm_is_R && (fun3 == 3'h6) && fun7 ==7'b0) || (opcode == 7'b0010011 && (fun3 == 3'h6)) ? 1'b1 : 1'b0;
+assign is_xor   = (imm_is_R && (fun3 == 3'h4) && fun7 ==7'b0) || (opcode == 7'b0010011 && (fun3 == 3'h4)) ? 1'b1 : 1'b0;
 
+assign is_sub   = (imm_is_R && (fun3 == 3'h0) && (fun7 == 7'h20)) ? 1'b1 : 1'b0;
 
-assign alu_src1 = imm_is_I ? rs1   :
+assign is_sll   = (imm_is_R && (fun3 == 3'h1) && (fun7 == 7'h00)) || (opcode == 7'b0010011 && (fun3 == 3'h1) && (fun7 == 7'h00)) ? 1'b1 : 1'b0;
+assign is_srl   = (imm_is_R && (fun3 == 3'h5) && (fun7 == 7'h00)) || (opcode == 7'b0010011 && (fun3 == 3'h5) && (fun7 == 7'h00)) ? 1'b1 : 1'b0;
+assign is_sra   = (imm_is_R && (fun3 == 3'h5) && (fun7 == 7'h20)) || (opcode == 7'b0010011 && (fun3 == 3'h5) && (fun7 == 7'h20)) ? 1'b1 : 1'b0;
+
+assign is_slt   = (imm_is_R && (fun3 == 3'h2) && (fun7 == 7'h00)) || (opcode == 7'b0010011 && (fun3 == 3'h2) && (fun7 == 7'h00)) ? 1'b1 : 1'b0;
+assign is_sltu  = (imm_is_R && (fun3 == 3'h3) && (fun7 == 7'h00)) || (opcode == 7'b0010011 && (fun3 == 3'h3) && (fun7 == 7'h00)) ? 1'b1 : 1'b0;
+
+assign is_lb    = (opcode == 7'b0000011 && fun3 == 3'h00);
+assign is_lh    = (opcode == 7'b0000011 && fun3 == 3'h01);
+assign is_lw    = (opcode == 7'b0000011 && fun3 == 3'h02);
+assign is_lbu   = (opcode == 7'b0000011 && fun3 == 3'h04);
+assign is_lhu   = (opcode == 7'b0000011 && fun3 == 3'h05);
+assign load_ctrl= {is_lhu,is_lbu,is_lw,is_lh,is_lb};
+
+assign is_sb    = (imm_is_S && fun3 == 3'h00) ? 1'b1 : 1'b0;
+assign is_sh    = (imm_is_S && fun3 == 3'h01) ? 1'b1 : 1'b0;
+assign is_sw    = (imm_is_S && fun3 == 3'h02) ? 1'b1 : 1'b0;
+assign store_ctrl ={is_sw,is_sh,is_sb};
+
+assign is_beq   = (imm_is_B && fun3 == 3'h00) ? 1'b1 : 1'b0;
+assign is_bne   = (imm_is_B && fun3 == 3'h01) ? 1'b1 : 1'b0;
+assign is_blt   = (imm_is_B && fun3 == 3'h04) ? 1'b1 : 1'b0;
+assign is_bge   = (imm_is_B && fun3 == 3'h05) ? 1'b1 : 1'b0;
+assign is_bltu  = (imm_is_B && fun3 == 3'h06) ? 1'b1 : 1'b0;
+assign is_bgeu  = (imm_is_B && fun3 == 3'h07) ? 1'b1 : 1'b0;
+assign branch_ctrl = {is_bgeu,is_bltu,is_bge,is_blt,is_bne,is_beq};
+
+assign alu_src1 = is_jump  ? pc    :
+                  imm_is_I ? rs1   :
+                  imm_is_R ? rs1   :
+                  imm_is_S ? rs1   :
                   is_auipc ? pc    : 
+                  imm_is_B ? pc    :
                   is_lui   ? 32'b0 :
-                  is_jump  ? pc    :32'b0;
+                  32'b0;
 
 
-assign alu_src2 = imm_is_I ? imm_I :
+assign alu_src2 = is_jump  ? 32'd4 :
+                  (imm_is_I && (is_sll || is_srl || is_sra)) ? {27'b0, shamt} :
+                  imm_is_I ? imm_I :
+                  imm_is_R ? rs2   :
+                  imm_is_S ? imm_S   :
+                  imm_is_B ? imm_B  :
                   imm_is_U ? imm_U :
-                  is_jump  ? 32'd4 : 32'b0;
+                   32'b0;
 
-assign alu_op[0]= ((opcode == 7'b0110011 && fun3 == 3'b0 && fun7 ==7'b0) || (opcode == 7'b0010111) || ((opcode == 7'b0010011) && fun3 ==3'b0 ) || (is_jump)) ? 1'b1 : 1'b0; //加法
-assign alu_op[1]= (opcode == 7'b0110111) ? 1'b1 : 1'b0;
+assign alu_op[0]= ((imm_is_R && fun3 == 3'b0 && fun7 ==7'b0) || (opcode == 7'b0010111) || ((opcode == 7'b0010011) && fun3 ==3'b0 ) || (is_jump) || (|load_ctrl) || (|store_ctrl) || (|branch_ctrl)) ? 1'b1 : 1'b0; //加法
+assign alu_op[1] = (opcode == 7'b0110111) ? 1'b1 : 1'b0;
+assign alu_op[2] = is_and ? 1'b1 : 1'b0;
+assign alu_op[3] = is_or  ? 1'b1 : 1'b0;
+assign alu_op[4] = is_xor ? 1'b1 : 1'b0;
+assign alu_op[5] = is_sub ? 1'b1 : 1'b0;
+assign alu_op[6] = is_sll ? 1'b1 : 1'b0; 
+assign alu_op[7] = is_srl ? 1'b1 : 1'b0; 
+assign alu_op[8] = is_sra ? 1'b1 : 1'b0; 
+assign alu_op[9] = is_slt ? 1'b1 : 1'b0;
+assign alu_op[10]= is_sltu ? 1'b1 :1'b0;
                   
 assign rd_we    = (imm_is_R || imm_is_U || 
                    imm_is_I || is_jump) ? 1'b1 : 1'b0;

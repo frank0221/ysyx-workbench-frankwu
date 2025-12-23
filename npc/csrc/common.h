@@ -14,6 +14,7 @@
 #include "init/init.h"
 #include "cpu/cpu_exe.h"
 #include "mem/mem.h"
+#include "difftest/difftest.h"
 
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
@@ -28,16 +29,24 @@
 #define CONFIG_ISA_x86 0
 #define CONFIG_ISA_mips32 0
 #define CONFIG_ISA_loongarch32r 0
+#define CONFIG_DIFFTEST 0
 
 typedef struct {
   int state;
   uint32_t halt_pc;
   uint32_t halt_ret;
 } NPCState;
-enum state {NPC_RUNNING , NPC_END , NEMU_STOP};
+extern NPCState npc_state;
+enum state {NPC_RUNNING , NPC_END , NPC_STOP, NPC_ABORT};
 //NPCState npc_state{.state = NEMU_STOP};
 
 //extern bool finish_flag;
 void step_and_dump_wave();
 // int get_gpr(int idx);
+
+typedef struct {
+  uint32_t gpr[32];
+  uint32_t pc;
+} riscv32_CPU_state;
+extern riscv32_CPU_state cpu;
 #endif

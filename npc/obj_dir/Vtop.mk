@@ -46,6 +46,7 @@ VM_USER_LDLIBS = \
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
 	cpu_exe \
+	dut \
 	init \
 	sdb \
 	main \
@@ -57,6 +58,7 @@ VM_USER_DIR = \
 	.. \
 	../csrc \
 	../csrc/cpu \
+	../csrc/difftest \
 	../csrc/init \
 	../csrc/mem \
 	../csrc/utils \
@@ -72,6 +74,8 @@ include $(VERILATOR_ROOT)/include/verilated.mk
 VPATH += $(VM_USER_DIR)
 
 cpu_exe.o: csrc/cpu/cpu_exe.c 
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
+dut.o: csrc/difftest/dut.c 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
 init.o: csrc/init/init.c 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<

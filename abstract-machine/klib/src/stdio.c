@@ -6,7 +6,90 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 int printf(const char *fmt, ...) {
-  panic("Not implemented");
+  va_list args;
+  va_start(args, fmt);
+  const char *src = fmt;
+  // int k = 0;
+  // char *out;
+  int total=0;
+
+  int j = 0;
+  for(; *(src + j) != '\0'; j++){
+
+    if(*(src + j) != '%'){
+      putch(*(src + j));
+      total++;
+    }
+
+    if(*(src + j) == '%'){
+      if(*(src + j + 1) == 's'){
+        char *temp = va_arg(args,char*);
+        while(*temp){
+        putch(*temp);
+        total++;
+        temp++;
+        }
+        j = j + 1;
+      }
+      //int b = 0;
+      for(;*(src + j + 1) >= '0' && *(src + j +1) <= '9';j++){
+      }
+      
+      if(*(src + j + 1) == 'd'){
+        int temp1 = va_arg(args,int);
+        char a[sizeof(int) * 3 + 2];
+        int i = 0;
+
+        if(temp1 == 0){
+          putch('0');
+          total++;
+        }
+        else if(temp1 >0){
+          do{
+            a[i] = temp1 % 10 + '0'; 
+            temp1 = temp1 /10;
+            i++;
+          }while(temp1 > 0);
+          a[i] = '\0';
+
+          for(int h =0; h < i/2; h++){
+            char tmp = a[h];
+            a[h] = a[i-1-h]; 
+            a[i-1-h] = tmp;
+          }
+          putstr(a);
+          total += i ;
+        }
+        else{
+          unsigned int val = -temp1;
+          a[i++] = '-';
+          do{
+            a[i] = val % 10 + '0'; 
+            val = val /10;
+            i++;
+          }while(val > 0);
+          a[i] = '\0';
+
+          int left = 1;
+          int right = i - 1;  
+          while (left < right) {
+              char tmp = a[left];
+              a[left] = a[right];
+              a[right] = tmp;
+              left++;
+              right--;
+          }
+          putstr(a);
+          total += i;
+        }
+        j++;
+
+      }
+    }
+  }
+  return total;
+  //out[k] = '\0';
+  //panic("Not implemented");
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {

@@ -1,14 +1,17 @@
-IMG ?= /home/frank_wu/ysyx-workbench/am-kernels/tests/cpu-tests/build/string-riscv32e-npc.bin
+IMG ?= /home/frank_wu/ysyx-workbench/am-kernels/tests/cpu-tests/build/sum-riscv32e-npc.bin
 include filelist.mk
+
+ASAN_LIB := $(shell gcc -print-file-name=libasan.so)
 run:
 	@echo "Write this Makefile by your self."
 	$(shell mkdir -p obj_dir)
-	verilator --cc --exe --build --trace -j 0 --LDFLAGS "-lreadline -lhistory -ldl" --CFLAGS "-I$(PWD)/csrc -g -O0  -I$(PWD)/tools/capstone/repo/include" --top-module top \
+	verilator --cc --exe --build --trace -j 0 --LDFLAGS "-lreadline -lhistory -ldl" --CFLAGS "-I$(NPC_HOME)/csrc -g -O0  -I$(NPC_HOME)/tools/capstone/repo/include" --top-module top \
           vsrc/top.v \
           vsrc/ysyx_25080218_EXU.v \
           vsrc/ysyx_25080218_WBU.v \
           vsrc/ysyx_25080218_IDU.v \
           vsrc/ysyx_25080218_IFU.v \
+		  vsrc/ysyx_25080218_MAU.v \
           vsrc/MUX.v \
           vsrc/example.v \
           csrc/main.cpp \
@@ -16,8 +19,10 @@ run:
 		  csrc/mem/mem.c \
 		  csrc/cpu/cpu_exe.c \
 		  csrc/init/sdb.c \
-		  csrc/utils/disasm.c 
-	obj_dir/Vtop $(IMG) -b
+		  csrc/utils/disasm.c \
+		  csrc/difftest/dut.c
+	LD_PRELOAD=$(ASAN_LIB) obj_dir/Vtop $(IMG) -b 
+#-d /home/frank_wu/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!

@@ -23,9 +23,10 @@ void init_difftest(char *ref_so_file, long img_size, int port);
 void init_device();
 void init_sdb();
 void init_disasm();
+#ifdef CONFIG_FTRACE
 void init_ftrace(char *elf_file);
 void ftrace(int rd, int src1, vaddr_t dnpc, vaddr_t pc);
-
+#endif
 static void welcome() {
   Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
   IFDEF(CONFIG_TRACE, Log("If trace is enabled, a log file will be generated "
@@ -114,10 +115,10 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Open the log file. */
   init_log(log_file);
-
+  #ifdef CONFIG_FRACE
   /* open the elf file. */
   init_ftrace(elf_file);
-
+  #endif
   /* Initialize memory. */
   init_mem();
 
@@ -141,7 +142,7 @@ void init_monitor(int argc, char *argv[]) {
   /* Display welcome message. */
   welcome();
 }
-
+#ifdef CONFIG_FTRACE
 int strtab_idx=0;
 int symtab_idx = 0;
 Elf32_Ehdr ehdr;
@@ -215,8 +216,9 @@ void ftrace(int rd ,int src1 ,vaddr_t dnpc, vaddr_t pc){
     //fseek(fp,sizeof(Elf32_Sym),SEEK_CUR);
   }
   fclose(fp1);
+  fclose(fp);
 }
-
+#endif
 
 #else // CONFIG_TARGET_AM
 static long load_img() {

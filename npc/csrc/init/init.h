@@ -9,4 +9,5 @@ int cmd_c(char *args);
 int cmd_si(char *args);
 int cmd_x(char *args);
 int cmd_info(char *args);
+void isa_reg_display();
 #endif

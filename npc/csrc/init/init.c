@@ -7,8 +7,13 @@
 
 uint8_t* guest_to_host(uint32_t paddr);
 uint32_t pmem_read(uint32_t addr);
+void init_difftest(char *ref_so_file, long img_size, int port);
 
 static char *img_file = NULL;
+static char *diff_so_file = NULL;
+static int difftest_port = 1234;
+
+
 static long load_img() {
   if (img_file == NULL) {
     printf("No image is given. Use the default build-in image.");
@@ -50,16 +55,15 @@ void init_pmem() {
 bool batch = false;
 static int parse_args(int argc,char *argv[]){
   const struct option table[]={
-    {"batch"   , no_argument   , NULL, 'b'},
+    {"batch"   , no_argument      , NULL, 'b'},
+    {"diff"    , required_argument, NULL, 'd'},
   };
   int o;
-  while((o = getopt_long(argc, argv, "-b", table,NULL)) != -1){
+  while((o = getopt_long(argc, argv, "-bd:", table,NULL)) != -1){
     switch (o)
     {
-    case 'b':
-      batch = true;
-      break;
-    
+    case 'b': batch = true; break;
+    case 'd': diff_so_file = optarg; break;
     default:
       printf("no argument\n");
       break;
@@ -69,6 +73,7 @@ static int parse_args(int argc,char *argv[]){
 }
 
 void init_device(int argc, char *argv[]){ 
+    long img_size;
     if (argc < 2) {
         printf("[NPC] no image file given, using built-in\n");
         img_file = NULL;
@@ -79,11 +84,15 @@ void init_device(int argc, char *argv[]){
     if(img_file ==NULL)
         init_pmem();
     else
-        load_img();
+        img_size = load_img();
+
     FILE *fp = fopen("log.txt","w");
     void init_disasm();
     init_disasm();
+
     parse_args(argc,argv);
+
+    init_difftest(diff_so_file, img_size, difftest_port);
 }
 
 static char* rl_gets(){
