@@ -3,8 +3,12 @@
 void __am_timer_init() {
 }
 
+uint32_t low = 0;
+uint32_t high= 0;
 void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
-  uptime->us = 0;
+  low = *(volatile uint32_t  *)0xa0000048;
+  high= *(volatile uint32_t  *)(0xa0000048+4);
+  uptime->us = ((uint64_t)high<<32) | low;
 }
 
 void __am_timer_rtc(AM_TIMER_RTC_T *rtc) {

@@ -47,6 +47,10 @@ int isa_mmu_check(vaddr_t vaddr, int len, int type);
 paddr_t isa_mmu_translate(vaddr_t vaddr, int len, int type);
 
 // interrupt/exception
+extern vaddr_t mepc;
+extern uint32_t mstatus;
+extern uint32_t mcause;
+extern uint32_t mtvec;
 vaddr_t isa_raise_intr(word_t NO, vaddr_t epc);
 #define INTR_EMPTY ((word_t)-1)
 word_t isa_query_intr();

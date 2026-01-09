@@ -7,6 +7,7 @@
 #include "svdpi.h"
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <assert.h>
 
@@ -15,6 +16,7 @@
 #include "cpu/cpu_exe.h"
 #include "mem/mem.h"
 #include "difftest/difftest.h"
+#include "device/device.h"
 
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
@@ -29,7 +31,10 @@
 #define CONFIG_ISA_x86 0
 #define CONFIG_ISA_mips32 0
 #define CONFIG_ISA_loongarch32r 0
-#define CONFIG_DIFFTEST 0
+#define CONFIG_DIFFTEST 1
+#define PC_TRACE 0
+#define CONFIG_MTRACE 0
+#define CONFIG_DTRACE 0
 
 typedef struct {
   int state;

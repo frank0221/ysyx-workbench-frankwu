@@ -24,7 +24,7 @@
 #define Mw vaddr_write
 
 enum {
-  TYPE_I, TYPE_U, TYPE_S,TYPE_J, TYPE_R, TYPE_B, TYPE_M,
+  TYPE_I, TYPE_U, TYPE_S,TYPE_J, TYPE_R, TYPE_B, TYPE_M,TYPE_SYS,
   TYPE_N, // none
 };
 
@@ -35,7 +35,10 @@ enum {
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
 #define immJ() do { *imm = (SEXT(BITS(i, 31, 31), 1) << 20) | BITS(i, 19, 12) << 12 | BITS(i, 20, 20) << 11 | BITS(i, 30, 21) <<1;} while(0)
 #define immB() do { *imm = (SEXT(BITS(i, 31, 31), 1) << 12) | BITS(i, 7, 7)<< 11 | BITS(i, 30, 25) << 5 | BITS(i, 11, 8)<<1;} while(0)
+#define immSYS() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
 
+uint32_t csrrw(uint32_t rs1, uint32_t csr_add);
+uint32_t csrrs(uint32_t rs1, uint32_t csr_add);
 
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type) {
   uint32_t i = s->isa.inst;
@@ -51,12 +54,14 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
     case TYPE_R:         src1R(); src2R(); break;
     case TYPE_B: src1R(); src2R(); immB(); break;
     case TYPE_M:         src1R(); src2R(); break;
+    case TYPE_SYS: immSYS();src1R();       break;
     default: panic("unsupported type = %d", type);
   }
 }
 
 void ftrace(int rd ,int src1 ,vaddr_t dnpc, vaddr_t pc);
 
+uint32_t csrrw_temp;
 static int decode_exec(Decode *s) {
   s->dnpc = s->snpc;
 
@@ -134,15 +139,64 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, R(rd) = s->snpc, s->dnpc = (src1 + imm )& ~1);
   INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(rd) = s->snpc, s->dnpc = s->pc + imm);//, printf("jar pc at 0x%x\n",s->pc));
 #endif
-
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(11, s->pc));
+  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = mepc);
+  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , SYS, R(rd) = csrrw(src1, imm));
+  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , SYS, R(rd) = csrrs(src1, imm));
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
-  INSTPAT_END();
+  INSTPAT_END()
 
   R(0) = 0; // reset $zero to 0
 
   return 0;
 }
+
+uint32_t csrrw(uint32_t rs1, uint32_t csr_add){
+
+  if(csr_add == 0x300){
+    csrrw_temp = mstatus;
+    mstatus = rs1;
+  }
+  else if(csr_add == 0x305){
+    csrrw_temp = mtvec;
+    mtvec = rs1;
+    printf("AM set mtvec = 0x%08x\n", rs1);
+  }
+  if(csr_add == 0x341){
+    csrrw_temp = mepc;
+    mepc = rs1;
+  }
+  if(csr_add == 0x342){
+    csrrw_temp = mcause;
+    mcause = rs1;
+  }
+  return csrrw_temp;
+};
+
+uint32_t csrrs(uint32_t rs1, uint32_t csr_add){
+  if(csr_add == 0x300){
+    csrrw_temp = mstatus;
+    mstatus = mstatus | rs1;
+    return csrrw_temp;
+  }
+  else if(csr_add == 0x305){
+    csrrw_temp = mtvec;
+    mtvec = mtvec | rs1;
+    return csrrw_temp;
+  }
+  if(csr_add == 0x341){
+    csrrw_temp = mepc;
+    mepc = mepc | rs1;
+    return csrrw_temp;
+  }
+  if(csr_add == 0x342){
+    csrrw_temp = mcause;
+    mcause = mcause | rs1;
+    return csrrw_temp;
+  }
+  return 0;
+};
 
 int isa_exec_once(Decode *s) {
   s->isa.inst = inst_fetch(&s->snpc, 4);

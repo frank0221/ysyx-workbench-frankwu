@@ -46,7 +46,7 @@ VL_ATTR_COLD void Vtop___024root___eval_settle(Vtop___024root* vlSelf) {
 #ifdef VL_DEBUG
             Vtop___024root___dump_triggers__stl(vlSelf);
 #endif
-            VL_FATAL_MT("vsrc/top.v", 1, "", "Settle region did not converge.");
+            VL_FATAL_MT("/home/frank_wu/ysyx-workbench/npc/vsrc/top.v", 1, "", "Settle region did not converge.");
         }
         __VstlIterCount = ((IData)(1U) + __VstlIterCount);
         __VstlContinue = 0U;
@@ -175,6 +175,12 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     vlSelf->top__DOT__IDU_init__DOT__is_lw = VL_RAND_RESET_I(1);
     vlSelf->top__DOT__IDU_init__DOT__is_lhu = VL_RAND_RESET_I(1);
     vlSelf->top__DOT__IDU_init__DOT__is_lbu = VL_RAND_RESET_I(1);
+    vlSelf->top__DOT__IDU_init__DOT__is_bne = VL_RAND_RESET_I(1);
+    vlSelf->top__DOT__IDU_init__DOT__is_beq = VL_RAND_RESET_I(1);
+    vlSelf->top__DOT__IDU_init__DOT__is_blt = VL_RAND_RESET_I(1);
+    vlSelf->top__DOT__IDU_init__DOT__is_bge = VL_RAND_RESET_I(1);
+    vlSelf->top__DOT__IDU_init__DOT__is_bltu = VL_RAND_RESET_I(1);
+    vlSelf->top__DOT__IDU_init__DOT__is_bgeu = VL_RAND_RESET_I(1);
     vlSelf->top__DOT__IDU_init__DOT____VdfgRegularize_h80d369ef_0_10 = VL_RAND_RESET_I(1);
     vlSelf->top__DOT__IDU_init__DOT____VdfgRegularize_h80d369ef_0_14 = VL_RAND_RESET_I(1);
     vlSelf->top__DOT__IDU_init__DOT____VdfgRegularize_h80d369ef_0_15 = VL_RAND_RESET_I(1);
@@ -183,16 +189,11 @@ VL_ATTR_COLD void Vtop___024root___ctor_var_reset(Vtop___024root* vlSelf) {
     }
     vlSelf->top__DOT__IDU_init__DOT__ysyx_25080218_GPR_init__DOT__i = VL_RAND_RESET_I(32);
     vlSelf->top__DOT__IFU_init__DOT__valid = VL_RAND_RESET_I(1);
-    vlSelf->top__DOT__EXU_init__DOT__is_beq = VL_RAND_RESET_I(1);
-    vlSelf->top__DOT__EXU_init__DOT__is_bne = VL_RAND_RESET_I(1);
-    vlSelf->top__DOT__EXU_init__DOT__is_blt = VL_RAND_RESET_I(1);
-    vlSelf->top__DOT__EXU_init__DOT__is_bge = VL_RAND_RESET_I(1);
-    vlSelf->top__DOT__EXU_init__DOT__is_bltu = VL_RAND_RESET_I(1);
-    vlSelf->top__DOT__EXU_init__DOT__is_bgeu = VL_RAND_RESET_I(1);
     vlSelf->top__DOT__EXU_init__DOT__equal = VL_RAND_RESET_I(1);
     vlSelf->top__DOT__EXU_init__DOT__less_than_signed = VL_RAND_RESET_I(1);
     vlSelf->top__DOT__EXU_init__DOT__less_than_unsigned = VL_RAND_RESET_I(1);
     vlSelf->top__DOT__EXU_init__DOT____VdfgRegularize_he932f07c_0_0 = VL_RAND_RESET_I(32);
+    vlSelf->top__DOT__MAU_init__DOT__rdata_r = VL_RAND_RESET_I(32);
     vlSelf->__VdfgRegularize_hd87f99a1_0_0 = VL_RAND_RESET_I(32);
     vlSelf->__Vfunc_top__DOT__IFU_init__DOT__pmem_read__1__Vfuncout = 0;
     vlSelf->__Vfunc_pmem_read__2__Vfuncout = 0;

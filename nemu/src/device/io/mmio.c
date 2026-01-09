@@ -15,14 +15,21 @@
 
 #include <device/map.h>
 #include <memory/paddr.h>
+#include <isa.h>
 
 #define NR_MAP 16
 
 static IOMap maps[NR_MAP] = {};
 static int nr_map = 0;
+extern FILE *dtrace_fp;
+extern CPU_state cpu;
 
 static IOMap* fetch_mmio_map(paddr_t addr) {
   int mapid = find_mapid_by_addr(maps, nr_map, addr);
+#ifdef CONFIG_DTRACE
+fprintf(dtrace_fp,"0x%x device: %s\n",cpu.pc,maps[mapid].name);
+fflush(dtrace_fp);
+#endif
   return (mapid == -1 ? NULL : &maps[mapid]);
 }
 

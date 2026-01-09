@@ -17,7 +17,7 @@
 #ifndef VL_DPIDECL_get_gpr_
 #define VL_DPIDECL_get_gpr_
 int get_gpr(int idx) {
-    // DPI export at vsrc/ysyx_25080218_IDU.v:216:24
+    // DPI export at /home/frank_wu/ysyx-workbench/npc/vsrc/ysyx_25080218_IDU.v:216:24
     return Vtop::get_gpr(idx);
 }
 #endif

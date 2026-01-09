@@ -81,7 +81,7 @@ void Vtop___024root___eval(Vtop___024root* vlSelf) {
 #ifdef VL_DEBUG
             Vtop___024root___dump_triggers__nba(vlSelf);
 #endif
-            VL_FATAL_MT("vsrc/top.v", 1, "", "NBA region did not converge.");
+            VL_FATAL_MT("/home/frank_wu/ysyx-workbench/npc/vsrc/top.v", 1, "", "NBA region did not converge.");
         }
         __VnbaIterCount = ((IData)(1U) + __VnbaIterCount);
         __VnbaContinue = 0U;
@@ -92,7 +92,7 @@ void Vtop___024root___eval(Vtop___024root* vlSelf) {
 #ifdef VL_DEBUG
                 Vtop___024root___dump_triggers__act(vlSelf);
 #endif
-                VL_FATAL_MT("vsrc/top.v", 1, "", "Active region did not converge.");
+                VL_FATAL_MT("/home/frank_wu/ysyx-workbench/npc/vsrc/top.v", 1, "", "Active region did not converge.");
             }
             vlSelfRef.__VactIterCount = ((IData)(1U) 
                                          + vlSelfRef.__VactIterCount);

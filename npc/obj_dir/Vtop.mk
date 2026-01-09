@@ -46,6 +46,9 @@ VM_USER_LDLIBS = \
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
 	cpu_exe \
+	map \
+	serial \
+	timer \
 	dut \
 	init \
 	sdb \
@@ -58,6 +61,7 @@ VM_USER_DIR = \
 	.. \
 	../csrc \
 	../csrc/cpu \
+	../csrc/device \
 	../csrc/difftest \
 	../csrc/init \
 	../csrc/mem \
@@ -73,19 +77,25 @@ include $(VERILATOR_ROOT)/include/verilated.mk
 ### Executable rules... (from --exe)
 VPATH += $(VM_USER_DIR)
 
-cpu_exe.o: csrc/cpu/cpu_exe.c 
+cpu_exe.o: /home/frank_wu/ysyx-workbench/npc/csrc/cpu/cpu_exe.c 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
-dut.o: csrc/difftest/dut.c 
+map.o: /home/frank_wu/ysyx-workbench/npc/csrc/device/map.c 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
-init.o: csrc/init/init.c 
+serial.o: /home/frank_wu/ysyx-workbench/npc/csrc/device/serial.c 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
-sdb.o: csrc/init/sdb.c 
+timer.o: /home/frank_wu/ysyx-workbench/npc/csrc/device/timer.c 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
-main.o: csrc/main.cpp 
+dut.o: /home/frank_wu/ysyx-workbench/npc/csrc/difftest/dut.c 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
-mem.o: csrc/mem/mem.c 
+init.o: /home/frank_wu/ysyx-workbench/npc/csrc/init/init.c 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
-disasm.o: csrc/utils/disasm.c 
+sdb.o: /home/frank_wu/ysyx-workbench/npc/csrc/init/sdb.c 
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
+main.o: /home/frank_wu/ysyx-workbench/npc/csrc/main.cpp 
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
+mem.o: /home/frank_wu/ysyx-workbench/npc/csrc/mem/mem.c 
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
+disasm.o: /home/frank_wu/ysyx-workbench/npc/csrc/utils/disasm.c 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
 
 ### Link rules... (from --exe)

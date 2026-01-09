@@ -13,6 +13,7 @@ void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
   high = inl(RTC_ADDR+4);
   low  = inl(RTC_ADDR);
   
+  
   uptime->us = ((uint64_t)high << 32) | low;
 }
 

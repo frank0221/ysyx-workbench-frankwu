@@ -67,28 +67,28 @@ void Vtop___024root__trace_chg_0_sub_0(Vtop___024root* vlSelf, VerilatedVcd::Buf
         bufp->chgIData(oldp+11,(vlSelfRef.top__DOT__IDU_init__DOT__ysyx_25080218_GPR_init__DOT__GPR
                                 [(0x1fU & (vlSelfRef.top__DOT__inst 
                                            >> 0xfU))]),32);
-        bufp->chgCData(oldp+12,(((((IData)(vlSelfRef.top__DOT__EXU_init__DOT__is_bgeu) 
-                                   << 5U) | (((IData)(vlSelfRef.top__DOT__EXU_init__DOT__is_bltu) 
+        bufp->chgCData(oldp+12,(((((IData)(vlSelfRef.top__DOT__IDU_init__DOT__is_bgeu) 
+                                   << 5U) | (((IData)(vlSelfRef.top__DOT__IDU_init__DOT__is_bltu) 
                                               << 4U) 
-                                             | ((IData)(vlSelfRef.top__DOT__EXU_init__DOT__is_bge) 
+                                             | ((IData)(vlSelfRef.top__DOT__IDU_init__DOT__is_bge) 
                                                 << 3U))) 
-                                 | (((IData)(vlSelfRef.top__DOT__EXU_init__DOT__is_blt) 
-                                     << 2U) | (((IData)(vlSelfRef.top__DOT__EXU_init__DOT__is_bne) 
+                                 | (((IData)(vlSelfRef.top__DOT__IDU_init__DOT__is_blt) 
+                                     << 2U) | (((IData)(vlSelfRef.top__DOT__IDU_init__DOT__is_bne) 
                                                 << 1U) 
-                                               | (IData)(vlSelfRef.top__DOT__EXU_init__DOT__is_beq))))),6);
+                                               | (IData)(vlSelfRef.top__DOT__IDU_init__DOT__is_beq))))),6);
         bufp->chgIData(oldp+13,(vlSelfRef.top__DOT__branch_pc),32);
-        bufp->chgBit(oldp+14,((((IData)(vlSelfRef.top__DOT__EXU_init__DOT__is_beq) 
+        bufp->chgBit(oldp+14,((((IData)(vlSelfRef.top__DOT__IDU_init__DOT__is_beq) 
                                 & (IData)(vlSelfRef.top__DOT__EXU_init__DOT__equal)) 
                                | (((~ (IData)(vlSelfRef.top__DOT__EXU_init__DOT__equal)) 
-                                   & (IData)(vlSelfRef.top__DOT__EXU_init__DOT__is_bne)) 
-                                  | (((IData)(vlSelfRef.top__DOT__EXU_init__DOT__is_blt) 
+                                   & (IData)(vlSelfRef.top__DOT__IDU_init__DOT__is_bne)) 
+                                  | (((IData)(vlSelfRef.top__DOT__IDU_init__DOT__is_blt) 
                                       & (IData)(vlSelfRef.top__DOT__EXU_init__DOT__less_than_signed)) 
                                      | (((~ (IData)(vlSelfRef.top__DOT__EXU_init__DOT__less_than_signed)) 
-                                         & (IData)(vlSelfRef.top__DOT__EXU_init__DOT__is_bge)) 
-                                        | (((IData)(vlSelfRef.top__DOT__EXU_init__DOT__is_bltu) 
+                                         & (IData)(vlSelfRef.top__DOT__IDU_init__DOT__is_bge)) 
+                                        | (((IData)(vlSelfRef.top__DOT__IDU_init__DOT__is_bltu) 
                                             & (IData)(vlSelfRef.top__DOT__EXU_init__DOT__less_than_unsigned)) 
                                            | ((~ (IData)(vlSelfRef.top__DOT__EXU_init__DOT__less_than_unsigned)) 
-                                              & (IData)(vlSelfRef.top__DOT__EXU_init__DOT__is_bgeu)))))))));
+                                              & (IData)(vlSelfRef.top__DOT__IDU_init__DOT__is_bgeu)))))))));
         bufp->chgIData(oldp+15,(vlSelfRef.top__DOT__rdata),32);
         bufp->chgBit(oldp+16,((1U & (IData)(vlSelfRef.top__DOT__alu_op))));
         bufp->chgBit(oldp+17,((1U & ((IData)(vlSelfRef.top__DOT__alu_op) 
@@ -116,12 +116,12 @@ void Vtop___024root__trace_chg_0_sub_0(Vtop___024root* vlSelf, VerilatedVcd::Buf
                                       ? 0xfffffffbU
                                       : (~ vlSelfRef.__VdfgRegularize_hd87f99a1_0_0))
                                   : vlSelfRef.top__DOT__alu_src2)),32);
-        bufp->chgBit(oldp+28,(vlSelfRef.top__DOT__EXU_init__DOT__is_beq));
-        bufp->chgBit(oldp+29,(vlSelfRef.top__DOT__EXU_init__DOT__is_bne));
-        bufp->chgBit(oldp+30,(vlSelfRef.top__DOT__EXU_init__DOT__is_blt));
-        bufp->chgBit(oldp+31,(vlSelfRef.top__DOT__EXU_init__DOT__is_bge));
-        bufp->chgBit(oldp+32,(vlSelfRef.top__DOT__EXU_init__DOT__is_bltu));
-        bufp->chgBit(oldp+33,(vlSelfRef.top__DOT__EXU_init__DOT__is_bgeu));
+        bufp->chgBit(oldp+28,(vlSelfRef.top__DOT__IDU_init__DOT__is_beq));
+        bufp->chgBit(oldp+29,(vlSelfRef.top__DOT__IDU_init__DOT__is_bne));
+        bufp->chgBit(oldp+30,(vlSelfRef.top__DOT__IDU_init__DOT__is_blt));
+        bufp->chgBit(oldp+31,(vlSelfRef.top__DOT__IDU_init__DOT__is_bge));
+        bufp->chgBit(oldp+32,(vlSelfRef.top__DOT__IDU_init__DOT__is_bltu));
+        bufp->chgBit(oldp+33,(vlSelfRef.top__DOT__IDU_init__DOT__is_bgeu));
         bufp->chgBit(oldp+34,(vlSelfRef.top__DOT__EXU_init__DOT__equal));
         bufp->chgBit(oldp+35,(vlSelfRef.top__DOT__EXU_init__DOT__less_than_signed));
         bufp->chgBit(oldp+36,(vlSelfRef.top__DOT__EXU_init__DOT__less_than_unsigned));
@@ -320,12 +320,13 @@ void Vtop___024root__trace_chg_0_sub_0(Vtop___024root* vlSelf, VerilatedVcd::Buf
                                                              & vlSelfRef.top__DOT__inst)))
                                                     ? 0xfU
                                                     : 0U)))))))),8);
+        bufp->chgIData(oldp+111,(vlSelfRef.top__DOT__MAU_init__DOT__rdata_r),32);
     }
-    bufp->chgBit(oldp+111,(vlSelfRef.clk));
-    bufp->chgBit(oldp+112,(vlSelfRef.rst));
-    bufp->chgIData(oldp+113,(vlSelfRef.pc),32);
-    bufp->chgIData(oldp+114,(vlSelfRef.dnpc),32);
-    bufp->chgIData(oldp+115,(((0x6fU == (0x7fU & vlSelfRef.top__DOT__inst))
+    bufp->chgBit(oldp+112,(vlSelfRef.clk));
+    bufp->chgBit(oldp+113,(vlSelfRef.rst));
+    bufp->chgIData(oldp+114,(vlSelfRef.pc),32);
+    bufp->chgIData(oldp+115,(vlSelfRef.dnpc),32);
+    bufp->chgIData(oldp+116,(((0x6fU == (0x7fU & vlSelfRef.top__DOT__inst))
                                ? (vlSelfRef.pc + ((
                                                    (- (IData)(
                                                               (vlSelfRef.top__DOT__inst 

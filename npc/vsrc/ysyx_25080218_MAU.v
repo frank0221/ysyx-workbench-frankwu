@@ -24,13 +24,22 @@ assign wmask = store_ctrl[0]&&(addr[1:0] == 2'b00) ? 8'd1 :
                store_ctrl[1]&&(addr[1:0] == 2'b10) ? 8'd12 :
                store_ctrl[2] ? 8'd15 :
                8'd0;
+//load_ctrl= {is_lhu,is_lbu,is_lw,is_lh,is_lb}
+reg [31:0] rdata_r;
+
 always @(*) begin
   if (valid) begin // 有读写请求时
-    rdata = pmem_read(addr);
+    rdata_r = pmem_read(addr);
   end else begin
-    rdata = 0;
+    rdata_r = 0;
   end
 end
+
+assign rdata = load_ctrl[0] ? rdata_r & {{24{data[7]}},{8{1'b1}}}:
+               load_ctrl[1] ? rdata_r & {{16{data[15]}},{16{1'b1}}}:
+               load_ctrl[2] ? rdata_r:
+               load_ctrl[3] ? rdata_r & {{24{1'b0}},{8{1'b1}}}:
+               load_ctrl[4] ? rdata_r & {{16{1'b0}},{16{1'b1}}}:32'b0;
 
 always @(*)begin
   if (wen) begin // 有写请求时

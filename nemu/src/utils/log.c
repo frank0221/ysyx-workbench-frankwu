@@ -19,6 +19,7 @@ extern uint64_t g_nr_guest_inst;
 
 #ifndef CONFIG_TARGET_AM
 FILE *log_fp = NULL;
+FILE *dtrace_fp = NULL;
 
 void init_log(const char *log_file) {
   log_fp = stdout;
@@ -28,6 +29,9 @@ void init_log(const char *log_file) {
     log_fp = fp;
   }
   Log("Log is written to %s", log_file ? log_file : "stdout");
+#ifdef CONFIG_DTRACE
+  if(dtrace_fp == NULL) dtrace_fp = fopen("dtrace-log.txt","w");
+#endif
 }
 
 bool log_enable() {

@@ -14,13 +14,21 @@
 ***************************************************************************************/
 
 #include <isa.h>
+vaddr_t mepc;
+uint32_t mstatus = 0x1800;
+uint32_t mcause;
+uint32_t mtvec;
+
+
 
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   /* TODO: Trigger an interrupt/exception with ``NO''.
    * Then return the address of the interrupt/exception vector.
    */
-
-  return 0;
+  mepc = epc;
+  mcause = NO;
+  printf("ecall reached. PC at 0x%8x\n",epc);
+  return mtvec;
 }
 
 word_t isa_query_intr() {

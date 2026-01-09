@@ -32,18 +32,16 @@ void excute_once(){
      #endif
         log();
         top->eval(); 
+#if PC_TRACE
         printf("PC = 0x%08x\n", top->pc); 
+#endif
         top->clk = 1;
         top->eval(); 
-        //top->inst = pmem_read(top->pc);
         step_and_dump_wave();  
         top->clk = 0;
         top->eval(); 
         step_and_dump_wave();
         }
-    // if(!finish_flag){
-    //     printf(ANSI_COLOR_GREEN "HIT GOOD TRAP\n" ANSI_COLOR_RESET);
-    // }
 }
 
 void state(){
@@ -63,6 +61,7 @@ void state(){
 
 void cpu_exec(uint64_t i){
     bool is_first_step = true;
+    uint64_t timer_start = get_time();
     excute_once();
     if (npc_state.state != NPC_RUNNING){
         state();

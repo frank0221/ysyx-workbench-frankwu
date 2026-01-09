@@ -2,9 +2,10 @@
 
 uint8_t pmem[256*1024*1024] = {0};
 uint8_t* guest_to_host(uint32_t paddr) { return pmem + paddr - 0x80000000; }
+extern void difftest_skip_ref();
 
-
-
+extern uint8_t *serial_base;
+extern uint32_t *timer_base;
 uint32_t host_read(void *addr, int len) {
   switch (len) {
     case 1: return *(uint8_t  *)addr;
@@ -23,19 +24,35 @@ void host_write(void *addr, char mask, uint32_t data){
   case 4: waddr[2] = (uint8_t) (data)&0x000000ff;return ;
   case 8: waddr[3] = (uint8_t) (data)&0x000000ff;return ;
   case 3: *(uint16_t *) addr = data&0x0000ffff;return ;
-  case 12: *(((uint16_t *) addr)+1) = (data>>16)&0x0000ffff;return ;
+  case 12: *(((uint16_t *) addr)+1) = (data)&0x0000ffff;return ;
   case 15: *(uint32_t *) addr = data;return ;
   }
 }
 
 extern "C" int pmem_read(int raddr) {
   uint32_t addr = (uint32_t) raddr;
+  if(addr == 0xa00003F8){
+#if CONFIG_DTRACE
+    printf(ANSI_COLOR_YELLOW "DEVICE READ AT 0x%x\n" ANSI_COLOR_RESET,addr);
+#endif
+    difftest_skip_ref();
+    return serial_base[0];
+  }
+  if(addr == 0xa0000048 || addr == 0xa0000048+4){
+    uint64_t us = get_time();
+    timer_base[0] = (uint32_t)us;
+    timer_base[1] = us >> 32;
+    difftest_skip_ref();
+    return addr == 0xa0000048 ? timer_base[0] : timer_base[1];
+  }
   if (addr < 0x80000000 || addr >= 0x80000000 + sizeof(pmem)) {
       printf("[ERROR] Illegal pmem read access at 0x%08x\n", addr);
       //printf(ANSI_COLOR_RED "HIT BAD TRAP\n" ANSI_COLOR_RESET);
       exit(0);
   }
+#if CONFIG_MTRACE
   printf(ANSI_COLOR_BLUE "MEMORY READ AT 0x%x\n" ANSI_COLOR_RESET,addr);
+#endif
   uint32_t ret = host_read(guest_to_host(addr), 4);
   return ret;
 }
@@ -44,28 +61,20 @@ extern "C" void pmem_write(int waddr, int wdata, char wmask) {
   // `wmask`中每比特表示`wdata`中1个字节的掩码,
   // 如`wmask = 0x3`代表只写入最低2个字节, 内存中的其它字节保持不变
   uint32_t addr = (uint32_t) waddr;
-  if (addr < 0x80000000 || addr >= 0x80000000 + sizeof(pmem)) {
+  if(addr == 0xa00003F8){
+#if CONFIG_DTRACE
+    printf(ANSI_COLOR_YELLOW "DEVICE WRITE AT 0x%x\n" ANSI_COLOR_RESET,addr);
+#endif
+    serial_base[0]= wdata & 0xff;
+    char ch = wdata & 0xff;
+    putc(ch,stderr);
+    difftest_skip_ref();
+    return;
+  }
+   if (addr < 0x80000000 || addr >= 0x80000000 + sizeof(pmem)) {
     printf("[ERROR] Illegal pmem write access at 0x%08x\n", addr);
     exit(0);
   }
   host_write(guest_to_host(addr & ~0x00000003),wmask,wdata);
+
 }
-
-// uint32_t pmem_read(uint32_t addr){
-//   if (addr < 0x80000000 || addr >= 0x80000000 + sizeof(pmem)) {
-//         printf("[ERROR] Illegal pmem read access at 0x%08x\n", addr);
-//         //printf(ANSI_COLOR_RED "HIT BAD TRAP\n" ANSI_COLOR_RESET);
-//         exit(0);
-//     }
-//   printf(ANSI_COLOR_BLUE "MEMORY READ AT 0x%x\n" ANSI_COLOR_RESET,addr);
-//   uint32_t ret = host_read(guest_to_host(addr), 4);
-//   return ret;
-// }
-
-// void pmem_write(uint32_t addr,int len,uint32_t data){
-//     if (addr < 0x80000000 || addr >= 0x80000000 + sizeof(pmem)) {
-//         printf("[ERROR] Illegal pmem write access at 0x%08x\n", addr);
-//         exit(0);
-//     }
-//   host_write(guest_to_host(addr),len,data);
-// }
