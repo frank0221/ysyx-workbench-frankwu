@@ -3,6 +3,7 @@
 uint8_t pmem[256*1024*1024] = {0};
 uint8_t* guest_to_host(uint32_t paddr) { return pmem + paddr - 0x80000000; }
 extern void difftest_skip_ref();
+extern Vtop* top;
 
 extern uint8_t *serial_base;
 extern uint32_t *timer_base;
@@ -35,18 +36,25 @@ extern "C" int pmem_read(int raddr) {
 #if CONFIG_DTRACE
     printf(ANSI_COLOR_YELLOW "DEVICE READ AT 0x%x\n" ANSI_COLOR_RESET,addr);
 #endif
+#if CONFIG_DIFFTEST
     difftest_skip_ref();
+#endif
     return serial_base[0];
   }
   if(addr == 0xa0000048 || addr == 0xa0000048+4){
+#if CONFIG_DIFFTEST
+    difftest_skip_ref();
+#endif
     uint64_t us = get_time();
     timer_base[0] = (uint32_t)us;
     timer_base[1] = us >> 32;
+#if CONFIG_DIFFTEST
     difftest_skip_ref();
+#endif
     return addr == 0xa0000048 ? timer_base[0] : timer_base[1];
   }
   if (addr < 0x80000000 || addr >= 0x80000000 + sizeof(pmem)) {
-      printf("[ERROR] Illegal pmem read access at 0x%08x\n", addr);
+      printf("[ERROR] Illegal pmem read access at 0x%08x PC at 0x%x\n", addr, top->pc);
       //printf(ANSI_COLOR_RED "HIT BAD TRAP\n" ANSI_COLOR_RESET);
       exit(0);
   }
@@ -56,24 +64,27 @@ extern "C" int pmem_read(int raddr) {
   uint32_t ret = host_read(guest_to_host(addr), 4);
   return ret;
 }
+
 extern "C" void pmem_write(int waddr, int wdata, char wmask) {
   // 总是往地址为`waddr & ~0x3u`的4字节按写掩码`wmask`写入`wdata`
   // `wmask`中每比特表示`wdata`中1个字节的掩码,
   // 如`wmask = 0x3`代表只写入最低2个字节, 内存中的其它字节保持不变
   uint32_t addr = (uint32_t) waddr;
   if(addr == 0xa00003F8){
+#if CONFIG_DIFFTEST
+    difftest_skip_ref();
+#endif
 #if CONFIG_DTRACE
     printf(ANSI_COLOR_YELLOW "DEVICE WRITE AT 0x%x\n" ANSI_COLOR_RESET,addr);
 #endif
     serial_base[0]= wdata & 0xff;
     char ch = wdata & 0xff;
     putc(ch,stderr);
-    difftest_skip_ref();
     return;
   }
    if (addr < 0x80000000 || addr >= 0x80000000 + sizeof(pmem)) {
-    printf("[ERROR] Illegal pmem write access at 0x%08x\n", addr);
-    exit(0);
+    printf("[ERROR] Illegal pmem write access at 0x%08x PC at 0x%x\n", addr, top->pc);
+    exit(1);
   }
   host_write(guest_to_host(addr & ~0x00000003),wmask,wdata);
 

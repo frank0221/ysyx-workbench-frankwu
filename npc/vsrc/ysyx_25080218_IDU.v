@@ -20,7 +20,9 @@ module ysyx_25080218_IDU(
     output [ 2 : 0] store_ctrl,
     output wire [ 5 : 0] branch_ctrl,
     output wire [31 : 0] rs1,
-    output wire [31 : 0] rs2
+    output wire [31 : 0] rs2,
+    output          is_ecall_mret,
+    output [31 : 0] next_pc_csr
 );
 
 wire [ 6 : 0] opcode;
@@ -144,6 +146,92 @@ assign is_bltu  = (imm_is_B && fun3 == 3'h06) ? 1'b1 : 1'b0;
 assign is_bgeu  = (imm_is_B && fun3 == 3'h07) ? 1'b1 : 1'b0;
 assign branch_ctrl = {is_bgeu,is_bltu,is_bge,is_blt,is_bne,is_beq};
 
+wire [11 : 0] csr_addr;
+wire is_mstatus;
+wire is_mtvec;
+wire is_mepc;
+wire is_mcause;
+
+assign csr_addr = inst[31 : 20];
+assign is_mstatus = (csr_addr == 12'h300) ? 1'b1 : 1'b0;
+assign is_mtvec   = (csr_addr == 12'h305) ? 1'b1 : 1'b0;
+assign is_mepc    = (csr_addr == 12'h341) ? 1'b1 : 1'b0;
+assign is_mcause  = (csr_addr == 12'h342) ? 1'b1 : 1'b0;
+
+wire is_csrrw;
+wire is_csrrs;
+wire is_csr;
+assign is_csrrw = (fun3 == 3'b001 && opcode == 7'b1110011) ? 1'b1 : 1'b0;
+assign is_csrrs = (fun3 == 3'b010 && opcode == 7'b1110011) ? 1'b1 : 1'b0;
+assign is_csr   = (is_csrrs || is_csrrw) ? 1'b1 : 1'b0;
+
+wire is_ecall;
+wire is_mret;
+assign is_ecall_mret = is_ecall || is_mret;
+assign is_ecall = (inst == 32'b00000000000000000000000001110011) ? 1'b1 : 1'b0;
+assign is_mret  = (inst == 32'b00110000001000000000000001110011) ? 1'b1 : 1'b0;
+
+reg  [31:0] mstatus = 32'h1800;
+reg  [31:0] mtvec   ;
+reg  [31:0] mepc    ;
+reg  [31:0] mcause  ;
+wire [31:0] csr_temp;
+wire [31:0] csr2reg ;
+
+assign next_pc_csr = is_ecall ? mtvec :
+                     is_mret  ? mepc  :
+                     32'b0;
+always @(posedge clk or posedge rst)begin
+    if(rst)begin
+        mstatus <= 32'h1800;
+        mtvec   <= 32'd0;
+        mepc    <= 32'b0;
+        mcause  <= 32'b0;
+    end
+    else if(is_ecall)begin
+        $display("ECALL at PC=%x", pc);
+        mcause <= 32'd11;
+        mepc   <= pc;
+    end
+    else if(is_csrrs)begin
+        $display("CSRRS at PC=%x Addr=%x mstatus=%x", pc, csr_addr, mstatus);
+        if(is_mstatus)begin
+            mstatus  <= mstatus | rs1;
+        end
+        else if(is_mtvec)begin
+            mtvec    <= mtvec | rs1;
+        end
+        else if(is_mepc)begin
+            mepc     <= mepc | rs1;
+        end
+        else if(is_mcause)begin
+            mcause   <= mcause | rs1;
+        end
+    end
+    else if(is_csrrw)begin
+        if(is_mstatus)begin
+            mstatus  <= rs1;
+        end
+        else if(is_mtvec)begin
+            mtvec    <= rs1;
+        end
+        else if(is_mepc)begin
+            mepc     <= rs1;
+        end
+        else if(is_mcause)begin
+            mcause   <= rs1;
+        end
+    end
+end
+
+
+assign csr_temp = is_mcause ? mcause : 
+                  is_mepc   ? mepc   :
+                  is_mtvec  ? mtvec  :
+                  is_mstatus? mstatus:
+                  32'b0;
+assign csr2reg  = csr_temp;
+
 assign alu_src1 = is_jump  ? pc    :
                   imm_is_I ? rs1   :
                   imm_is_R ? rs1   :
@@ -176,7 +264,7 @@ assign alu_op[9] = is_slt ? 1'b1 : 1'b0;
 assign alu_op[10]= is_sltu ? 1'b1 :1'b0;
                   
 assign rd_we    = (imm_is_R || imm_is_U || 
-                   imm_is_I || is_jump) ? 1'b1 : 1'b0;
+                   imm_is_I || is_jump ||is_csr) ? 1'b1 : 1'b0;
 
 assign is_break = (inst == 32'b00000000000100000000000001110011) ? 1'b1 : 1'b0;
 
@@ -185,11 +273,14 @@ always @(*)begin
         halt();
 end
 
+wire [31 : 0] gpr_wdata_total;
+assign gpr_wdata_total = is_csr ? csr2reg : gpr_wdata;
+
 ysyx_25080218_GPR ysyx_25080218_GPR_init(
     .clk         (clk),
     .rst         (rst),
     .gpr_waddr   (gpr_waddr),
-    .gpr_wdata   (gpr_wdata),
+    .gpr_wdata   (gpr_wdata_total),
     .gpr_we      (gpr_we),
     .gpr_raddr1  (src1),
     .gpr_raddr2  (src2),
@@ -211,10 +302,24 @@ module ysyx_25080218_GPR(
     output [31 : 0] gpr_rdata2
 );
 reg [31 : 0] GPR [31 : 0];
-// GPR[0] = 0; 
+reg [31 : 0] GPR_diff [31 : 0];
+ 
+integer j;
+always @(*)begin
+    if(rst)begin
+        for (j = 0; j < 32; j = j + 1)   
+            GPR_diff[j] = 32'b0;             
+    end
+    else if(gpr_we && gpr_waddr != 5'd0)
+        GPR_diff[gpr_waddr] = gpr_wdata;
+    else begin
+        for (j = 0; j < 32; j = j + 1)   
+            GPR_diff[j] = GPR_diff[j];  
+    end
+end
 
 function automatic int get_gpr(input int idx);
-    return GPR[idx];
+    return GPR_diff[idx];
 endfunction
 
 export "DPI-C" function get_gpr;

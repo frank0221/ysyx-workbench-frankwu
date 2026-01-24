@@ -14,7 +14,7 @@ using raise_t  = void (*)(uint64_t);
 using init_t   = void (*)(int);
 
 #if CONFIG_DIFFTEST
-static bool is_skip_ref = false;
+ bool is_skip_ref = false;
 static int skip_dut_nr_inst = 0;
 
 void init_difftest(char *ref_so_file, long img_size, int port){
@@ -82,13 +82,13 @@ bool isa_difftest_checkregs(riscv32_CPU_state *ref_r, uint32_t pc) {
       printf("ref gpr = %x\n", ref_r->gpr[i]);
       printf("Wrong at(nemu): 0x%x\n",ref_r->pc);
       printf("dut gpr = %x\n", cpu.gpr[i]);
-      printf("Wrong at(npc): 0x%x\n",top->pc);
+      printf("Wrong at(npc): 0x%x\n",pc);
       return false;
     }
   }
-  if(ref_r->pc != top->pc){
+  if(ref_r->pc != pc){
     printf("ref_pc %0x\n",ref_r->pc);
-    printf("Wrong at: 0x%x\n",top->pc);
+    printf("Wrong at: 0x%x\n",pc);
     return false;
   }
   return true;
@@ -120,15 +120,16 @@ void difftest_step(uint32_t pc, uint32_t npc) {
 
   if (is_skip_ref) {
     // to skip the checking of an instruction, just copy the reg state to reference design
+    cpu.pc = npc; 
     ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
     is_skip_ref = false;
     return;
   }
-
+  //printf("2.%d\n",is_skip_ref);
   ref_difftest_exec(1);
   ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
 
-  checkregs(&ref_r, pc);
+  checkregs(&ref_r, npc);
 }
 #else
 void init_difftest(char *ref_so_file, long img_size, int port) { };

@@ -50,8 +50,10 @@ void state(){
         case NPC_END:
             if(npc_state.halt_ret == 0)
                 printf(ANSI_COLOR_GREEN "HIT GOOD TRAP\n" ANSI_COLOR_RESET);
-            else
+            else{
                 printf(ANSI_COLOR_RED "HIT BAD TRAP\n" ANSI_COLOR_RESET);
+                exit(1);
+            }
             break;
         case NPC_ABORT:
             printf(ANSI_COLOR_RED "ERROR!\n" ANSI_COLOR_RESET);
@@ -63,6 +65,15 @@ void cpu_exec(uint64_t i){
     bool is_first_step = true;
     uint64_t timer_start = get_time();
     excute_once();
+#if CONFIG_DIFFTEST
+    top->eval();
+    svSetScope(svGetScopeFromName("TOP.top.IDU_init.ysyx_25080218_GPR_init"));
+    for(int k=0; k<32; k++){
+        cpu.gpr[k] = get_gpr(k);
+    }
+    cpu.pc = top->pc;
+    difftest_step(top->pc, top->dnpc);
+#endif 
     if (npc_state.state != NPC_RUNNING){
         state();
         return;

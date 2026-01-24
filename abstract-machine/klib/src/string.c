@@ -153,10 +153,13 @@ void *memcpy(void *out, const void *in, size_t n) {
 
   unsigned char* dst = (unsigned char *)out;
   unsigned char* src = (unsigned char *)in;
-  int i = 0;
-  for(; i < n; i++){
+  int i = (int)n - 1;
+  //printf("%d\n",i);
+  for(; i >= 0; i--){
+    //printf("%d\n",i);
     dst[i] = src[i];
   }
+  //printf("MEMCPY\n");
   return dst;
   panic("Not implemented");
 }

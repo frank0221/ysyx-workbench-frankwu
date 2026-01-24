@@ -19,13 +19,16 @@ wire [ 4 : 0] rd;
 wire [31 : 0] next_pc_jump;
 wire          is_jump;
 wire [31 : 0] pc_wire;
-//assign dnpc = next_pc_jump;
+wire [31 : 0] npc;
+assign dnpc = npc;
 wire [4:0] load_ctrl;
 wire [2:0] store_ctrl;
 wire [31 : 0] rs2;
 wire [31 : 0] rs1;
 wire [5:0]    branch_ctrl;
-wire [31:0]    branch_pc;
+wire [31:0]   branch_pc;
+wire [31:0]   next_pc_csr;
+wire          is_ecall_mret;
 ysyx_25080218_IDU IDU_init(
     .clk          (clk),
     .rst          (rst),
@@ -46,7 +49,9 @@ ysyx_25080218_IDU IDU_init(
     .store_ctrl   (store_ctrl),
     .rs2          (rs2),
     .rs1          (rs1),
-    .branch_ctrl  (branch_ctrl)
+    .branch_ctrl  (branch_ctrl),
+    .is_ecall_mret(is_ecall_mret),
+    .next_pc_csr  (next_pc_csr)
 );
 wire branch_taken;
 ysyx_25080218_IFU IFU_init(
@@ -57,8 +62,11 @@ ysyx_25080218_IFU IFU_init(
     .next_pc_jump(next_pc_jump),
     .branch_pc  (branch_pc),
     .branch_taken(branch_taken),
-    .next_pc    (dnpc),
-    .inst       (inst)
+    //.next_pc    (dnpc),
+    .npc        (npc),
+    .inst       (inst),
+    .is_ecall_mret(is_ecall_mret),
+    .next_pc_csr  (next_pc_csr)
 );
 // assign pc = pc_wire;
 

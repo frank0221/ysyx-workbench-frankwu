@@ -27,7 +27,7 @@ word_t isa_raise_intr(word_t NO, vaddr_t epc) {
    */
   mepc = epc;
   mcause = NO;
-  printf("ecall reached. PC at 0x%8x\n",epc);
+  printf("ecall reached. Mtvec: 0x%8x. Mstatus: 0x%8x. Mcause: 0x%8x. PC at 0x%8x\n",mtvec,mstatus,mcause,epc);
   return mtvec;
 }
 
