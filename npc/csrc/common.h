@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <SDL2/SDL.h>
 
 
 #include "init/init.h"
@@ -26,12 +27,12 @@
 #define ANSI_COLOR_CYAN    "\x1b[36m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
-#define CONFIG_ITRACE 1
+#define CONFIG_ITRACE 0
 #define CONFIG_ISA_riscv 1
 #define CONFIG_ISA_x86 0
 #define CONFIG_ISA_mips32 0
 #define CONFIG_ISA_loongarch32r 0
-#define CONFIG_DIFFTEST 1
+#define CONFIG_DIFFTEST 0
 #define PC_TRACE 0
 #define CONFIG_MTRACE 0
 #define CONFIG_DTRACE 0
@@ -42,7 +43,7 @@ typedef struct {
   uint32_t halt_ret;
 } NPCState;
 extern NPCState npc_state;
-enum state {NPC_RUNNING , NPC_END , NPC_STOP, NPC_ABORT};
+enum state {NPC_RUNNING , NPC_END , NPC_STOP, NPC_ABORT, NPC_QUIT};
 //NPCState npc_state{.state = NEMU_STOP};
 
 //extern bool finish_flag;

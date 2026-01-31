@@ -6,6 +6,7 @@ void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 #endif
 
 extern NPCState npc_state;
+void device_update();
 
 extern Vtop* top;
 void excute_once(){
@@ -58,6 +59,9 @@ void state(){
         case NPC_ABORT:
             printf(ANSI_COLOR_RED "ERROR!\n" ANSI_COLOR_RESET);
             break;
+        case NPC_QUIT:
+            printf(ANSI_COLOR_RED "QUIT!\n" ANSI_COLOR_RESET);
+            break;
     }
 }
 
@@ -78,6 +82,7 @@ void cpu_exec(uint64_t i){
         state();
         return;
     }
+    device_update();
     for(uint64_t j = i -1 ; j > 0; j--){
         excute_once();
         #if CONFIG_DIFFTEST
@@ -90,13 +95,16 @@ void cpu_exec(uint64_t i){
         difftest_step(top->pc, top->dnpc); //dnp 要等之后支持跳转指令
         #endif
         if (npc_state.state != NPC_RUNNING) break;
+        device_update();
     }
     state();
 }
 
 void log(){
+#if CONFIG_ITRACE
     FILE *fp = fopen("log.txt","a");
     fprintf(fp,"%s\n",logbuf);
     fflush(fp);
     fclose(fp);
+#endif
 }

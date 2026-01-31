@@ -7,6 +7,7 @@ extern Vtop* top;
 
 extern uint8_t *serial_base;
 extern uint32_t *timer_base;
+extern uint32_t *i8042_data_port_base;
 uint32_t host_read(void *addr, int len) {
   switch (len) {
     case 1: return *(uint8_t  *)addr;
@@ -53,9 +54,31 @@ extern "C" int pmem_read(int raddr) {
 #endif
     return addr == 0xa0000048 ? timer_base[0] : timer_base[1];
   }
+  if(addr == 0xa0000060){
+#if CONFIG_DIFFTEST
+    difftest_skip_ref();
+#endif
+    i8042_data_port_base[0] = key_dequeue();
+    //printf("%d",i8042_data_port_base[0]);
+    return i8042_data_port_base[0];
+  }
+  if(addr >= 0xa0000100 && addr <= 0xa0000100 + 7){
+#if CONFIG_DIFFTEST
+    difftest_skip_ref();
+#endif
+    extern uint32_t *vgactl_port_base;
+  //  if(addr != 0xa0000100) printf(ANSI_COLOR_RED "VGACTL READ AT 0x%x: 0x%x\n" ANSI_COLOR_RESET,addr,vgactl_port_base[(addr - 0xa0000100)/4]);
+    return vgactl_port_base[(addr - 0xa0000100)/4];
+  }
+  if(addr >= 0xa1000000 && addr <= 0xa1000000 + 400*300*sizeof(uint32_t) - 1){
+#if CONFIG_DIFFTEST
+    difftest_skip_ref();
+#endif
+    extern void *vmem;
+    return ((uint32_t*)vmem)[(addr - 0xa1000000)/4];
+  }
   if (addr < 0x80000000 || addr >= 0x80000000 + sizeof(pmem)) {
       printf("[ERROR] Illegal pmem read access at 0x%08x PC at 0x%x\n", addr, top->pc);
-      //printf(ANSI_COLOR_RED "HIT BAD TRAP\n" ANSI_COLOR_RESET);
       exit(0);
   }
 #if CONFIG_MTRACE
@@ -74,14 +97,34 @@ extern "C" void pmem_write(int waddr, int wdata, char wmask) {
 #if CONFIG_DIFFTEST
     difftest_skip_ref();
 #endif
-#if CONFIG_DTRACE
-    printf(ANSI_COLOR_YELLOW "DEVICE WRITE AT 0x%x\n" ANSI_COLOR_RESET,addr);
-#endif
     serial_base[0]= wdata & 0xff;
     char ch = wdata & 0xff;
     putc(ch,stderr);
     return;
   }
+  if(addr >= 0xa0000100 && addr <= 0xa0000100 + 7){
+#if CONFIG_DIFFTEST
+    difftest_skip_ref();
+#endif
+    extern uint32_t *vgactl_port_base;
+    vgactl_port_base[(addr - 0xa0000100)/4] = wdata;
+#if CONFIG_DTRACE
+    printf(ANSI_COLOR_BLUE "VGACTL WRITE AT 0x%x: 0x%x\n" ANSI_COLOR_RESET,addr,wdata);
+    //if(addr == 0xa0000104) exit(0);
+#endif  
+    return;
+  }
+  if(addr >= 0xa1000000 && addr <= 0xa1000000 + 400*300*sizeof(uint32_t) - 1){
+#if CONFIG_DTRACE
+    //printf(ANSI_COLOR_YELLOW "VMEM WRITE AT 0x%x: 0x%x\n" ANSI_COLOR_RESET,addr,wdata);
+#endif  
+#if CONFIG_DIFFTEST
+    difftest_skip_ref();
+#endif
+    extern void *vmem;
+    ((uint32_t*)vmem)[(addr - 0xa1000000)/4] = wdata;
+    return;
+  }  
    if (addr < 0x80000000 || addr >= 0x80000000 + sizeof(pmem)) {
     printf("[ERROR] Illegal pmem write access at 0x%08x PC at 0x%x\n", addr, top->pc);
     exit(1);

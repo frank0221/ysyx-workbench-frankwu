@@ -23,6 +23,7 @@ module ysyx_25080218_IDU(
     output wire [31 : 0] rs2,
     output          is_ecall_mret,
     output [31 : 0] next_pc_csr
+//    output reg      ready
 );
 
 wire [ 6 : 0] opcode;

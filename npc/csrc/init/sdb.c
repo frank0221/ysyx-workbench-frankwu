@@ -10,7 +10,7 @@
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
 int cmd_q(char *args) {
-  // nemu_state.state = NEMU_QUIT;
+   npc_state.state = NPC_QUIT;
   return -1;
 }
 

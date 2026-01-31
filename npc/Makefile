@@ -4,10 +4,11 @@ include filelist.mk
 CSRC = $(shell find $(NPC_HOME)/csrc -name "*.c" -o -name "*.cpp" | grep -v "capstone")
 VSRC = $(shell find $(NPC_HOME)/vsrc -name "*.v")
 ASAN_LIB := $(shell gcc -print-file-name=libasan.so)
+LDFLAGS += -lSDL2
 run:
 	@echo "Write this Makefile by your self."
 	$(shell mkdir -p obj_dir)
-	verilator --cc --exe --build --trace -j 0 --LDFLAGS "-lreadline -lhistory -ldl" --CFLAGS "-I$(NPC_HOME)/csrc -g -O0  -I$(NPC_HOME)/tools/capstone/repo/include" --top-module top \
+	verilator --cc --exe --build --trace -j 0 --LDFLAGS "-lreadline -lhistory -ldl -lSDL2" --CFLAGS "-I$(NPC_HOME)/csrc -g -O0  -I$(NPC_HOME)/tools/capstone/repo/include" --top-module top \
 			$(VSRC) $(CSRC)
 #           vsrc/top.v \
 #           vsrc/ysyx_25080218_EXU.v \
@@ -25,7 +26,8 @@ run:
 # 		  csrc/utils/disasm.c \
 # 		  csrc/difftest/dut.c \
 # 		  csrc/device/serial.c
-	LD_PRELOAD=$(ASAN_LIB) obj_dir/Vtop $(IMG) -b -d /home/frank_wu/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so
+	LD_PRELOAD=$(ASAN_LIB) obj_dir/Vtop $(IMG) -b 
+#-d /home/frank_wu/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!

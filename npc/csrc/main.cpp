@@ -57,13 +57,12 @@ int main(int argc, char *argv[]) {
   sim_init();
   cpu.pc = 0x80000000;
   npc_state = {0};
-  init_device(argc, argv);
   init_map();
+  init_vga();
   init_serial();
   init_timer();
-  // uint32_t first_inst = pmem_read(0x80000000);
-  // printf("First instruction at 0x80000000: 0x%08x\n", first_inst);
-  //finish_flag = true;
+  init_i8042();
+  init_device(argc, argv);
   npc_state.state = NPC_RUNNING;
   reset(1);
   cmd_process();
