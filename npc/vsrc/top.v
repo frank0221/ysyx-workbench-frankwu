@@ -29,6 +29,11 @@ wire [5:0]    branch_ctrl;
 wire [31:0]   branch_pc;
 wire [31:0]   next_pc_csr;
 wire          is_ecall_mret;
+wire          Ifu2Idu_valid;
+wire          Idu2Ifu_ready;
+
+wire          valid_to_exu;
+wire          ready_from_exu;
 ysyx_25080218_IDU IDU_init(
     .clk          (clk),
     .rst          (rst),
@@ -51,7 +56,11 @@ ysyx_25080218_IDU IDU_init(
     .rs1          (rs1),
     .branch_ctrl  (branch_ctrl),
     .is_ecall_mret(is_ecall_mret),
-    .next_pc_csr  (next_pc_csr)
+    .next_pc_csr  (next_pc_csr),
+    .valid_from_ifu   (Ifu2Idu_valid),
+    .ready_to_ifu     (Idu2Ifu_ready),
+    .valid_to_exu     (valid_to_exu),
+    .ready_from_exu   (ready_from_exu)
 );
 wire branch_taken;
 ysyx_25080218_IFU IFU_init(
@@ -66,7 +75,9 @@ ysyx_25080218_IFU IFU_init(
     .npc        (npc),
     .inst       (inst),
     .is_ecall_mret(is_ecall_mret),
-    .next_pc_csr  (next_pc_csr)
+    .next_pc_csr  (next_pc_csr),
+    .valid        (Ifu2Idu_valid),
+    .ready        (Idu2Ifu_ready)
 );
 // assign pc = pc_wire;
 
@@ -80,14 +91,27 @@ ysyx_25080218_EXU EXU_init(
     .rs2        (rs2),
     .branch_ctrl(branch_ctrl),
     .branch_pc  (branch_pc),
-    .branch_taken(branch_taken)
+    .branch_taken(branch_taken),
+    .read_from_lsu(ready_from_lsu),
+    .ready_to_idu (ready_from_exu),
+    .valid_to_lsu (valid_to_lsu),
+    .valid_from_idu (valid_to_exu)
 );
-
+wire ready_from_lsu;
+wire valid_to_lsu;
+wire valid_to_wbu;
+wire ready_from_wbu;
 wire [31:0] rdata;
 ysyx_25080218_MAU MAU_init(
+    .clk(clk),
+    .rst(rst),
     .data(rs2),
     .addr(alu_result),
     .wen(|store_ctrl) ,
+    .valid_from_exu(valid_to_lsu),
+    .ready_to_exu(ready_from_lsu),
+    .valid_to_wbu(valid_to_wbu),
+    .ready_from_wbu(ready_from_wbu),
     
     .store_ctrl(store_ctrl),
     .load_ctrl(load_ctrl),
@@ -102,7 +126,9 @@ ysyx_25080218_WBU WBU_init(
     .rd         (rd),
     .gpr_we     (gpr_we),
     .gpr_wdata  (gpr_wdata),
-    .gpr_waddr  (gpr_waddr)
+    .gpr_waddr  (gpr_waddr),
+    .ready_from_wbu(ready_from_wbu),
+    .valid_from_lsu(valid_to_wbu)
 );
 
 endmodule

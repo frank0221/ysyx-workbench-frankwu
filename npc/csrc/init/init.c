@@ -53,17 +53,20 @@ void init_pmem() {
 }
 
 bool batch = false;
+bool dump_wave = false;
 static int parse_args(int argc,char *argv[]){
   const struct option table[]={
     {"batch"   , no_argument      , NULL, 'b'},
     {"diff"    , required_argument, NULL, 'd'},
+    {"wave"    , no_argument      , NULL, 'w'},
   };
   int o;
-  while((o = getopt_long(argc, argv, "-bd:", table,NULL)) != -1){
+  while((o = getopt_long(argc, argv, "-bd:w", table,NULL)) != -1){
     switch (o)
     {
     case 'b': batch = true; break;
     case 'd': diff_so_file = optarg; break;
+    case 'w': dump_wave = true; break;
     default:
       printf("no argument\n");
       break;

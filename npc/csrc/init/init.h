@@ -2,8 +2,6 @@
 #define __INIT_H_
 
 #include "common.h"
-#include <stdbool.h>
-extern bool batch;
 void init_device(int argc, char *argv[]);
 void cmd_process();
 int cmd_q(char *args);

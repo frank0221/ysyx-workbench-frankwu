@@ -13,22 +13,26 @@ extern "C" void halt(){
   svSetScope(svGetScopeFromName("TOP.top.IDU_init.ysyx_25080218_GPR_init"));
   npc_state.halt_ret = get_gpr(10);
 
-  if (tfp) {
+  if (dump_wave && tfp) {
     tfp->close();  // 刷新缓冲区，确保文件完整
   }
 };
 void step_and_dump_wave(){
   top->eval();
   contextp->timeInc(1);
-  tfp->dump(contextp->time());
+  if (dump_wave) {
+    tfp->dump(contextp->time());
+  }
 }
 void sim_init(){
   contextp = new VerilatedContext;
   tfp = new VerilatedVcdC;
   top = new Vtop;
-  contextp->traceEverOn(true);
-  top->trace(tfp,99);
-  tfp->open("dump.vcd");
+  if (dump_wave) {
+    contextp->traceEverOn(true);
+    top->trace(tfp,99);
+    tfp->open("dump.vcd");
+  }
 }
 
 void sim_exit(){

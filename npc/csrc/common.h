@@ -33,7 +33,7 @@
 #define CONFIG_ISA_mips32 0
 #define CONFIG_ISA_loongarch32r 0
 #define CONFIG_DIFFTEST 0
-#define PC_TRACE 0
+#define PC_TRACE 1
 #define CONFIG_MTRACE 0
 #define CONFIG_DTRACE 0
 
@@ -46,7 +46,8 @@ extern NPCState npc_state;
 enum state {NPC_RUNNING , NPC_END , NPC_STOP, NPC_ABORT, NPC_QUIT};
 //NPCState npc_state{.state = NEMU_STOP};
 
-//extern bool finish_flag;
+extern bool finish_flag;
+extern bool dump_wave;
 void step_and_dump_wave();
 // int get_gpr(int idx);
 

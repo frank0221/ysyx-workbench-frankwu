@@ -8,6 +8,8 @@ module ysyx_25080218_IDU(
     input  [31 : 0] gpr_wdata,
     input  [ 4 : 0] gpr_waddr,
     input           gpr_we,
+    input wire      valid_from_ifu,
+    input wire      ready_from_exu,
     output [11 : 0] imm,
     output [31 : 0] alu_src1,
     output [31 : 0] alu_src2,
@@ -22,10 +24,12 @@ module ysyx_25080218_IDU(
     output wire [31 : 0] rs1,
     output wire [31 : 0] rs2,
     output          is_ecall_mret,
-    output [31 : 0] next_pc_csr
-//    output reg      ready
+    output [31 : 0] next_pc_csr,
+    output wire     ready_to_ifu,
+    output wire     valid_to_exu
 );
-
+assign ready_to_ifu = ready_from_exu;
+assign valid_to_exu = valid_from_ifu;
 wire [ 6 : 0] opcode;
 wire [ 4 : 0] src1;
 wire [ 4 : 0] src2;

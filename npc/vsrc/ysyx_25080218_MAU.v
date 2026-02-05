@@ -3,9 +3,15 @@ import "DPI-C" function void pmem_write(
   input int waddr, input int wdata, input byte wmask);
 
 module ysyx_25080218_MAU(
+    input  clk,
+    input  rst,
     input  [31:0] data,
     input  [31:0] addr,
     input         wen ,
+    input         valid_from_exu,
+    output        ready_to_exu,
+    output        valid_to_wbu,
+    input         ready_from_wbu,
     
     input  [ 4: 0] load_ctrl,
     input  [ 2: 0] store_ctrl,
@@ -14,6 +20,8 @@ module ysyx_25080218_MAU(
 
 wire valid;
 assign valid = (|load_ctrl) || (|store_ctrl);
+assign ready_to_exu = ready_from_wbu;
+assign valid_to_wbu = valid_from_exu;
 
 wire [7:0] wmask;
 assign wmask = store_ctrl[0]&&(addr[1:0] == 2'b00) ? 8'd1 :
@@ -35,14 +43,14 @@ always @(*) begin
   end
 end
 
-assign rdata = load_ctrl[0] ? rdata_r & {{24{data[7]}},{8{1'b1}}}:
-               load_ctrl[1] ? rdata_r & {{16{data[15]}},{16{1'b1}}}:
+assign rdata = load_ctrl[0] ? {{24{rdata_r[7]}},rdata_r[7:0]} :
+               load_ctrl[1] ? {{16{rdata_r[15]}},rdata_r[15:0]} :
                load_ctrl[2] ? rdata_r:
-               load_ctrl[3] ? rdata_r & {{24{1'b0}},{8{1'b1}}}:
-               load_ctrl[4] ? rdata_r & {{16{1'b0}},{16{1'b1}}}:32'b0;
+               load_ctrl[3] ? {24'b0,rdata_r[7:0]} :
+               load_ctrl[4] ? {16'b0,rdata_r[15:0]} : 32'b0;
 
-always @(*)begin
-  if (wen) begin // 有写请求时
+always @(posedge clk)begin
+  if (wen && valid_from_exu) begin // 有写请求且有效时
       pmem_write(addr, data, wmask);
   end
 end

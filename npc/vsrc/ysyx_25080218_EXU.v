@@ -5,12 +5,19 @@ module ysyx_25080218_EXU(
     input  [31 : 0] rs1,
     input  [31 : 0] rs2,
     input  [ 5 : 0] branch_ctrl,
+    input  wire     valid_from_idu,
+    input  wire     read_from_lsu,
     output [31 : 0] alu_result,
     output [31 : 0] branch_pc,
-    output          branch_taken
+    output          branch_taken,
+    output wire     ready_to_idu,
+    output wire     valid_to_lsu
 );
+
+assign ready_to_idu = read_from_lsu;
+assign valid_to_lsu = valid_from_idu;
 wire op_add;
-wire op_sub;
+wire op_sub; 
 wire op_and;
 wire op_or ;
 wire op_xor;
@@ -44,9 +51,9 @@ assign alu_result = op_add || op_sub ? alu_a + alu_b + {31'b0,carry_in} :
                     op_and           ? alu_src1 & alu_src2 : 
                     op_or            ? alu_src1 | alu_src2 :
                     op_xor           ? alu_src1 ^ alu_src2 : 
-                    op_sll           ? alu_src1 << alu_src2:
-                    op_srl           ? alu_src1 >> alu_src2:
-                    op_sra           ? (alu_src1[31] ? ~((~alu_src1) >> alu_src2) : alu_src1 >> alu_src2):
+                    op_sll           ? alu_src1 << alu_src2[4:0] :
+                    op_srl           ? alu_src1 >> alu_src2[4:0] :
+                    op_sra           ? (alu_src1[31] ? ~((~alu_src1) >> alu_src2[4:0]) : alu_src1 >> alu_src2[4:0]) :
                     op_slt           ? ($signed(alu_src1)<$signed(alu_src2)) ? {31'b0,1'b1} : 32'b0 :
                     op_sltu          ? (alu_src1 < alu_src2) ? {31'b0,1'b1} : 32'b0 :
                     32'b0;
