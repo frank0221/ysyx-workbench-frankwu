@@ -70,13 +70,15 @@ void cpu_exec(uint64_t i){
     uint64_t timer_start = get_time();
     excute_once();
 #if CONFIG_DIFFTEST
-    top->eval();
-    svSetScope(svGetScopeFromName("TOP.top.IDU_init.ysyx_25080218_GPR_init"));
-    for(int k=0; k<32; k++){
-        cpu.gpr[k] = get_gpr(k);
+    if (top->commit) {
+        top->eval();
+        svSetScope(svGetScopeFromName("TOP.top.IDU_init.ysyx_25080218_GPR_init"));
+        for(int k=0; k<32; k++){
+            cpu.gpr[k] = get_gpr(k);
+        }
+        cpu.pc = top->pc;
+        difftest_step(top->pc, top->dnpc);
     }
-    cpu.pc = top->pc;
-    difftest_step(top->pc, top->dnpc);
 #endif 
     if (npc_state.state != NPC_RUNNING){
         state();
@@ -86,13 +88,16 @@ void cpu_exec(uint64_t i){
     for(uint64_t j = i -1 ; j > 0; j--){
         excute_once();
         #if CONFIG_DIFFTEST
-        top->eval();
-        svSetScope(svGetScopeFromName("TOP.top.IDU_init.ysyx_25080218_GPR_init"));
-        for(int k=0; k<32; k++){
-            cpu.gpr[k] = get_gpr(k);
+        if (top->commit) {
+            //printf("difftest enable");
+            top->eval();
+            svSetScope(svGetScopeFromName("TOP.top.IDU_init.ysyx_25080218_GPR_init"));
+            for(int k=0; k<32; k++){
+                cpu.gpr[k] = get_gpr(k);
+            }
+            cpu.pc = top->pc;
+            difftest_step(top->pc, top->dnpc);
         }
-        cpu.pc = top->pc;
-        difftest_step(top->pc, top->dnpc); //dnp 要等之后支持跳转指令
         #endif
         if (npc_state.state != NPC_RUNNING) break;
         device_update();

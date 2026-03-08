@@ -58,7 +58,6 @@ static void reset(int n) {
 
 
 int main(int argc, char *argv[]) {
-  sim_init();
   cpu.pc = 0x80000000;
   npc_state = {0};
   init_map();
@@ -67,6 +66,7 @@ int main(int argc, char *argv[]) {
   init_timer();
   init_i8042();
   init_device(argc, argv);
+  sim_init();
   npc_state.state = NPC_RUNNING;
   reset(1);
   cmd_process();

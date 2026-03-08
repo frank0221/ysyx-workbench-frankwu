@@ -58,16 +58,14 @@ VL_INLINE_OPT void Vtop___024root___ico_sequent__TOP__0(Vtop___024root* vlSelf) 
         vlSelfRef.top__DOT__IDU_init__DOT__ysyx_25080218_GPR_init__DOT__GPR_diff[0x1eU] = 0U;
         vlSelfRef.top__DOT__IDU_init__DOT__ysyx_25080218_GPR_init__DOT__GPR_diff[0x1fU] = 0U;
     } else {
-        if ((1U & (~ ((IData)(vlSelfRef.top__DOT__rd_we) 
+        if ((1U & (~ ((IData)(vlSelfRef.top__DOT__gpr_we) 
                       & (0U != (0x1fU & (vlSelfRef.top__DOT__inst 
                                          >> 7U))))))) {
             vlSelfRef.top__DOT__IDU_init__DOT__ysyx_25080218_GPR_init__DOT__j = 0x20U;
         }
-        if (((IData)(vlSelfRef.top__DOT__rd_we) & (0U 
-                                                   != 
-                                                   (0x1fU 
-                                                    & (vlSelfRef.top__DOT__inst 
-                                                       >> 7U))))) {
+        if (((IData)(vlSelfRef.top__DOT__gpr_we) & 
+             (0U != (0x1fU & (vlSelfRef.top__DOT__inst 
+                              >> 7U))))) {
             vlSelfRef.top__DOT__IDU_init__DOT__ysyx_25080218_GPR_init__DOT__GPR_diff[(0x1fU 
                                                                                 & (vlSelfRef.top__DOT__inst 
                                                                                 >> 7U))] 
@@ -389,7 +387,7 @@ VL_INLINE_OPT void Vtop___024root___nba_comb__TOP__0(Vtop___024root* vlSelf) {
         vlSelfRef.top__DOT__IDU_init__DOT__ysyx_25080218_GPR_init__DOT__GPR_diff[0x1dU] = 0U;
         vlSelfRef.top__DOT__IDU_init__DOT__ysyx_25080218_GPR_init__DOT__GPR_diff[0x1eU] = 0U;
         vlSelfRef.top__DOT__IDU_init__DOT__ysyx_25080218_GPR_init__DOT__GPR_diff[0x1fU] = 0U;
-    } else if (((IData)(vlSelfRef.top__DOT__rd_we) 
+    } else if (((IData)(vlSelfRef.top__DOT__gpr_we) 
                 & (0U != (0x1fU & (vlSelfRef.top__DOT__inst 
                                    >> 7U))))) {
         vlSelfRef.top__DOT__IDU_init__DOT__ysyx_25080218_GPR_init__DOT__GPR_diff[(0x1fU 

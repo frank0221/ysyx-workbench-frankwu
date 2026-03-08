@@ -26,7 +26,7 @@ run:
 # 		  csrc/utils/disasm.c \
 # 		  csrc/difftest/dut.c \
 # 		  csrc/device/serial.c
-	LD_PRELOAD=$(ASAN_LIB) obj_dir/Vtop $(IMG) -b -d /home/frank_wu/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so
+	LD_PRELOAD=$(ASAN_LIB) obj_dir/Vtop $(IMG) -b -d /home/frank_wu/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so -w
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!

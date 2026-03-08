@@ -22,7 +22,7 @@ extern "C" {
     // DPI IMPORTS
     // DPI import at /home/frank_wu/ysyx-workbench/npc/vsrc/ysyx_25080218_IDU.v:1:30
     extern void halt();
-    // DPI import at /home/frank_wu/ysyx-workbench/npc/vsrc/ysyx_25080218_IFU.v:17:29
+    // DPI import at /home/frank_wu/ysyx-workbench/npc/vsrc/ysyx_25080218_IFU.v:16:29
     extern int pmem_read(int raddr);
     // DPI import at /home/frank_wu/ysyx-workbench/npc/vsrc/ysyx_25080218_MAU.v:2:30
     extern void pmem_write(int waddr, int wdata, char wmask);

@@ -79,6 +79,8 @@ extern "C" int pmem_read(int raddr) {
   }
   if (addr < 0x80000000 || addr >= 0x80000000 + sizeof(pmem)) {
       printf("[ERROR] Illegal pmem read access at 0x%08x PC at 0x%x\n", addr, top->pc);
+      npc_state.state = NPC_ABORT;
+      return -1;
       exit(0);
   }
 #if CONFIG_MTRACE
@@ -127,6 +129,8 @@ extern "C" void pmem_write(int waddr, int wdata, char wmask) {
   }  
    if (addr < 0x80000000 || addr >= 0x80000000 + sizeof(pmem)) {
     printf("[ERROR] Illegal pmem write access at 0x%08x PC at 0x%x\n", addr, top->pc);
+    npc_state.state = NPC_ABORT;
+    return;
     exit(1);
   }
   host_write(guest_to_host(addr & ~0x00000003),wmask,wdata);

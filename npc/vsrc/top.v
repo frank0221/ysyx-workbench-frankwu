@@ -3,7 +3,8 @@ module top(
     input           rst,
     //input  [31 : 0] inst,
     output [31 : 0] pc,
-    output [31 : 0] dnpc
+    output [31 : 0] dnpc,
+    output          commit
 );
 wire [31 : 0] inst;
 wire [31 : 0] gpr_wdata;
@@ -102,6 +103,7 @@ wire valid_to_lsu;
 wire valid_to_wbu;
 wire ready_from_wbu;
 wire [31:0] rdata;
+assign commit = valid_to_wbu;
 ysyx_25080218_MAU MAU_init(
     .clk(clk),
     .rst(rst),
