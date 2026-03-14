@@ -64,6 +64,15 @@ ysyx_25080218_IDU IDU_init(
     .ready_from_exu   (ready_from_exu)
 );
 wire branch_taken;
+wire [31:0] ARADDR;
+wire ARVALID;
+wire ARREAD;
+wire [31:0] RDATA;
+wire [ 1:0] RRESP;
+wire RVALID;
+wire RREADY;
+assign ARREAD = 1'b1;
+assign RVALID = 1'b1;
 ysyx_25080218_IFU IFU_init(
     .clk        (clk),
     .rst        (rst),
@@ -78,7 +87,15 @@ ysyx_25080218_IFU IFU_init(
     .is_ecall_mret(is_ecall_mret),
     .next_pc_csr  (next_pc_csr),
     .valid        (Ifu2Idu_valid),
-    .ready        (Idu2Ifu_ready)
+    .ready        (Idu2Ifu_ready),
+    .ARADDR(ARADDR),
+    .ARVALID(ARVALID),
+    .ARREADY(ARREAD),
+
+    .RDATA(RDATA),
+    .RRESP(RRESP),
+    .RVALID(RVALID),
+    .RREADY(RREADY)    
 );
 // assign pc = pc_wire;
 
@@ -104,6 +121,30 @@ wire valid_to_wbu;
 wire ready_from_wbu;
 wire [31:0] rdata;
 assign commit = valid_to_wbu;
+
+wire [31:0] LSU_ARADDR;
+wire LSU_ARVALID;
+wire LSU_ARREADY;
+wire [31:0] LSU_RDATA;
+wire [ 1:0] LSU_RRESP;
+wire LSU_RVALID;
+wire LSU_RREADY;
+
+wire [31:0] LSU_AWADDR;
+wire LSU_AWVALID;
+wire LSU_AWREADY;
+wire [31:0] LSU_WDATA;
+wire [ 3:0] LSU_WSTRB;
+wire LSU_WVALID;
+wire LSU_WREADY;
+wire [ 1:0] LSU_BRESP;
+wire LSU_BVALID;
+wire LSU_BREADY;
+assign LSU_ARREADY= 1'b1;
+assign LSU_BVALID = 1'b1;
+assign LSU_RVALID = 1'b1;
+assign LSU_WREADY = 1'b1;
+assign LSU_AWREADY= 1'b1;
 ysyx_25080218_MAU MAU_init(
     .clk(clk),
     .rst(rst),
@@ -117,7 +158,29 @@ ysyx_25080218_MAU MAU_init(
     
     .store_ctrl(store_ctrl),
     .load_ctrl(load_ctrl),
-    .rdata(rdata)
+    .rdata(rdata),
+
+    .AWADDR(LSU_AWADDR),
+    .AWVALID(LSU_AWVALID),
+    .AWREADY(LSU_AWREADY),
+
+    .WDATA(LSU_WDATA),
+    .WSTRB(LSU_WSTRB),
+    .WVALID(LSU_WVALID),
+    .WREADY(LSU_WREADY),
+
+    .BRESP(LSU_BRESP),
+    .BVALID(LSU_BVALID),
+    .BREADY(LSU_BREADY),
+
+    .ARADDR(LSU_ARADDR),
+    .ARVALID(LSU_ARVALID),
+    .ARREADY(LSU_ARREADY),
+
+    .RDATA(LSU_RDATA),
+    .RRESP(LSU_RRESP),
+    .RVALID(LSU_RVALID),
+    .RREADY(LSU_RREADY)
 );
 
 ysyx_25080218_WBU WBU_init(
@@ -131,6 +194,129 @@ ysyx_25080218_WBU WBU_init(
     .gpr_waddr  (gpr_waddr),
     .ready_from_wbu(ready_from_wbu),
     .valid_from_lsu(valid_to_wbu)
+);
+
+xbar xbar_init(
+    .clk        (clk),
+    .rst        (rst),
+
+    .m1_awaddr  (),
+    .m1_awvalid (),
+    .m1_awready (),
+.
+    //写数据通道
+    .m1_wdata   (),
+    .m1_wstrb   (),
+    .m1_wvalid  (),
+    .m1_wready  (),
+.
+    .
+    .m1_bresp   (),
+    .m1_bvalid  (),
+    .m1_bready  (),
+
+    .m1_araddr  (),
+    .m1_arvalid (),
+    .m1_arready (),
+
+    .m1_rdata   (),
+    .m1_rresp   (),
+    .m1_rvalid  (),
+    .m1_rready  (),
+
+    .m0_awaddr  (),
+    .m0_awvalid (),
+    .m0_awready (),
+
+    .m0_wdata   (),
+    .m0_wstrb   (),
+    .m0_wvalid  (),
+    .m0_wready  (),
+
+    .m0_bresp   (),
+    .m0_bvalid  (),
+    .m0_bready  (),
+
+    .m0_araddr  (),
+    .m0_arvalid (),
+    .m0_arready (),
+
+    .m0_rdata   (),
+    .m0_rresp   (),
+    .m0_rvalid  (),
+    .m0_rready  (),
+
+    .s0_awaddr  (),
+    .s0_awvalid (),
+    .s0_awready (),
+
+    .s0_wdata   (),
+    .s0_wstrb   (),
+    .s0_wvalid  (),
+    .s0_wready  (),
+
+    .s0_bresp   (),
+    .s0_bvalid  (),
+    .s0_bready  (),
+
+    .s0_araddr  (),
+    .s0_arvalid (),
+    .s0_arready (),
+
+    .s0_rdata   (),
+    .s0_rresp   (),
+    .s0_rvalid  (),
+    .s0_rready  (),
+
+    .s1_awaddr  (),
+    .s1_awvalid (),
+    .s1_awready (),
+
+    .s1_wdata   (),
+    .s1_wstrb   (),
+    .s1_wvalid  (),
+    .s1_wready  (),
+
+    .s1_bresp   (),
+    .s1_bvalid  (),
+    .s1_bready  (),
+
+    .s1_araddr  (),
+    .s1_arvalid (),
+    .s1_arready (),
+
+    .s1_rdata   (),
+    .s1_rresp   (),
+    .s1_rvalid  (),
+    .s1_rready  ()
+);
+
+uart uart_init(
+    .clk       (clk),
+    .rst       (rst),
+    .s_awaddr  (),
+    .s_awvalid (),
+    .s_awready (),
+    
+
+    .s_wdata   (),
+    .s_wstrb   (),
+    .s_wvalid  (),
+    .s_wready  (),
+    
+    
+    .s_bresp   (),
+    .s_bvalid  (),
+    .s_bready  (),
+
+    .s_araddr  (),
+    .s_arvalid (),
+    .s_arready (),
+
+    .s_rdata   (),
+    .s_rresp   (),
+    .s_rvalid  (),
+    .s_rready  ()
 );
 
 endmodule
