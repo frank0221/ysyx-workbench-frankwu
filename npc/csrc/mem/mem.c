@@ -46,13 +46,13 @@ extern "C" int pmem_read(int raddr) {
 #if CONFIG_DIFFTEST
     difftest_skip_ref();
 #endif
-    uint64_t us = get_time();
-    timer_base[0] = (uint32_t)us;
-    timer_base[1] = us >> 32;
+    // uint64_t us = get_time();
+    // timer_base[0] = (uint32_t)us;
+    // timer_base[1] = us >> 32;
 #if CONFIG_DIFFTEST
     difftest_skip_ref();
 #endif
-    return addr == 0xa0000048 ? timer_base[0] : timer_base[1];
+    return 0;// addr == 0xa0000048 ? timer_base[0] : timer_base[1];
   }
   if(addr == 0xa0000060){
 #if CONFIG_DIFFTEST
@@ -99,9 +99,9 @@ extern "C" void pmem_write(int waddr, int wdata, char wmask) {
 #if CONFIG_DIFFTEST
     difftest_skip_ref();
 #endif
-    serial_base[0]= wdata & 0xff;
-    char ch = wdata & 0xff;
-    putc(ch,stderr);
+    // serial_base[0]= wdata & 0xff;
+    // char ch = wdata & 0xff;
+    // putc(ch,stderr);
     return;
   }
   if(addr >= 0xa0000100 && addr <= 0xa0000100 + 7){

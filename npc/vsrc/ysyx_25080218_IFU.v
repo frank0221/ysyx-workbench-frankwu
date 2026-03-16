@@ -37,7 +37,7 @@ module ysyx_25080218_IFU(
     input wire        RVALID,
     output reg        RREADY           
 );
-import "DPI-C" function int pmem_read(input int raddr);
+//import "DPI-C" function int pmem_read(input int raddr);
 wire   [31 : 0]next_pc;
 assign next_pc = pc + 32'h4;
 reg valid_rst;
@@ -148,7 +148,7 @@ always @(posedge clk)begin
             end
             S_R:begin
                 if(RREADY && RVALID)begin
-                    inst <= pmem_read(araddr_latched);
+                    inst <= RDATA;//pmem_read(araddr_latched);
                     valid <= 1'b1;
                     RREADY <= 1'b0;
                     state <= S_AR;

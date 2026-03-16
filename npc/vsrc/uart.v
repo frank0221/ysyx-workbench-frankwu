@@ -67,7 +67,7 @@ always @(posedge clk)begin
 
         if(!s_bvalid && aw_holding && w_holding)begin
             if(awaddr_hold == 32'ha00003F8)
-                $write("%c",wdata_hold & 8'hff);
+                $write("%c",wdata_hold[7:0]);
             aw_holding <= 1'b0;
             w_holding  <= 1'b0;
 

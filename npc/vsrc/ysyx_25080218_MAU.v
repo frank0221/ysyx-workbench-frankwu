@@ -1,4 +1,4 @@
-import "DPI-C" function int pmem_read(input int raddr);
+// import "DPI-C" function int pmem_read(input int raddr);
 import "DPI-C" function void pmem_write(
   input int waddr, input int wdata, input byte wmask);
 
@@ -191,7 +191,7 @@ always @(posedge clk) begin
         if(RREADY && RVALID)begin
           state <= S_IDLE;
           RREADY <= 1'b0;
-          rdata_r <= pmem_read(araddr_latched);
+          rdata_r <= RDATA;//pmem_read(araddr_latched);
           done <= 1'b1;
         end
       end
@@ -203,7 +203,7 @@ always @(posedge clk) begin
         end
         if(!w_done)begin
           WVALID  <= 1'b1;
-          //WSTRB   <= 
+          WSTRB   <= 4'b1111;
           WDATA   <= data;
         end
         if(AWVALID && AWREADY)begin
