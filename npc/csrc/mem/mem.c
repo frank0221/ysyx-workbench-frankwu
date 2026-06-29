@@ -1,13 +1,7 @@
 #include "mem.h"
 
-uint8_t pmem[256*1024*1024] = {0};
-uint8_t* guest_to_host(uint32_t paddr) { return pmem + paddr - 0x80000000; }
-extern void difftest_skip_ref();
-extern Vtop* top;
-
-extern uint8_t *serial_base;
-extern uint32_t *timer_base;
-extern uint32_t *i8042_data_port_base;
+uint8_t pmem[1024*1024*1024] = {0};
+uint8_t* guest_to_host(uint32_t paddr) { return pmem + paddr - 0x20000000; }
 uint32_t host_read(void *addr, int len) {
   switch (len) {
     case 1: return *(uint8_t  *)addr;
@@ -16,7 +10,30 @@ uint32_t host_read(void *addr, int len) {
     default: return 0;
   }
 }
+extern void difftest_skip_ref();
+extern VysyxSoCFull* top;
 
+extern uint8_t *serial_base;
+extern uint32_t *timer_base;
+extern uint32_t *i8042_data_port_base;
+
+#if SOC_EN
+//void flash_read(int32_t addr, int32_t *data) { assert(0); }
+extern "C" void mrom_read(int32_t addr, int32_t *data) {
+  *data = host_read(guest_to_host(addr), 4);
+  // *data = 0x00100073;
+  //fprintf(stderr, "[mrom_read] addr=0x%08x data=0x%08x\n", (uint32_t)addr, (uint32_t)*data);
+}
+
+uint8_t page, sector, block;
+uint8_t flash[16*1024*1024]={};
+uint8_t* flash_guest_to_host(uint32_t addr){ return (flash + addr - 0x30000000);}
+void flash_read(int32_t addr, int32_t *data){
+  
+  *data = host_read(flash_guest_to_host(addr|0x30000000),4);
+  //assert(0);
+}
+#else
 void host_write(void *addr, char mask, uint32_t data){
   uint8_t* waddr = (uint8_t *)addr; 
   switch (mask)
@@ -136,3 +153,4 @@ extern "C" void pmem_write(int waddr, int wdata, char wmask) {
   host_write(guest_to_host(addr & ~0x00000003),wmask,wdata);
 
 }
+#endif

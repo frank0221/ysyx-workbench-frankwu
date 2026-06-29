@@ -17,7 +17,8 @@
 #include <memory/paddr.h>
 #include <device/mmio.h>
 #include <isa.h>
-
+#define SOC_EN 1
+#ifndef SOC_EN
 #if   defined(CONFIG_PMEM_MALLOC)
 static uint8_t *pmem = NULL;
 #else // CONFIG_PMEM_GARRAY
@@ -68,3 +69,44 @@ void paddr_write(paddr_t addr, int len, word_t data) {
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
   out_of_bound(addr);
 }
+#endif
+#ifdef SOC_EN
+static uint8_t *mrom = NULL;
+static uint8_t *sram = NULL;
+uint8_t* guest_to_host(paddr_t paddr) { return mrom + paddr - 0x20000000; }
+
+void init_mem() {
+  mrom = malloc(0x1000);
+  assert(mrom);
+  sram = malloc(8*1024);
+  assert(sram);
+}
+
+word_t paddr_read(paddr_t addr, int len) {
+  #ifdef CONFIG_MTRACE_COND 
+    printf("\033[0m\033[1;31mMemory read at\033[0m \033[0m\033[1;34m0x%x\033[0m\n",addr);
+  #endif
+  if(addr >= 0x20000000 && addr <= 0x20000fff){
+    word_t ret = host_read(mrom+addr-0x20000000, len);
+    return ret;
+  }
+  else if(addr >= 0x0f000000 && addr <= 0x0f002000){
+    word_t ret = host_read(sram+addr-0x0f000000, len);
+    return ret;
+  }
+  return 0;
+}
+
+void paddr_write(paddr_t addr, int len, word_t data) {
+  #ifdef CONFIG_MTRACE_COND
+    printf("Memory write at 0x%x\n",addr);
+  #endif
+  if(addr >= 0x20000000 && addr <= 0x20000fff){
+    assert(0);
+  }
+  else if(addr >= 0x0f000000 && addr <= 0x0f002000){
+    host_write(sram+addr-0x0f000000, len, data);
+  }
+}
+
+#endif

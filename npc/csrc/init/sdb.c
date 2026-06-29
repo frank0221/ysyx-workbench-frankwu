@@ -44,7 +44,7 @@ int cmd_x(char *args){
   uint32_t add = 0x80000000;
   for(int j=0;j<i;j++)
   {
-    printf("0x%X :%08xH\n",add,host_read(guest_to_host(add), 4));
+    //printf("0x%X :%08xH\n",add,host_read(guest_to_host(add), 4));
     add = add + 0x4;
   }
   return 0;
@@ -65,7 +65,7 @@ void isa_reg_display() {
       printf(">>> ERROR: get_gpr is NULL! DPI not linked!\n");
       return;
   }
-  svSetScope(svGetScopeFromName("TOP.top.IDU_init.ysyx_25080218_GPR_init"));
+  svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu.IDU_init.ysyx_25080218_GPR_init"));
   for(i=0;i<32;i++)
   {
     printf("%s: %u \n",regs[i],get_gpr(i));

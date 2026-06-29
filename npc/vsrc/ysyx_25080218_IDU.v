@@ -1,5 +1,10 @@
 import "DPI-C" function void halt();
-
+import "DPI-C" function void B_inst_analysis();
+import "DPI-C" function void I_inst_analysis();
+import "DPI-C" function void J_inst_analysis();
+import "DPI-C" function void R_inst_analysis();
+import "DPI-C" function void S_inst_analysis();
+import "DPI-C" function void U_inst_analysis();
 module ysyx_25080218_IDU(
     input  clk,
     input  rst,
@@ -156,12 +161,16 @@ wire is_mstatus;
 wire is_mtvec;
 wire is_mepc;
 wire is_mcause;
+wire is_mvendorid;
+wire is_marchid;
 
 assign csr_addr = inst[31 : 20];
-assign is_mstatus = (csr_addr == 12'h300) ? 1'b1 : 1'b0;
-assign is_mtvec   = (csr_addr == 12'h305) ? 1'b1 : 1'b0;
-assign is_mepc    = (csr_addr == 12'h341) ? 1'b1 : 1'b0;
-assign is_mcause  = (csr_addr == 12'h342) ? 1'b1 : 1'b0;
+assign is_mstatus  = (csr_addr == 12'h300) ? 1'b1 : 1'b0;
+assign is_mtvec    = (csr_addr == 12'h305) ? 1'b1 : 1'b0;
+assign is_mepc     = (csr_addr == 12'h341) ? 1'b1 : 1'b0;
+assign is_mcause   = (csr_addr == 12'h342) ? 1'b1 : 1'b0;
+assign is_mvendorid= (csr_addr == 12'hf11) ? 1'b1 : 1'b0;
+assign is_marchid  = (csr_addr == 12'hf12) ? 1'b1 : 1'b0;
 
 wire is_csrrw;
 wire is_csrrs;
@@ -199,7 +208,7 @@ always @(posedge clk or posedge rst)begin
         mepc   <= pc;
     end
     else if(is_csrrs)begin
-        $display("CSRRS at PC=%x Addr=%x mstatus=%x", pc, csr_addr, mstatus);
+        //$display("CSRRS at PC=%x Addr=%x mstatus=%x", pc, csr_addr, mstatus);
         if(is_mstatus)begin
             mstatus  <= mstatus | rs1;
         end
@@ -211,6 +220,12 @@ always @(posedge clk or posedge rst)begin
         end
         else if(is_mcause)begin
             mcause   <= mcause | rs1;
+        end
+        else if(is_mvendorid)begin
+            mvendorid <= mvendorid | rs1;
+        end
+        else if(is_marchid)begin
+            marchid <= marchid | rs1;
         end
     end
     else if(is_csrrw)begin
@@ -229,11 +244,14 @@ always @(posedge clk or posedge rst)begin
     end
 end
 
-
+reg [31:0] mvendorid = 32'h17EB19A;
+reg [31:0] marchid   = 32'h25080218;
 assign csr_temp = is_mcause ? mcause : 
                   is_mepc   ? mepc   :
                   is_mtvec  ? mtvec  :
                   is_mstatus? mstatus:
+                  is_mvendorid? mvendorid:
+                  is_marchid ? marchid:
                   32'b0;
 assign csr2reg  = csr_temp;
 
@@ -292,6 +310,30 @@ ysyx_25080218_GPR ysyx_25080218_GPR_init(
     .gpr_rdata1  (rs1),
     .gpr_rdata2  (rs2)
 );
+
+always @(posedge imm_is_B) begin
+    B_inst_analysis();
+end
+
+always @(posedge imm_is_I) begin
+    I_inst_analysis();
+end
+
+always @(posedge imm_is_J) begin
+    J_inst_analysis();
+end
+
+always @(posedge imm_is_R) begin
+    R_inst_analysis();
+end
+
+always @(posedge imm_is_S) begin
+    S_inst_analysis();
+end
+
+always @(posedge imm_is_U) begin
+    U_inst_analysis();
+end
 
 endmodule
 

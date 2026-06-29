@@ -2,8 +2,12 @@
 #define __COMMON_H_
 #include "verilated.h"
 #include "verilated_vcd_c.h"
-#include "Vtop.h"
-#include "Vtop__Dpi.h"
+#include "VysyxSoCFull.h"
+#include "VysyxSoCFull_ysyxSoCASIC.h"
+#include "VysyxSoCFull_ysyxSoCFull.h"
+#include "VysyxSoCFull_CPU.h"
+#include "VysyxSoCFull_ysyx_25080218.h"
+#include "VysyxSoCFull__Dpi.h"
 #include "svdpi.h"
 #include <stdint.h>
 #include <stdio.h>
@@ -18,6 +22,7 @@
 #include "mem/mem.h"
 #include "difftest/difftest.h"
 #include "device/device.h"
+#include "nvboard.h"
 
 #define ANSI_COLOR_RED     "\x1b[31m"
 #define ANSI_COLOR_GREEN   "\x1b[32m"
@@ -27,7 +32,7 @@
 #define ANSI_COLOR_CYAN    "\x1b[36m"
 #define ANSI_COLOR_RESET   "\x1b[0m"
 
-#define CONFIG_ITRACE 1
+#define CONFIG_ITRACE 0
 #define CONFIG_ISA_riscv 1
 #define CONFIG_ISA_x86 0
 #define CONFIG_ISA_mips32 0
@@ -36,6 +41,9 @@
 #define PC_TRACE 0
 #define CONFIG_MTRACE 0
 #define CONFIG_DTRACE 0
+
+#define SOC_EN 1
+#define TOP top->ysyxSoCFull->asic->cpu->cpu
 
 typedef struct {
   int state;

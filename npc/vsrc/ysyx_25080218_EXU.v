@@ -1,3 +1,5 @@
+import "DPI-C" function void EXU_stastic();
+
 module ysyx_25080218_EXU(
     input  [31 : 0] alu_src1,
     input  [31 : 0] alu_src2,
@@ -79,5 +81,9 @@ assign branch_taken =
     (is_bgeu && !less_than_unsigned);
 
 assign branch_pc = alu_result;
+
+always @(posedge valid_to_lsu) begin
+    EXU_stastic();
+end
 
 endmodule

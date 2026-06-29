@@ -59,8 +59,8 @@ always @(posedge clk)begin
                 s_rresp    <= 2'b00;
                 s_busy     <= 1'b1;
                 case(s_araddr)
-                    32'ha0000048: s_rdata <= mtime[31: 0];
-                    32'ha000004c: s_rdata <= mtime[63:32];
+                    32'h02000000: s_rdata <= mtime[31: 0];
+                    32'h02000004: s_rdata <= mtime[63:32];
                     default:      s_rdata <= 32'd0;
                 endcase
             end

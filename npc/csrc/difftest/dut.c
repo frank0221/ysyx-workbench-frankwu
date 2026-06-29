@@ -41,8 +41,9 @@ void init_difftest(char *ref_so_file, long img_size, int port){
 
     printf("Differential testing: " ANSI_COLOR_GREEN "on" ANSI_COLOR_RESET "\n");
 
+    cpu.pc = 0x20000000;
     ref_difftest_init(port);
-    ref_difftest_memcpy(0x80000000, guest_to_host(0x80000000), img_size, DIFFTEST_TO_REF);
+    ref_difftest_memcpy(0x20000000, guest_to_host(0x20000000), img_size, DIFFTEST_TO_REF);
     ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF); //把npc的reg和pc值复制给nemu
 }
 
@@ -74,7 +75,7 @@ void difftest_skip_dut(int nr_ref, int nr_dut) {
   }
 }
 
-extern Vtop* top;
+extern VysyxSoCFull* top;
 bool isa_difftest_checkregs(riscv32_CPU_state *ref_r, uint32_t pc) {
   for(int i=0; i < 32; i++){
     if(ref_r->gpr[i] != cpu.gpr[i]){

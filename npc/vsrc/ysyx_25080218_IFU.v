@@ -1,3 +1,5 @@
+import "DPI-C" function void IFU_stastic();
+
 module ysyx_25080218_IFU(
     input               clk,
     input               rst,
@@ -38,16 +40,16 @@ module ysyx_25080218_IFU(
     output reg        RREADY           
 );
 //import "DPI-C" function int pmem_read(input int raddr);
-wire   [31 : 0]next_pc;
+wire   [31 : 0] next_pc;
 assign next_pc = pc + 32'h4;
 reg valid_rst;
 always @(posedge clk) begin
     if(rst)begin
-        pc <= 32'h80000000;
+        pc <= 32'h30000000;
         valid_rst <= 1'b0;
     end
     else if(valid_rst == 1'b0)begin
-        pc <= 32'h80000000;
+        pc <= 32'h30000000;
         valid_rst <= 1'b1;
         //valid <= 1'b1;
     end
@@ -129,10 +131,16 @@ always @(posedge clk)begin
         ARVALID <= 0;
         RREADY <= 0;
         valid <= 1'b0;
+        inst <= 32'b0;
     end
     else begin
+        // if(ARADDR == 32'h2000_0000)
+        //     $display("IFU rst=%b state=%0d ARV=%b ARR=%b RV=%b RR=%b pc=%08x",
+        //     rst, state, ARVALID, ARREADY, RVALID, RREADY, ARADDR);
+
         case(state)
             S_AR:begin
+                //$display("inst: %08x  pc: %08x",inst,pc);
                 if(valid && ready)
                     valid <= 1'b0;
                 if(!valid && !ARVALID)begin
@@ -142,12 +150,13 @@ always @(posedge clk)begin
                 if(ARVALID && ARREADY)begin
                     state <= S_R;
                     ARVALID <= 0;
-                    araddr_latched <= ARADDR;
+                    //araddr_latched <= ARADDR;
                     RREADY <= 1'b1;
                 end
             end
             S_R:begin
                 if(RREADY && RVALID)begin
+                    IFU_stastic();
                     inst <= RDATA;//pmem_read(araddr_latched);
                     valid <= 1'b1;
                     RREADY <= 1'b0;

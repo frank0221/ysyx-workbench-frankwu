@@ -1,0 +1,224 @@
+// Verilated -*- C++ -*-
+// DESCRIPTION: Verilator output: Design implementation internals
+// See VysyxSoCFull.h for the primary calling header
+
+#include "VysyxSoCFull__pch.h"
+#include "VysyxSoCFull_ysyxSoCFull.h"
+
+VL_ATTR_COLD void VysyxSoCFull_ysyxSoCFull___eval_initial__TOP__ysyxSoCFull(VysyxSoCFull_ysyxSoCFull* vlSelf) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+      VysyxSoCFull_ysyxSoCFull___eval_initial__TOP__ysyxSoCFull\n"); );
+    VysyxSoCFull__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    auto& vlSelfRef = std::ref(*vlSelf).get();
+    // Body
+    vlSelfRef.psram__DOT__QPI_COUNT = 7U;
+    vlSelfRef.psram__DOT__CMD_COUNT = 1U;
+    vlSelfRef.psram__DOT__ADDR_COUNT = 6U;
+    vlSelfRef.psram__DOT__WAIT_COUNT = 6U;
+    vlSelfRef.psram__DOT__DATA_COUNT = 8U;
+}
+
+VL_ATTR_COLD void VysyxSoCFull_ysyxSoCFull___ctor_var_reset(VysyxSoCFull_ysyxSoCFull* vlSelf) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+      VysyxSoCFull_ysyxSoCFull___ctor_var_reset\n"); );
+    VysyxSoCFull__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    auto& vlSelfRef = std::ref(*vlSelf).get();
+    // Body
+    vlSelf->clock = VL_RAND_RESET_I(1);
+    vlSelf->reset = VL_RAND_RESET_I(1);
+    vlSelf->externalPins_gpio_out = VL_RAND_RESET_I(16);
+    vlSelf->externalPins_gpio_in = VL_RAND_RESET_I(16);
+    vlSelf->externalPins_gpio_seg_0 = VL_RAND_RESET_I(8);
+    vlSelf->externalPins_gpio_seg_1 = VL_RAND_RESET_I(8);
+    vlSelf->externalPins_gpio_seg_2 = VL_RAND_RESET_I(8);
+    vlSelf->externalPins_gpio_seg_3 = VL_RAND_RESET_I(8);
+    vlSelf->externalPins_gpio_seg_4 = VL_RAND_RESET_I(8);
+    vlSelf->externalPins_gpio_seg_5 = VL_RAND_RESET_I(8);
+    vlSelf->externalPins_gpio_seg_6 = VL_RAND_RESET_I(8);
+    vlSelf->externalPins_gpio_seg_7 = VL_RAND_RESET_I(8);
+    vlSelf->externalPins_ps2_clk = VL_RAND_RESET_I(1);
+    vlSelf->externalPins_ps2_data = VL_RAND_RESET_I(1);
+    vlSelf->externalPins_vga_r = VL_RAND_RESET_I(8);
+    vlSelf->externalPins_vga_g = VL_RAND_RESET_I(8);
+    vlSelf->externalPins_vga_b = VL_RAND_RESET_I(8);
+    vlSelf->externalPins_vga_hsync = VL_RAND_RESET_I(1);
+    vlSelf->externalPins_vga_vsync = VL_RAND_RESET_I(1);
+    vlSelf->externalPins_vga_valid = VL_RAND_RESET_I(1);
+    vlSelf->externalPins_uart_rx = VL_RAND_RESET_I(1);
+    vlSelf->externalPins_uart_tx = VL_RAND_RESET_I(1);
+    vlSelf->_bitrev_miso = VL_RAND_RESET_I(1);
+    vlSelf->_flash_miso = VL_RAND_RESET_I(1);
+    vlSelf->_asic_spi_sck = VL_RAND_RESET_I(1);
+    vlSelf->_asic_spi_ss = VL_RAND_RESET_I(8);
+    vlSelf->_asic_spi_mosi = VL_RAND_RESET_I(1);
+    vlSelf->_asic_psram_sck = VL_RAND_RESET_I(1);
+    vlSelf->_asic_psram_ce_n = VL_RAND_RESET_I(1);
+    vlSelf->_asic_sdram_clk = VL_RAND_RESET_I(1);
+    vlSelf->_asic_sdram_cke = VL_RAND_RESET_I(1);
+    vlSelf->_asic_sdram_cs = VL_RAND_RESET_I(1);
+    vlSelf->_asic_sdram_ras = VL_RAND_RESET_I(1);
+    vlSelf->_asic_sdram_cas = VL_RAND_RESET_I(1);
+    vlSelf->_asic_sdram_we = VL_RAND_RESET_I(1);
+    vlSelf->_asic_sdram_a = VL_RAND_RESET_I(13);
+    vlSelf->_asic_sdram_ba = VL_RAND_RESET_I(2);
+    vlSelf->_asic_sdram_dqm = VL_RAND_RESET_I(2);
+    vlSelf->_dio_wire = VL_RAND_RESET_I(4);
+    vlSelf->_dq_wire = VL_RAND_RESET_I(16);
+    vlSelf->flash__DOT__sck = VL_RAND_RESET_I(1);
+    vlSelf->flash__DOT__ss = VL_RAND_RESET_I(1);
+    vlSelf->flash__DOT__mosi = VL_RAND_RESET_I(1);
+    vlSelf->flash__DOT__miso = VL_RAND_RESET_I(1);
+    vlSelf->flash__DOT__reset = VL_RAND_RESET_I(1);
+    vlSelf->flash__DOT__state = VL_RAND_RESET_I(3);
+    vlSelf->flash__DOT__counter = VL_RAND_RESET_I(8);
+    vlSelf->flash__DOT__cmd = VL_RAND_RESET_I(8);
+    vlSelf->flash__DOT__addr = VL_RAND_RESET_I(24);
+    vlSelf->flash__DOT__data = VL_RAND_RESET_I(32);
+    vlSelf->flash__DOT__ren = VL_RAND_RESET_I(1);
+    vlSelf->flash__DOT__rdata = VL_RAND_RESET_I(32);
+    vlSelf->flash__DOT__raddr = VL_RAND_RESET_I(32);
+    vlSelf->flash__DOT__data_bswap = VL_RAND_RESET_I(32);
+    vlSelf->flash__DOT__flash_cmd_i__DOT__clock = VL_RAND_RESET_I(1);
+    vlSelf->flash__DOT__flash_cmd_i__DOT__valid = VL_RAND_RESET_I(1);
+    vlSelf->flash__DOT__flash_cmd_i__DOT__cmd = VL_RAND_RESET_I(8);
+    vlSelf->flash__DOT__flash_cmd_i__DOT__addr = VL_RAND_RESET_I(32);
+    vlSelf->flash__DOT__flash_cmd_i__DOT__data = VL_RAND_RESET_I(32);
+    vlSelf->bitrev__DOT__sck = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__ss = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__mosi = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__miso = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__data_i = VL_RAND_RESET_I(8);
+    vlSelf->bitrev__DOT__data_o = VL_RAND_RESET_I(8);
+    vlSelf->bitrev__DOT__out = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__data_i_7 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__data_i_6 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__data_i_5 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__data_i_4 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__data_i_3 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__data_i_2 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__data_i_1 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__data_i_0 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__data_o_7 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__data_o_6 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__data_o_5 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__data_o_4 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__data_o_3 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__data_o_2 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__data_o_1 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__data_o_0 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__ss = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__in_s = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__in_p = VL_RAND_RESET_I(8);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__out_s = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__out_p = VL_RAND_RESET_I(8);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__d0 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__d1 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__d2 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__d3 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__d4 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__d5 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__d6 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__d7 = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__i = VL_RAND_RESET_I(5);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__out_r = VL_RAND_RESET_I(8);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__sel = VL_RAND_RESET_I(4);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D0__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D0__DOT__ss = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D0__DOT__in = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D0__DOT__out = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D1__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D1__DOT__ss = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D1__DOT__in = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D1__DOT__out = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D2__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D2__DOT__ss = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D2__DOT__in = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D2__DOT__out = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D3__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D3__DOT__ss = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D3__DOT__in = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D3__DOT__out = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D4__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D4__DOT__ss = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D4__DOT__in = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D4__DOT__out = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D5__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D5__DOT__ss = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D5__DOT__in = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D5__DOT__out = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D6__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D6__DOT__ss = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D6__DOT__in = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D6__DOT__out = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D7__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D7__DOT__ss = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D7__DOT__in = VL_RAND_RESET_I(1);
+    vlSelf->bitrev__DOT__serial2pare_init__DOT__D7__DOT__out = VL_RAND_RESET_I(1);
+    vlSelf->psram__DOT__sck = VL_RAND_RESET_I(1);
+    vlSelf->psram__DOT__ce_n = VL_RAND_RESET_I(1);
+    vlSelf->psram__DOT__dio = VL_RAND_RESET_I(4);
+    vlSelf->psram__DOT__din = VL_RAND_RESET_I(4);
+    vlSelf->psram__DOT__dout = VL_RAND_RESET_I(4);
+    vlSelf->psram__DOT__douten = VL_RAND_RESET_I(1);
+    vlSelf->psram__DOT__QPI_COUNT = VL_RAND_RESET_I(8);
+    vlSelf->psram__DOT__CMD_COUNT = VL_RAND_RESET_I(8);
+    vlSelf->psram__DOT__ADDR_COUNT = VL_RAND_RESET_I(8);
+    vlSelf->psram__DOT__WAIT_COUNT = VL_RAND_RESET_I(8);
+    vlSelf->psram__DOT__DATA_COUNT = VL_RAND_RESET_I(8);
+    vlSelf->psram__DOT__count = VL_RAND_RESET_I(8);
+    vlSelf->psram__DOT__cmd = VL_RAND_RESET_I(8);
+    vlSelf->psram__DOT__qpi_cmd = VL_RAND_RESET_I(8);
+    vlSelf->psram__DOT__qpi_en = VL_RAND_RESET_I(1);
+    vlSelf->psram__DOT__addr = VL_RAND_RESET_I(24);
+    vlSelf->psram__DOT__addr_done = VL_RAND_RESET_I(1);
+    vlSelf->psram__DOT__cmd_done = VL_RAND_RESET_I(1);
+    vlSelf->psram__DOT__data = VL_RAND_RESET_I(8);
+    vlSelf->psram__DOT__state = VL_RAND_RESET_I(1);
+    for (int __Vi0 = 0; __Vi0 < 16777216; ++__Vi0) {
+        vlSelf->psram__DOT__mem[__Vi0] = VL_RAND_RESET_I(8);
+    }
+    vlSelf->sdram__DOT__clk = VL_RAND_RESET_I(1);
+    vlSelf->sdram__DOT__cke = VL_RAND_RESET_I(1);
+    vlSelf->sdram__DOT__cs = VL_RAND_RESET_I(1);
+    vlSelf->sdram__DOT__ras = VL_RAND_RESET_I(1);
+    vlSelf->sdram__DOT__cas = VL_RAND_RESET_I(1);
+    vlSelf->sdram__DOT__we = VL_RAND_RESET_I(1);
+    vlSelf->sdram__DOT__a = VL_RAND_RESET_I(13);
+    vlSelf->sdram__DOT__ba = VL_RAND_RESET_I(2);
+    vlSelf->sdram__DOT__dqm = VL_RAND_RESET_I(2);
+    vlSelf->sdram__DOT__dq = VL_RAND_RESET_I(16);
+    for (int __Vi0 = 0; __Vi0 < 4194304; ++__Vi0) {
+        vlSelf->sdram__DOT__bank0[__Vi0] = VL_RAND_RESET_I(16);
+    }
+    for (int __Vi0 = 0; __Vi0 < 4194304; ++__Vi0) {
+        vlSelf->sdram__DOT__bank1[__Vi0] = VL_RAND_RESET_I(16);
+    }
+    for (int __Vi0 = 0; __Vi0 < 4194304; ++__Vi0) {
+        vlSelf->sdram__DOT__bank2[__Vi0] = VL_RAND_RESET_I(16);
+    }
+    for (int __Vi0 = 0; __Vi0 < 4194304; ++__Vi0) {
+        vlSelf->sdram__DOT__bank3[__Vi0] = VL_RAND_RESET_I(16);
+    }
+    vlSelf->sdram__DOT__COMMAND_INHIBIT = VL_RAND_RESET_I(1);
+    vlSelf->sdram__DOT__NO_OPERATION = VL_RAND_RESET_I(1);
+    vlSelf->sdram__DOT__ACTIVE = VL_RAND_RESET_I(1);
+    vlSelf->sdram__DOT__READ = VL_RAND_RESET_I(1);
+    vlSelf->sdram__DOT__WRITE = VL_RAND_RESET_I(1);
+    vlSelf->sdram__DOT__BURST_TERMINATE = VL_RAND_RESET_I(1);
+    vlSelf->sdram__DOT__LOAD_MODE_REGISTER = VL_RAND_RESET_I(1);
+    vlSelf->sdram__DOT__mode_reg = VL_RAND_RESET_I(13);
+    vlSelf->sdram__DOT__rst_count = VL_RAND_RESET_I(4);
+    vlSelf->sdram__DOT__cas_latency = VL_RAND_RESET_I(13);
+    vlSelf->sdram__DOT__burst_length = VL_RAND_RESET_I(13);
+    vlSelf->sdram__DOT__count = VL_RAND_RESET_I(4);
+    vlSelf->sdram__DOT__state = VL_RAND_RESET_I(4);
+    vlSelf->sdram__DOT__bank_num = VL_RAND_RESET_I(2);
+    vlSelf->sdram__DOT__row_num = VL_RAND_RESET_I(13);
+    vlSelf->sdram__DOT__col_num = VL_RAND_RESET_I(13);
+    vlSelf->sdram__DOT__cas_count = VL_RAND_RESET_I(13);
+    vlSelf->sdram__DOT__out = VL_RAND_RESET_I(16);
+    vlSelf->sdram__DOT__write_count = VL_RAND_RESET_I(13);
+    vlSelf->sdram__DOT__read_valid = VL_RAND_RESET_I(1);
+    vlSelf->sdram__DOT____VdfgRegularize_h49d81015_0_3 = VL_RAND_RESET_I(1);
+    vlSelf->sdram__DOT____VdfgRegularize_h49d81015_0_6 = VL_RAND_RESET_I(1);
+    vlSelf->__Vdly__flash__DOT__cmd = VL_RAND_RESET_I(8);
+}

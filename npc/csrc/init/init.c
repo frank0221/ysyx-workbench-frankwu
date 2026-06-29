@@ -6,6 +6,7 @@
 #include <readline/history.h>
 
 uint8_t* guest_to_host(uint32_t paddr);
+uint8_t* flash_guest_to_host(uint32_t addr);
 uint32_t pmem_read(uint32_t addr);
 void init_difftest(char *ref_so_file, long img_size, int port);
 
@@ -13,7 +14,9 @@ static char *img_file = NULL;
 static char *diff_so_file = NULL;
 static int difftest_port = 1234;
 
-
+//#define MROM
+#define FLASH
+extern uint8_t flash[];
 static long load_img() {
   if (img_file == NULL) {
     printf("No image is given. Use the default build-in image.");
@@ -29,15 +32,34 @@ static long load_img() {
   fseek(fp, 0, SEEK_END);
   long size = ftell(fp);
 
-  printf("The image is %s, size = %ld", img_file, size);
+  printf("The image is %s, size = %ld\n", img_file, size);
 
   fseek(fp, 0, SEEK_SET);
-  int ret = fread(guest_to_host(0x80000000), size, 1, fp);
+#ifdef MROM
+  int ret = fread(guest_to_host(0x20000000), size, 1, fp);
   assert(ret == 1);
+#endif
+#ifdef FLASH
+  // FILE *fp1 = fopen("/home/frank_wu/ysyx-workbench/npc/soc-tests/char-test/char-test.bin", "rb");
+  // if(fp1==NULL){
+  //   printf("FATAL: Cannot open flash file\n");
+  //   exit(1);
+  // }
+  // fseek(fp1, 0, SEEK_END);
+  // uint32_t size1 = ftell(fp1);
+  // fseek(fp1, 0, SEEK_SET);
+  int ret1 = fread(flash_guest_to_host(0x30000000), size, 1, fp);
+  assert(ret1 == 1);
+#endif
 
+  // for(int i=0;i<10;i++){
+  //   flash[i] = i;
+  // }
+  
   fclose(fp);
   return size;
 }
+
 
 void init_pmem() {
     uint32_t prog[] = {
@@ -61,7 +83,7 @@ static int parse_args(int argc,char *argv[]){
     {"wave"    , no_argument      , NULL, 'w'},
   };
   int o;
-  while((o = getopt_long(argc, argv, "-bd:w", table,NULL)) != -1){
+  while((o = getopt_long(argc, argv, "bd:w", table,NULL)) != -1){
     switch (o)
     {
     case 'b': batch = true; break;
