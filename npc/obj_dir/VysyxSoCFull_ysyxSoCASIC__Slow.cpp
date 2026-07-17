@@ -115,6 +115,11 @@ constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCASIC::lsdram_apb__DOT__msdram__DOT__
 constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCASIC::lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__SDRAM_TRFC_CYCLES;
 constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCASIC::lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__DELAY_W;
 constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCASIC::lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__REFRESH_CNT_W;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCASIC::apbdelay_delayer__DOT__idle;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCASIC::apbdelay_delayer__DOT__setup;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCASIC::apbdelay_delayer__DOT__access;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCASIC::apbdelay_delayer__DOT__wait1;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCASIC::apbdelay_delayer__DOT__wait2;
 
 
 void VysyxSoCFull_ysyxSoCASIC___ctor_var_reset(VysyxSoCFull_ysyxSoCASIC* vlSelf);

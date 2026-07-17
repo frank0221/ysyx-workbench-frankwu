@@ -189,13 +189,13 @@ ysyx_25080218_IFU IFU_init(
     .next_pc_csr  (next_pc_csr),
     .valid        (Ifu2Idu_valid),
     .ready        (Idu2Ifu_ready),
-    .ARADDR     (m0_araddr),
-    .ARVALID    (m0_arvalid),
-    .ARREADY    (m0_arready),
-    .RDATA      (m0_rdata),
-    .RRESP      (m0_rresp),
-    .RVALID     (m0_rvalid),
-    .RREADY     (m0_rready)
+    .ARADDR     (cache_araddr),
+    .ARVALID    (cache_arvalid),
+    .ARREADY    (cache_arready),
+    .RDATA      (cache_rdata),
+    .RRESP      (cache_rresp),
+    .RVALID     (cache_rvalid),
+    .RREADY     (cache_rready)
 );
 // assign pc = pc_wire;
 
@@ -332,6 +332,37 @@ assign s0_bvalid  = 1'b1;
 //assign s0_rdata   = 32'b0;
 // assign s0_rresp   = 2'b00;
 // assign s0_rvalid  = 1'b1;
+
+wire [31:0] cache_rdata;
+wire [ 1:0] cache_rresp;
+wire        cache_rvalid;
+wire        cache_rready;
+wire [31:0] cache_araddr;
+wire        cache_arvalid;
+wire        cache_arready;
+
+Cache Cache_init(
+    .clock(clock),
+    .reset(reset),
+
+    .out_arvalid(m0_arvalid),
+    .out_arready(m0_arready),
+    .out_araddr(m0_araddr),
+
+    .in_arvalid(cache_arvalid),
+    .in_arready(cache_arready),
+    .in_araddr(cache_araddr),
+
+    .in_rready(cache_rready),
+    .in_rvalid(cache_rvalid),
+    .in_rdata(cache_rdata),
+    .in_rresp(cache_rresp),
+
+    .out_rready(m0_rready),
+    .out_rvalid(m0_rvalid),
+    .out_rdata(m0_rdata),
+    .out_rresp(m0_rresp)
+);
 
 XBAR xbar_init(
     .clk        (clock),

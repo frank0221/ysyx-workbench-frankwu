@@ -92,8 +92,8 @@ VL_ATTR_COLD void VysyxSoCFull_ysyxSoCASIC___ctor_var_reset(VysyxSoCFull_ysyxSoC
     vlSelf->sdram_we = VL_RAND_RESET_I(1);
     vlSelf->sdram_a = VL_RAND_RESET_I(13);
     vlSelf->sdram_ba = VL_RAND_RESET_I(2);
-    vlSelf->sdram_dqm = VL_RAND_RESET_I(2);
-    vlSelf->sdram_dq = VL_RAND_RESET_I(16);
+    vlSelf->sdram_dqm = VL_RAND_RESET_I(4);
+    vlSelf->sdram_dq = VL_RAND_RESET_I(32);
     vlSelf->gpio_out = VL_RAND_RESET_I(16);
     vlSelf->gpio_in = VL_RAND_RESET_I(16);
     vlSelf->gpio_seg_0 = VL_RAND_RESET_I(8);
@@ -403,8 +403,8 @@ VL_ATTR_COLD void VysyxSoCFull_ysyxSoCASIC___ctor_var_reset(VysyxSoCFull_ysyxSoC
     vlSelf->_axi4xbar_auto_anon_out_rready = VL_RAND_RESET_I(1);
     vlSelf->psram_dio__out = VL_RAND_RESET_I(4);
     vlSelf->psram_dio__en = VL_RAND_RESET_I(4);
-    vlSelf->sdram_dq__out = VL_RAND_RESET_I(16);
-    vlSelf->sdram_dq__en = VL_RAND_RESET_I(16);
+    vlSelf->sdram_dq__out = VL_RAND_RESET_I(32);
+    vlSelf->sdram_dq__en = VL_RAND_RESET_I(32);
     vlSelf->axi4xbar__DOT__clock = VL_RAND_RESET_I(1);
     vlSelf->axi4xbar__DOT__reset = VL_RAND_RESET_I(1);
     vlSelf->axi4xbar__DOT__auto_anon_in_awready = VL_RAND_RESET_I(1);
@@ -1649,8 +1649,8 @@ VL_ATTR_COLD void VysyxSoCFull_ysyxSoCASIC___ctor_var_reset(VysyxSoCFull_ysyxSoC
     vlSelf->lsdram_apb__DOT__sdram_bundle_we = VL_RAND_RESET_I(1);
     vlSelf->lsdram_apb__DOT__sdram_bundle_a = VL_RAND_RESET_I(13);
     vlSelf->lsdram_apb__DOT__sdram_bundle_ba = VL_RAND_RESET_I(2);
-    vlSelf->lsdram_apb__DOT__sdram_bundle_dqm = VL_RAND_RESET_I(2);
-    vlSelf->lsdram_apb__DOT__sdram_bundle_dq = VL_RAND_RESET_I(16);
+    vlSelf->lsdram_apb__DOT__sdram_bundle_dqm = VL_RAND_RESET_I(4);
+    vlSelf->lsdram_apb__DOT__sdram_bundle_dq = VL_RAND_RESET_I(32);
     vlSelf->lsdram_apb__DOT__msdram__DOT__clock = VL_RAND_RESET_I(1);
     vlSelf->lsdram_apb__DOT__msdram__DOT__reset = VL_RAND_RESET_I(1);
     vlSelf->lsdram_apb__DOT__msdram__DOT__in_paddr = VL_RAND_RESET_I(32);
@@ -1671,10 +1671,13 @@ VL_ATTR_COLD void VysyxSoCFull_ysyxSoCASIC___ctor_var_reset(VysyxSoCFull_ysyxSoC
     vlSelf->lsdram_apb__DOT__msdram__DOT__sdram_we = VL_RAND_RESET_I(1);
     vlSelf->lsdram_apb__DOT__msdram__DOT__sdram_a = VL_RAND_RESET_I(13);
     vlSelf->lsdram_apb__DOT__msdram__DOT__sdram_ba = VL_RAND_RESET_I(2);
-    vlSelf->lsdram_apb__DOT__msdram__DOT__sdram_dqm = VL_RAND_RESET_I(2);
-    vlSelf->lsdram_apb__DOT__msdram__DOT__sdram_dq = VL_RAND_RESET_I(16);
+    vlSelf->lsdram_apb__DOT__msdram__DOT__sdram_dqm = VL_RAND_RESET_I(4);
+    vlSelf->lsdram_apb__DOT__msdram__DOT__sdram_dq = VL_RAND_RESET_I(32);
     vlSelf->lsdram_apb__DOT__msdram__DOT__sdram_dout_en = VL_RAND_RESET_I(1);
-    vlSelf->lsdram_apb__DOT__msdram__DOT__sdram_dout = VL_RAND_RESET_I(16);
+    vlSelf->lsdram_apb__DOT__msdram__DOT__sdram_dout0 = VL_RAND_RESET_I(16);
+    vlSelf->lsdram_apb__DOT__msdram__DOT__sdram_dout1 = VL_RAND_RESET_I(16);
+    vlSelf->lsdram_apb__DOT__msdram__DOT__dq0 = VL_RAND_RESET_I(16);
+    vlSelf->lsdram_apb__DOT__msdram__DOT__dq1 = VL_RAND_RESET_I(16);
     vlSelf->lsdram_apb__DOT__msdram__DOT__state = VL_RAND_RESET_I(2);
     vlSelf->lsdram_apb__DOT__msdram__DOT__req_accept = VL_RAND_RESET_I(1);
     vlSelf->lsdram_apb__DOT__msdram__DOT__is_read = VL_RAND_RESET_I(1);
@@ -1686,7 +1689,7 @@ VL_ATTR_COLD void VysyxSoCFull_ysyxSoCASIC___ctor_var_reset(VysyxSoCFull_ysyxSoC
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__inport_len_i = VL_RAND_RESET_I(8);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__inport_addr_i = VL_RAND_RESET_I(32);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__inport_write_data_i = VL_RAND_RESET_I(32);
-    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sdram_data_input_i = VL_RAND_RESET_I(16);
+    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sdram_data_input_i = VL_RAND_RESET_I(32);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__inport_accept_o = VL_RAND_RESET_I(1);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__inport_ack_o = VL_RAND_RESET_I(1);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__inport_error_o = VL_RAND_RESET_I(1);
@@ -1697,10 +1700,11 @@ VL_ATTR_COLD void VysyxSoCFull_ysyxSoCASIC___ctor_var_reset(VysyxSoCFull_ysyxSoC
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sdram_ras_o = VL_RAND_RESET_I(1);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sdram_cas_o = VL_RAND_RESET_I(1);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sdram_we_o = VL_RAND_RESET_I(1);
-    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sdram_dqm_o = VL_RAND_RESET_I(2);
+    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sdram_dqm_o = VL_RAND_RESET_I(4);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sdram_addr_o = VL_RAND_RESET_I(13);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sdram_ba_o = VL_RAND_RESET_I(2);
-    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sdram_data_output_o = VL_RAND_RESET_I(16);
+    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sdram_data_output_o0 = VL_RAND_RESET_I(16);
+    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sdram_data_output_o1 = VL_RAND_RESET_I(16);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sdram_data_out_en_o = VL_RAND_RESET_I(1);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__ram_addr_w = VL_RAND_RESET_I(32);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__ram_wr_w = VL_RAND_RESET_I(4);
@@ -1712,14 +1716,14 @@ VL_ATTR_COLD void VysyxSoCFull_ysyxSoCASIC___ctor_var_reset(VysyxSoCFull_ysyxSoC
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__ram_req_w = VL_RAND_RESET_I(1);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__command_q = VL_RAND_RESET_I(4);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__addr_q = VL_RAND_RESET_I(13);
-    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__data_q = VL_RAND_RESET_I(16);
+    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__data_q = VL_RAND_RESET_I(32);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__data_rd_en_q = VL_RAND_RESET_I(1);
-    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q = VL_RAND_RESET_I(2);
+    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_q = VL_RAND_RESET_I(4);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__cke_q = VL_RAND_RESET_I(1);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q = VL_RAND_RESET_I(2);
-    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__data_buffer_q = VL_RAND_RESET_I(16);
-    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_buffer_q = VL_RAND_RESET_I(2);
-    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sdram_data_in_w = VL_RAND_RESET_I(16);
+    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__data_buffer_q = VL_RAND_RESET_I(32);
+    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_buffer_q = VL_RAND_RESET_I(4);
+    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sdram_data_in_w = VL_RAND_RESET_I(32);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__refresh_q = VL_RAND_RESET_I(1);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__row_open_q = VL_RAND_RESET_I(4);
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
@@ -1736,8 +1740,8 @@ VL_ATTR_COLD void VysyxSoCFull_ysyxSoCASIC___ctor_var_reset(VysyxSoCFull_ysyxSoC
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__delay_q = VL_RAND_RESET_I(4);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__delay_r = VL_RAND_RESET_I(4);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__refresh_timer_q = VL_RAND_RESET_I(17);
-    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sample_data0_q = VL_RAND_RESET_I(16);
-    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sample_data_q = VL_RAND_RESET_I(16);
+    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sample_data0_q = VL_RAND_RESET_I(32);
+    vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sample_data_q = VL_RAND_RESET_I(32);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__idx = VL_RAND_RESET_I(32);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__rd_q = VL_RAND_RESET_I(4);
     vlSelf->lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__ack_q = VL_RAND_RESET_I(1);
@@ -1764,6 +1768,15 @@ VL_ATTR_COLD void VysyxSoCFull_ysyxSoCASIC___ctor_var_reset(VysyxSoCFull_ysyxSoC
     vlSelf->apbdelay_delayer__DOT__out_pready = VL_RAND_RESET_I(1);
     vlSelf->apbdelay_delayer__DOT__out_prdata = VL_RAND_RESET_I(32);
     vlSelf->apbdelay_delayer__DOT__out_pslverr = VL_RAND_RESET_I(1);
+    vlSelf->apbdelay_delayer__DOT__counter = VL_RAND_RESET_I(11);
+    vlSelf->apbdelay_delayer__DOT__start = VL_RAND_RESET_I(1);
+    vlSelf->apbdelay_delayer__DOT__data = VL_RAND_RESET_I(32);
+    vlSelf->apbdelay_delayer__DOT__ready = VL_RAND_RESET_I(1);
+    vlSelf->apbdelay_delayer__DOT__slverr = VL_RAND_RESET_I(1);
+    vlSelf->apbdelay_delayer__DOT__sel = VL_RAND_RESET_I(1);
+    vlSelf->apbdelay_delayer__DOT__enable = VL_RAND_RESET_I(1);
+    vlSelf->apbdelay_delayer__DOT__addr = VL_RAND_RESET_I(32);
+    vlSelf->apbdelay_delayer__DOT__state = VL_RAND_RESET_I(3);
     vlSelf->axi42apb__DOT__clock = VL_RAND_RESET_I(1);
     vlSelf->axi42apb__DOT__reset = VL_RAND_RESET_I(1);
     vlSelf->axi42apb__DOT__auto_in_awready = VL_RAND_RESET_I(1);
@@ -2969,4 +2982,6 @@ VL_ATTR_COLD void VysyxSoCFull_ysyxSoCASIC___ctor_var_reset(VysyxSoCFull_ysyxSoC
     }
     vlSelf->__VdfgRegularize_hc2da4b9d_1_65 = VL_RAND_RESET_I(4);
     vlSelf->__Vtask_lmrom__DOT__mrom__DOT__mrom_read__0__rdata = 0;
+    vlSelf->__Vdly__apbdelay_delayer__DOT__counter = VL_RAND_RESET_I(11);
+    vlSelf->__Vdly__apbdelay_delayer__DOT__state = VL_RAND_RESET_I(3);
 }

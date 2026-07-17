@@ -13,6 +13,7 @@ $(SRC_AUTO_BIND): $(NXDC_FILES)
 CSRC += $(SRC_AUTO_BIND)
 CSRC += $(shell find $(NPC_HOME)/csrc -name "*.c" -o -name "*.cpp" | grep -v "capstone" | grep -v "device/*")
 VSRC = $(shell find $(NPC_HOME)/vsrc -name "*.v")
+VSRC += $(shell find $(NPC_HOME)/vsrc -name "*.sv")
 VSRC += $(shell find $(YSYX_HOME)/ysyxSoC/perip -name "*.v")
 VSRC += $(YSYX_HOME)/ysyxSoC/build/ysyxSoCFull.v
 DIRS  = $(NPC_HOME)/csrc $(NPC_HOME)/tools/capstone/repo/include
@@ -60,7 +61,7 @@ dump.fst:dump.vcd
 
 #wave:dump.fst
 wave:
-	gtkwave -g dump.vcd ps2.gtkw
+	gtkwave -g dump.vcd wave/sdram.gtkw
 #sdram.gtkw
 #gpio.gtkw
 #sdram.gtkw

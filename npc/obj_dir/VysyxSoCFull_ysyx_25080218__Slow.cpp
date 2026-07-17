@@ -14,6 +14,13 @@ constexpr IData/*31:0*/ VysyxSoCFull_ysyx_25080218::MAU_init__DOT__S_AR;
 constexpr IData/*31:0*/ VysyxSoCFull_ysyx_25080218::MAU_init__DOT__S_R;
 constexpr IData/*31:0*/ VysyxSoCFull_ysyx_25080218::MAU_init__DOT__S_AW_W;
 constexpr IData/*31:0*/ VysyxSoCFull_ysyx_25080218::MAU_init__DOT__S_B;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyx_25080218::Cache_init__DOT__DAT_LEN;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyx_25080218::Cache_init__DOT__TAG_LEN;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyx_25080218::Cache_init__DOT__CACHE_SIZE;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyx_25080218::Cache_init__DOT__BLOCK_SIZE;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyx_25080218::Cache_init__DOT__idle;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyx_25080218::Cache_init__DOT__AR;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyx_25080218::Cache_init__DOT__R;
 
 
 void VysyxSoCFull_ysyx_25080218___ctor_var_reset(VysyxSoCFull_ysyx_25080218* vlSelf);

@@ -21,7 +21,7 @@ int main(){
     printf("start\n");
     for(int i = start_addr; i < end_addr; i++){
         //outw(SDRAM_BASE + 4*i , (uint32_t)i);
-        outb(SDRAM_BASE + i,(uint8_t)i);
+        outh(SDRAM_BASE + 2*i,(uint16_t)i);
         //  if(i%(1024)==0)
         //     printf("now write at %d kb\n",i);
         //outw(SDRAM_BASE  , 123456789);
@@ -31,14 +31,14 @@ int main(){
     int i =  start_addr;
     for(; i < end_addr; i++){
         //data = inw(SDRAM_BASE + 4*i);
-        data= inb(SDRAM_BASE+i);
+        data= inh(SDRAM_BASE+2*i);
         
         //data = inw(SDRAM_BASE);
         // if(i%(1024)==0)
         //     printf("now read at %d kb\n",i);
         //if((data<<16 | data>>16) != i){
         //if(data != 123456789){
-        if(data != (uint8_t)i){
+        if(data != (uint16_t)i){
             error = 1;
             break;
         }

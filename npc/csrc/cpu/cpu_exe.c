@@ -118,6 +118,18 @@ extern "C" void lsu_time(){
     lsu_cycle++;
 }
 
+static unsigned long cache_hit=0;
+extern "C" void cache_total(){
+    svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu.Cache_init"));
+    cache_hit++;
+}
+
+static unsigned long cache_amat=0;
+extern "C" void cache_amat_analysis(){
+    svSetScope(svGetScopeFromName("TOP.ysyxSoCFull.asic.cpu.cpu.IFU_init"));
+    cache_amat++;
+}
+
 
 void state(){
     switch(npc_state.state){
@@ -126,6 +138,8 @@ void state(){
             if(npc_state.halt_ret == 0){
                 printf(ANSI_COLOR_GREEN "HIT GOOD TRAP\n" ANSI_COLOR_RESET);
                 printf(ANSI_COLOR_GREEN "cycle:%ld inst: %ld IPC=%f\n" ANSI_COLOR_RESET,cycle,inst,(double)inst/(double)cycle);
+                printf(ANSI_COLOR_GREEN "Cache hit: %ld\n" ANSI_COLOR_RESET,cache_hit);
+                printf(ANSI_COLOR_GREEN "Cache AMAT: %f\n" ANSI_COLOR_RESET,(double)cache_amat/(double)cache_hit);
                 printf(ANSI_COLOR_RED "IFU:%ld\n" ANSI_COLOR_RESET,ifu_stastic);
                 printf(ANSI_COLOR_RED "LSU:%ld\n" ANSI_COLOR_RESET,lsu_stastic);
                 printf(ANSI_COLOR_RED "EXU:%ld\n" ANSI_COLOR_RESET,exu_stastic);

@@ -184,7 +184,8 @@ u_core
     ,.sdram_dqm_o(sdram_dqm_o)
     ,.sdram_addr_o(sdram_addr_o)
     ,.sdram_ba_o(sdram_ba_o)
-    ,.sdram_data_output_o(sdram_data_output_o)
+    ,.sdram_data_output_o0(sdram_data_output_o)
+    ,.sdram_data_output_o1(sdram_data_output_o)
     ,.sdram_data_out_en_o(sdram_data_out_en_o)
     ,.sdram_data_input_i(sdram_data_input_i)
 );

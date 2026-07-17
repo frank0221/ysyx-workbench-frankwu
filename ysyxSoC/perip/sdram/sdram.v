@@ -27,6 +27,8 @@ module sdram(
   wire WRITE              = !cs & ras & !cas & !we;
   wire BURST_TERMINATE    = !cs & ras & cas & !we;
   wire LOAD_MODE_REGISTER = !cs & !ras & !cas & !we;
+  wire PRECHARGE          = !cs & !ras &  cas & !we;
+  wire AUTO_REFRESH       = !cs & !ras & !cas &  we;
 
   reg [12:0] mode_reg;
 
@@ -58,120 +60,151 @@ module sdram(
   parameter read_latency_1=5;
 
   reg [1:0] bank_num;
-  reg [12:0] row_num;
+  reg [12:0] row_num [0:3];
   reg [12:0] col_num;
-  reg [12:0] cas_count;
+  reg [12:0] burst_count;
+  reg [12:0] latency_count;
   reg [15:0] out;
   reg [12:0] write_count;
   reg        read_valid;
+  wire [1:0] write_bank = WRITE ? ba : bank_num;
+
+  wire [12:0] write_col =WRITE ? {4'd0, a[8:0]} : col_num;
+  initial begin
+  mode_reg   = 13'b0;
+  state      = idle;
+  bank_num   = 2'b0;
+  row_num[0] = 13'b0;
+  row_num[1] = 13'b0;
+  row_num[2] = 13'b0;
+  row_num[3] = 13'b0;
+  col_num    = 13'b0;
+  burst_count  = 13'b0;
+  write_count = 13'b0;
+  read_valid = 1'b0;
+  out        = 16'b0;
+  latency_count=13'b0;
+end
   always @(posedge clk) begin
     if(cke)begin
       if(ACTIVE)begin
         state <= active;
         bank_num <= ba;
-        row_num <= a;
+        row_num[ba] <= a;
       end
       if(READ)begin
         state <= read_latency;
         bank_num <= ba;
         col_num <= {4'd0,a[8:0]};
+        burst_count <= 0;
+        read_valid <= 0;
+      end
+      else if(WRITE)begin
+        state <= write;
+        bank_num <= ba;
+        col_num <= {4'd0,a[8:0]};
+        write_count <= 1;
+      end
+      else begin
+        case (state)
+          read_latency:begin
+            // state <= read;
+            // read_valid <=1;
+            if(latency_count+2<cas_latency)begin
+              latency_count <= latency_count+1;
+            end
+            else begin
+              state <= read;
+              read_valid <=1;
+            end
+          end
+          //read_latency_1: state <= read;
+          read : begin
+            burst_count <= burst_count + 1;
+            latency_count<=0;
+            if(burst_count == burst_length-1)begin
+              state <= idle;
+              burst_count <= 0;
+              read_valid <=0;
+            end
+          end
+
+          write:begin
+            if(write_count < burst_length-1)
+              write_count <= write_count + 1;
+            else begin
+              write_count <= 0;
+              state <= idle;
+            end
+          end
+        endcase
       end
 
-      if(WRITE | state == write)begin
-        state <= write;
-        if(write_count < burst_length-1)
-            write_count <= write_count + 1;
-          else begin
-            write_count <= 0;
-            state <= idle;
-          end
-        case (bank_num)
+      
+
+      if(state == write || WRITE)begin
+        case (write_bank)
           0: begin 
             if(!dqm[1])begin
-              bank0[512*row_num+ {4'd0,a[8:0]}+write_count][15:8] <= dq[15:8];
+              bank0[512*row_num[write_bank]+ write_col+write_count][15:8] <= dq[15:8];
               //$display("addr:%x data:%d",512*row_num+ {4'd0,a[8:0]}+write_count,bank0[512*row_num+ {4'd0,a[8:0]}+write_count][15:8]);
             end
             if(!dqm[0])begin
-              bank0[512*row_num+ {4'd0,a[8:0]}+write_count][7:0] <= dq[7:0];
+              bank0[512*row_num[write_bank]+ write_col+write_count][7:0] <= dq[7:0];
               //$display("addr:%x data:%d",512*row_num+ {4'd0,a[8:0]}+write_count,bank0[512*row_num+ {4'd0,a[8:0]}+write_count][7:0]);
             end
             //$display("write addr:%x data:%x",512*row_num+ {4'd0,a[8:0]}+write_count,dq);
           end
           1: begin 
             if(!dqm[1])begin
-              bank1[512*row_num+ {4'd0,a[8:0]}+write_count][15:8] <= dq[15:8];
+              bank1[512*row_num[write_bank]+ write_col+write_count][15:8] <= dq[15:8];
               //$display("addr:%d data:%d",write_count,dq[15:8]);
             end
             if(!dqm[0])begin
-              bank1[512*row_num+ {4'd0,a[8:0]}+write_count][7:0] <= dq[7:0];
+              bank1[512*row_num[write_bank]+ write_col+write_count][7:0] <= dq[7:0];
               //$display("addr:%d data:%d",write_count,dq[7:0]);
             end
           end
           2: begin 
             if(!dqm[1])begin
-              bank2[512*row_num+ {4'd0,a[8:0]}+write_count][15:8] <= dq[15:8];
+              bank2[512*row_num[write_bank]+ write_col+write_count][15:8] <= dq[15:8];
               //$display("addr:%d data:%d",write_count,dq[15:8]);
             end
             if(!dqm[0])begin
-              bank2[512*row_num+ {4'd0,a[8:0]}+write_count][7:0] <= dq[7:0];
+              bank2[512*row_num[write_bank]+ write_col+write_count][7:0] <= dq[7:0];
               //$display("addr:%d data:%d",write_count,dq[7:0]);
             end
           end
           3: begin
             if(!dqm[1])begin
-              bank3[512*row_num+ {4'd0,a[8:0]}+write_count][15:8] <= dq[15:8];
+              bank3[512*row_num[write_bank]+ write_col+write_count][15:8] <= dq[15:8];
               //$display("addr:%d data:%d",write_count,dq[15:8]);
             end
             if(!dqm[0])begin
-              bank3[512*row_num+ {4'd0,a[8:0]}+write_count][7:0] <= dq[7:0];
+              bank3[512*row_num[write_bank]+ write_col+write_count][7:0] <= dq[7:0];
               //$display("addr:%d data:%d",write_count,dq[7:0]);
             end
           end
         endcase
       end
 
-      case (state)
-        read_latency:begin
-           state <= read;
-           read_valid <=1;
-        end
-        //read_latency_1: state <= read;
-        read : begin
-          // if(read_valid)
-          //   cas_count <= cas_count + 1;
-          //   case(bank_num)
-          //     0: begin 
-          //       out <= bank0[512*row_num+col_num+cas_count];//latency不对
-          //       $display("read addr:%x data:%x",512*row_num+col_num+cas_count,bank0[512*row_num+col_num+cas_count]);
-          //     end
-          //     1: out <= bank1[512*row_num+col_num+cas_count];
-          //     2: out <= bank2[512*row_num+col_num+cas_count];
-          //     3: out <= bank3[512*row_num+col_num+cas_count];//页面读取回环未完成；连续read burst截断未处理
-          //   endcase
-          cas_count <= cas_count + 1;
-          if(cas_count == burst_length-1)begin
-            state <= idle;
-            cas_count <= 0;
-            read_valid <=0;
-          end
-        end
-
-      endcase
+      
     end
   end
 
   always @(*) begin
-    if(read_valid)
-      
+    out = 16'b0;
+    if(read_valid) begin
       case(bank_num)
         0: begin 
-          out = bank0[512*row_num+col_num+cas_count];//latency不对
-          //$display("read addr:%x data:%x",512*row_num+col_num+cas_count,bank0[512*row_num+col_num+cas_count]);
+          out = bank0[512*row_num[bank_num]+col_num+burst_count];//latency不对
+          //$display("read addr:%x data:%x",512*row_num+col_num+burst_count,bank0[512*row_num+col_num+burst_count]);
         end
-        1: out = bank1[512*row_num+col_num+cas_count];
-        2: out = bank2[512*row_num+col_num+cas_count];
-        3: out = bank3[512*row_num+col_num+cas_count];//页面读取回环未完成；连续read burst截断未处理
+        1: out = bank1[512*row_num[bank_num]+col_num+burst_count];
+        2: out = bank2[512*row_num[bank_num]+col_num+burst_count];
+        3: out = bank3[512*row_num[bank_num]+col_num+burst_count];//页面读取回环未完成；连续read burst截断未处理
       endcase
+    end
   end
 
 endmodule

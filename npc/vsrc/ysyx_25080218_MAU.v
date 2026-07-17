@@ -147,6 +147,7 @@ always @(posedge clk) begin
           state <= S_IDLE;
           RREADY <= 1'b0;
           rdata_r <= RDATA;//pmem_read(araddr_latched);
+          ARADDR <= 0;
           done <= 1'b1;
         end
       end
@@ -180,6 +181,7 @@ always @(posedge clk) begin
           aw_done <= 1'b0;
           w_done <= 1'b0;
           state <= S_B;
+          AWADDR <= 0;
           // AWVALID <= 1'b0;
           // WVALID  <= 1'b0;
           //pmem_write(addr,data,wmask);

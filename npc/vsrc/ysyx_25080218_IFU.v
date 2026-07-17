@@ -1,5 +1,5 @@
 import "DPI-C" function void IFU_stastic();
-
+import "DPI-C" function void cache_amat_analysis();
 module ysyx_25080218_IFU(
     input               clk,
     input               rst,
@@ -155,6 +155,7 @@ always @(posedge clk)begin
                 end
             end
             S_R:begin
+                cache_amat_analysis();
                 if(RREADY && RVALID)begin
                     IFU_stastic();
                     inst <= RDATA;//pmem_read(araddr_latched);

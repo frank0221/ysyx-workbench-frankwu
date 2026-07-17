@@ -19,9 +19,13 @@ VL_ATTR_COLD void VysyxSoCFull_ysyx_25080218___stl_sequent__TOP__ysyxSoCFull__as
     vlSelfRef.IFU_init__DOT__pc = vlSelfRef.pc;
     vlSelfRef.IFU_init__DOT__inst = vlSelfRef.inst;
     vlSelfRef.IFU_init__DOT__valid = vlSelfRef.Ifu2Idu_valid;
-    vlSelfRef.IFU_init__DOT__ARADDR = vlSelfRef.m0_araddr;
-    vlSelfRef.IFU_init__DOT__ARVALID = vlSelfRef.m0_arvalid;
-    vlSelfRef.IFU_init__DOT__RREADY = vlSelfRef.m0_rready;
+    vlSelfRef.IFU_init__DOT__ARADDR = vlSelfRef.cache_araddr;
+    vlSelfRef.IFU_init__DOT__ARVALID = vlSelfRef.cache_arvalid;
+    vlSelfRef.IFU_init__DOT__ARREADY = vlSelfRef.cache_arready;
+    vlSelfRef.IFU_init__DOT__RDATA = vlSelfRef.cache_rdata;
+    vlSelfRef.IFU_init__DOT__RRESP = vlSelfRef.cache_rresp;
+    vlSelfRef.IFU_init__DOT__RVALID = vlSelfRef.cache_rvalid;
+    vlSelfRef.IFU_init__DOT__RREADY = vlSelfRef.cache_rready;
     vlSelfRef.MAU_init__DOT__ready_from_wbu = vlSelfRef.ready_from_wbu;
     vlSelfRef.MAU_init__DOT__AWADDR = vlSelfRef.m1_awaddr;
     vlSelfRef.MAU_init__DOT__AWVALID = vlSelfRef.m1_awvalid;
@@ -33,6 +37,16 @@ VL_ATTR_COLD void VysyxSoCFull_ysyx_25080218___stl_sequent__TOP__ysyxSoCFull__as
     vlSelfRef.MAU_init__DOT__ARVALID = vlSelfRef.m1_arvalid;
     vlSelfRef.MAU_init__DOT__RREADY = vlSelfRef.m1_rready;
     vlSelfRef.WBU_init__DOT__ready_from_wbu = vlSelfRef.ready_from_wbu;
+    vlSelfRef.Cache_init__DOT__out_arvalid = vlSelfRef.m0_arvalid;
+    vlSelfRef.Cache_init__DOT__out_araddr = vlSelfRef.m0_araddr;
+    vlSelfRef.Cache_init__DOT__in_arvalid = vlSelfRef.cache_arvalid;
+    vlSelfRef.Cache_init__DOT__in_arready = vlSelfRef.cache_arready;
+    vlSelfRef.Cache_init__DOT__in_araddr = vlSelfRef.cache_araddr;
+    vlSelfRef.Cache_init__DOT__in_rready = vlSelfRef.cache_rready;
+    vlSelfRef.Cache_init__DOT__in_rvalid = vlSelfRef.cache_rvalid;
+    vlSelfRef.Cache_init__DOT__in_rdata = vlSelfRef.cache_rdata;
+    vlSelfRef.Cache_init__DOT__in_rresp = vlSelfRef.cache_rresp;
+    vlSelfRef.Cache_init__DOT__out_rready = vlSelfRef.m0_rready;
     vlSelfRef.xbar_init__DOT__m1_awaddr = vlSelfRef.m1_awaddr;
     vlSelfRef.xbar_init__DOT__m1_awvalid = vlSelfRef.m1_awvalid;
     vlSelfRef.xbar_init__DOT__m1_wdata = vlSelfRef.m1_wdata;
@@ -71,6 +85,10 @@ VL_ATTR_COLD void VysyxSoCFull_ysyx_25080218___stl_sequent__TOP__ysyxSoCFull__as
     vlSelfRef.clint_init__DOT__s_rdata = vlSelfRef.s1_rdata;
     vlSelfRef.clint_init__DOT__s_rresp = vlSelfRef.s1_rresp;
     vlSelfRef.clint_init__DOT__s_rvalid = vlSelfRef.s1_rvalid;
+    vlSelfRef.Cache_init__DOT__index = (0xfU & (vlSelfRef.Cache_init__DOT__addr 
+                                                >> 2U));
+    vlSelfRef.Cache_init__DOT__tag = (vlSelfRef.Cache_init__DOT__addr 
+                                      >> 6U);
     vlSelfRef.valid_to_exu = vlSelfRef.Ifu2Idu_valid;
     vlSelfRef.valid_to_lsu = vlSelfRef.Ifu2Idu_valid;
     vlSelfRef.s1_bready = 0U;

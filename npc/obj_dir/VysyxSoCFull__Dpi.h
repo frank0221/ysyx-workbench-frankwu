@@ -38,6 +38,10 @@ extern "C" {
     extern void S_inst_analysis();
     // DPI import at /home/frank_wu/ysyx-workbench/npc/vsrc/ysyx_25080218_IDU.v:7:30
     extern void U_inst_analysis();
+    // DPI import at /home/frank_wu/ysyx-workbench/npc/vsrc/ysyx_25080218_IFU.v:2:30
+    extern void cache_amat_analysis();
+    // DPI import at /home/frank_wu/ysyx-workbench/npc/vsrc/ysyx_25080218_cache.sv:1:30
+    extern void cache_total();
     // DPI import at /home/frank_wu/ysyx-workbench/nemu/../ysyxSoC/perip/flash/flash.v:84:30
     extern void flash_read(int addr, int* data);
     // DPI import at /home/frank_wu/ysyx-workbench/npc/vsrc/ysyx_25080218_IDU.v:1:30

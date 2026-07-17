@@ -150,6 +150,11 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull_ysyx_25080218 final : public Ver
     struct {
         CData/*0:0*/ s1_rvalid;
         CData/*0:0*/ s1_rready;
+        CData/*1:0*/ cache_rresp;
+        CData/*0:0*/ cache_rvalid;
+        CData/*0:0*/ cache_rready;
+        CData/*0:0*/ cache_arvalid;
+        CData/*0:0*/ cache_arready;
         CData/*0:0*/ s2_awvalid;
         CData/*0:0*/ s2_awready;
         CData/*3:0*/ s2_wstrb;
@@ -207,13 +212,13 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull_ysyx_25080218 final : public Ver
         CData/*0:0*/ IDU_init__DOT__is_sh;
         CData/*0:0*/ IDU_init__DOT__is_sb;
         CData/*0:0*/ IDU_init__DOT__is_bne;
+    };
+    struct {
         CData/*0:0*/ IDU_init__DOT__is_beq;
         CData/*0:0*/ IDU_init__DOT__is_blt;
         CData/*0:0*/ IDU_init__DOT__is_bge;
         CData/*0:0*/ IDU_init__DOT__is_bltu;
         CData/*0:0*/ IDU_init__DOT__is_bgeu;
-    };
-    struct {
         CData/*0:0*/ IDU_init__DOT__is_mstatus;
         CData/*0:0*/ IDU_init__DOT__is_mtvec;
         CData/*0:0*/ IDU_init__DOT__is_mepc;
@@ -273,13 +278,13 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull_ysyx_25080218 final : public Ver
         CData/*0:0*/ EXU_init__DOT__is_bge;
         CData/*0:0*/ EXU_init__DOT__is_bltu;
         CData/*0:0*/ EXU_init__DOT__is_bgeu;
+    };
+    struct {
         CData/*0:0*/ EXU_init__DOT__equal;
         CData/*0:0*/ EXU_init__DOT__less_than_signed;
         CData/*0:0*/ EXU_init__DOT__less_than_unsigned;
         CData/*4:0*/ EXU_init__DOT____VdfgRegularize_he932f07c_0_0;
         CData/*0:0*/ MAU_init__DOT__clk;
-    };
-    struct {
         CData/*0:0*/ MAU_init__DOT__rst;
         CData/*0:0*/ MAU_init__DOT__wen;
         CData/*0:0*/ MAU_init__DOT__valid_from_exu;
@@ -318,6 +323,20 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull_ysyx_25080218 final : public Ver
         CData/*0:0*/ WBU_init__DOT__valid_from_lsu;
         CData/*4:0*/ WBU_init__DOT__gpr_waddr;
         CData/*0:0*/ WBU_init__DOT__ready_from_wbu;
+        CData/*0:0*/ Cache_init__DOT__clock;
+        CData/*0:0*/ Cache_init__DOT__reset;
+        CData/*0:0*/ Cache_init__DOT__out_arvalid;
+        CData/*0:0*/ Cache_init__DOT__out_arready;
+        CData/*0:0*/ Cache_init__DOT__in_arvalid;
+        CData/*0:0*/ Cache_init__DOT__in_arready;
+        CData/*0:0*/ Cache_init__DOT__in_rready;
+        CData/*0:0*/ Cache_init__DOT__in_rvalid;
+        CData/*1:0*/ Cache_init__DOT__in_rresp;
+        CData/*0:0*/ Cache_init__DOT__out_rready;
+        CData/*0:0*/ Cache_init__DOT__out_rvalid;
+        CData/*1:0*/ Cache_init__DOT__out_rresp;
+        CData/*3:0*/ Cache_init__DOT__index;
+        CData/*3:0*/ Cache_init__DOT__state;
         CData/*0:0*/ xbar_init__DOT__clk;
         CData/*0:0*/ xbar_init__DOT__rst;
         CData/*0:0*/ xbar_init__DOT__m1_awvalid;
@@ -325,6 +344,8 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull_ysyx_25080218 final : public Ver
         CData/*3:0*/ xbar_init__DOT__m1_wstrb;
         CData/*0:0*/ xbar_init__DOT__m1_wvalid;
         CData/*0:0*/ xbar_init__DOT__m1_wready;
+    };
+    struct {
         CData/*1:0*/ xbar_init__DOT__m1_bresp;
         CData/*0:0*/ xbar_init__DOT__m1_bvalid;
         CData/*0:0*/ xbar_init__DOT__m1_bready;
@@ -344,8 +365,6 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull_ysyx_25080218 final : public Ver
         CData/*0:0*/ xbar_init__DOT__m0_arvalid;
         CData/*0:0*/ xbar_init__DOT__m0_arready;
         CData/*1:0*/ xbar_init__DOT__m0_rresp;
-    };
-    struct {
         CData/*0:0*/ xbar_init__DOT__m0_rvalid;
         CData/*0:0*/ xbar_init__DOT__m0_rready;
         CData/*0:0*/ xbar_init__DOT__s0_awvalid;
@@ -391,6 +410,8 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull_ysyx_25080218 final : public Ver
         CData/*0:0*/ xbar_init__DOT__s1_r_owner;
         CData/*0:0*/ xbar_init__DOT__s1_r_busy;
         CData/*0:0*/ xbar_init__DOT__s0_w_busy;
+    };
+    struct {
         CData/*0:0*/ xbar_init__DOT__s1_w_busy;
         CData/*0:0*/ clint_init__DOT__clk;
         CData/*0:0*/ clint_init__DOT__rst;
@@ -408,12 +429,10 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull_ysyx_25080218 final : public Ver
         CData/*0:0*/ clint_init__DOT__s_rvalid;
         CData/*0:0*/ clint_init__DOT__s_rready;
         CData/*0:0*/ clint_init__DOT__s_busy;
-        CData/*0:0*/ __Vdly__m0_arvalid;
         CData/*0:0*/ __Vdly__m1_arvalid;
-    };
-    struct {
         CData/*0:0*/ __Vdly__m1_awvalid;
         CData/*0:0*/ __Vdly__m1_wvalid;
+        CData/*0:0*/ __Vdly__m0_arvalid;
         CData/*0:0*/ __Vdly__s1_rvalid;
         SData/*11:0*/ imm;
         SData/*11:0*/ alu_op;
@@ -421,6 +440,7 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull_ysyx_25080218 final : public Ver
         SData/*11:0*/ IDU_init__DOT__alu_op;
         SData/*11:0*/ IDU_init__DOT__csr_addr;
         SData/*11:0*/ EXU_init__DOT__alu_op;
+        SData/*10:0*/ Cache_init__DOT__cache_hit;
         VL_OUT(io_master_awaddr,31,0);
         VL_OUT(io_master_wdata,31,0);
         VL_OUT(io_master_araddr,31,0);
@@ -456,11 +476,15 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull_ysyx_25080218 final : public Ver
         IData/*31:0*/ s0_awaddr;
         IData/*31:0*/ s0_wdata;
         IData/*31:0*/ s0_araddr;
+    };
+    struct {
         IData/*31:0*/ s0_rdata;
         IData/*31:0*/ s1_awaddr;
         IData/*31:0*/ s1_wdata;
         IData/*31:0*/ s1_araddr;
         IData/*31:0*/ s1_rdata;
+        IData/*31:0*/ cache_rdata;
+        IData/*31:0*/ cache_araddr;
         IData/*31:0*/ s2_awaddr;
         IData/*31:0*/ s2_wdata;
         IData/*31:0*/ s2_araddr;
@@ -476,8 +500,6 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull_ysyx_25080218 final : public Ver
         IData/*31:0*/ IDU_init__DOT__next_pc_csr;
         IData/*31:0*/ IDU_init__DOT__imm_J;
         IData/*31:0*/ IDU_init__DOT__imm_I;
-    };
-    struct {
         IData/*31:0*/ IDU_init__DOT__imm_U;
         IData/*31:0*/ IDU_init__DOT__imm_S;
         IData/*31:0*/ IDU_init__DOT__imm_B;
@@ -520,6 +542,8 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull_ysyx_25080218 final : public Ver
         IData/*31:0*/ MAU_init__DOT__AWADDR;
         IData/*31:0*/ MAU_init__DOT__WDATA;
         IData/*31:0*/ MAU_init__DOT__ARADDR;
+    };
+    struct {
         IData/*31:0*/ MAU_init__DOT__RDATA;
         IData/*31:0*/ MAU_init__DOT__wdata;
         IData/*31:0*/ MAU_init__DOT__rdata_r;
@@ -527,6 +551,14 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull_ysyx_25080218 final : public Ver
         IData/*31:0*/ WBU_init__DOT__rdata;
         IData/*31:0*/ WBU_init__DOT__alu_result;
         IData/*31:0*/ WBU_init__DOT__gpr_wdata;
+        IData/*31:0*/ Cache_init__DOT__out_araddr;
+        IData/*31:0*/ Cache_init__DOT__in_araddr;
+        IData/*31:0*/ Cache_init__DOT__in_rdata;
+        IData/*31:0*/ Cache_init__DOT__out_rdata;
+        IData/*31:0*/ Cache_init__DOT__data;
+        IData/*25:0*/ Cache_init__DOT__tag;
+        IData/*31:0*/ Cache_init__DOT__addr;
+        IData/*31:0*/ Cache_init__DOT__i;
         IData/*31:0*/ xbar_init__DOT__m1_awaddr;
         IData/*31:0*/ xbar_init__DOT__m1_wdata;
         IData/*31:0*/ xbar_init__DOT__m1_araddr;
@@ -542,8 +574,6 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull_ysyx_25080218 final : public Ver
         IData/*31:0*/ xbar_init__DOT__s1_awaddr;
         IData/*31:0*/ xbar_init__DOT__s1_wdata;
         IData/*31:0*/ xbar_init__DOT__s1_araddr;
-    };
-    struct {
         IData/*31:0*/ xbar_init__DOT__s1_rdata;
         IData/*31:0*/ clint_init__DOT__s_awaddr;
         IData/*31:0*/ clint_init__DOT__s_wdata;
@@ -555,6 +585,8 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull_ysyx_25080218 final : public Ver
         QData/*63:0*/ clint_init__DOT__mtime;
         VlUnpacked<IData/*31:0*/, 32> IDU_init__DOT__ysyx_25080218_GPR_init__DOT__GPR;
         VlUnpacked<IData/*31:0*/, 32> IDU_init__DOT__ysyx_25080218_GPR_init__DOT__GPR_diff;
+        VlUnpacked<QData/*32:0*/, 16> Cache_init__DOT__cache_data;
+        VlUnpacked<IData/*25:0*/, 16> Cache_init__DOT__cache_tag;
     };
 
     // INTERNAL VARIABLES
@@ -568,6 +600,13 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull_ysyx_25080218 final : public Ver
     static constexpr IData/*31:0*/ MAU_init__DOT__S_R = 2U;
     static constexpr IData/*31:0*/ MAU_init__DOT__S_AW_W = 3U;
     static constexpr IData/*31:0*/ MAU_init__DOT__S_B = 4U;
+    static constexpr IData/*31:0*/ Cache_init__DOT__DAT_LEN = 0x00000020U;
+    static constexpr IData/*31:0*/ Cache_init__DOT__TAG_LEN = 0x0000001aU;
+    static constexpr IData/*31:0*/ Cache_init__DOT__CACHE_SIZE = 4U;
+    static constexpr IData/*31:0*/ Cache_init__DOT__BLOCK_SIZE = 2U;
+    static constexpr IData/*31:0*/ Cache_init__DOT__idle = 0U;
+    static constexpr IData/*31:0*/ Cache_init__DOT__AR = 1U;
+    static constexpr IData/*31:0*/ Cache_init__DOT__R = 2U;
 
     // CONSTRUCTORS
     VysyxSoCFull_ysyx_25080218(VysyxSoCFull__Syms* symsp, const char* v__name);

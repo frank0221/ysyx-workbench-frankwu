@@ -22,16 +22,16 @@ SECTIONS {
     bootloader_vma_start = .;
     *(.bootloader_text)
     bootloader_vma_end = .;
-  } > psram AT > flash : bootloader
+  } > sdram AT > flash : bootloader
   bootloader_lma_start = LOADADDR(.bootloader);
 
-  . = ORIGIN(psram);
+  . = ORIGIN(sdram);
   .text : {
     text_vma_start = .;
     *(.text*)
     . = ALIGN(8);
     text_vma_end = .;
-  } > psram AT > flash : text
+  } > sdram AT > flash : text
   text_lma_start = LOADADDR(.text);
   text_lma_end = LOADADDR(.text) + SIZEOF(.text);
 
@@ -42,7 +42,7 @@ SECTIONS {
     rodata_vma_start = .;
     *(.rodata*)
     rodata_vma_end = .;
-  }  > psram AT > flash :text
+  }  > sdram AT > flash :text
   rodata_lma_start = LOADADDR(.rodata);
   rodata_lma_end   = LOADADDR(.rodata) + SIZEOF(.rodata);
 
@@ -78,7 +78,7 @@ SECTIONS {
     __am_apps_data_end = .;
     . = ALIGN(8);
     data_vma_end = .;
-  } > psram AT> flash :data
+  } > sdram AT> flash :data
   data_lma_start = LOADADDR(.data);
   data_lma_end   = LOADADDR(.data) + SIZEOF(.data);
   
@@ -99,13 +99,13 @@ SECTIONS {
     __am_apps_bss_end = .;
     . = ALIGN(8);
   _bss_end = .;
-  }> psram : data
+  }> sdram : data
 
   . = ALIGN(4);
   _stack_size = 0x800;
   _stack_pointer = ORIGIN(sram) + LENGTH(sram) - 0x10;
 
   _heap_start =  .;
-  _heap_end = ORIGIN(psram) + LENGTH(psram);
+  _heap_end = ORIGIN(sdram) + LENGTH(sdram);
 
 }

@@ -66,6 +66,16 @@ VL_ATTR_COLD void VysyxSoCFull___024root___eval_initial(VysyxSoCFull___024root* 
     VysyxSoCFull_ysyx_25080218___eval_initial__TOP__ysyxSoCFull__asic__cpu__cpu((&vlSymsp->TOP__ysyxSoCFull__asic__cpu__cpu));
 }
 
+VL_ATTR_COLD void VysyxSoCFull_ysyx_25080218___eval_final__TOP__ysyxSoCFull__asic__cpu__cpu(VysyxSoCFull_ysyx_25080218* vlSelf);
+
+VL_ATTR_COLD void VysyxSoCFull___024root___eval_final(VysyxSoCFull___024root* vlSelf) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root___eval_final\n"); );
+    VysyxSoCFull__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    auto& vlSelfRef = std::ref(*vlSelf).get();
+    // Body
+    VysyxSoCFull_ysyx_25080218___eval_final__TOP__ysyxSoCFull__asic__cpu__cpu((&vlSymsp->TOP__ysyxSoCFull__asic__cpu__cpu));
+}
+
 #ifdef VL_DEBUG
 VL_ATTR_COLD void VysyxSoCFull___024root___dump_triggers__stl(VysyxSoCFull___024root* vlSelf);
 #endif  // VL_DEBUG

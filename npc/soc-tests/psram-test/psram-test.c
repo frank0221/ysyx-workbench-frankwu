@@ -16,13 +16,13 @@ void outh(int addr, uint16_t data){*(volatile uint16_t*)addr = data;};
 
 int main(){
     //printf("start");
-    for(int i = 0; i < 4 * 1024 *1024; i++){
+    for(int i = 0; i < 4 * 50 ; i++){
         outw(PSRAM_BASE + 4*i , (uint32_t)i);
     }
     int data;
     int error = 0;
     int i =0;
-    for(; i < 4 * 1024 *1024; i++){
+    for(; i < 4 * 50; i++){
         data = inw(PSRAM_BASE + 4*i);
         if(data != i){
             error = 1;

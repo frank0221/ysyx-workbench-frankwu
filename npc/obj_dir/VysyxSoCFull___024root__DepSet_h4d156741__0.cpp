@@ -166,12 +166,12 @@ void VysyxSoCFull_CPU___nba_sequent__TOP__ysyxSoCFull__asic__cpu__0(VysyxSoCFull
 void VysyxSoCFull___024root___nba_sequent__TOP__0(VysyxSoCFull___024root* vlSelf);
 void VysyxSoCFull_ysyx_25080218___nba_sequent__TOP__ysyxSoCFull__asic__cpu__cpu__8(VysyxSoCFull_ysyx_25080218* vlSelf);
 void VysyxSoCFull_ysyxSoCFull___nba_sequent__TOP__ysyxSoCFull__2(VysyxSoCFull_ysyxSoCFull* vlSelf);
-void VysyxSoCFull_ysyxSoCASIC___nba_sequent__TOP__ysyxSoCFull__asic__2(VysyxSoCFull_ysyxSoCASIC* vlSelf);
 void VysyxSoCFull_ysyxSoCFull___nba_sequent__TOP__ysyxSoCFull__3(VysyxSoCFull_ysyxSoCFull* vlSelf);
-void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___024root* vlSelf);
+void VysyxSoCFull_ysyxSoCASIC___nba_sequent__TOP__ysyxSoCFull__asic__2(VysyxSoCFull_ysyxSoCASIC* vlSelf);
 void VysyxSoCFull_ysyxSoCFull___nba_sequent__TOP__ysyxSoCFull__4(VysyxSoCFull_ysyxSoCFull* vlSelf);
-void VysyxSoCFull_ysyx_25080218___nba_sequent__TOP__ysyxSoCFull__asic__cpu__cpu__9(VysyxSoCFull_ysyx_25080218* vlSelf);
+void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___024root* vlSelf);
 void VysyxSoCFull_ysyxSoCFull___nba_sequent__TOP__ysyxSoCFull__5(VysyxSoCFull_ysyxSoCFull* vlSelf);
+void VysyxSoCFull_ysyx_25080218___nba_sequent__TOP__ysyxSoCFull__asic__cpu__cpu__9(VysyxSoCFull_ysyx_25080218* vlSelf);
 void VysyxSoCFull_ysyxSoCASIC___nba_sequent__TOP__ysyxSoCFull__asic__3(VysyxSoCFull_ysyxSoCASIC* vlSelf);
 void VysyxSoCFull_ysyxSoCFull___nba_sequent__TOP__ysyxSoCFull__6(VysyxSoCFull_ysyxSoCFull* vlSelf);
 void VysyxSoCFull_ysyxSoCASIC___nba_sequent__TOP__ysyxSoCFull__asic__4(VysyxSoCFull_ysyxSoCASIC* vlSelf);
@@ -181,20 +181,19 @@ void VysyxSoCFull_ysyxSoCASIC___nba_comb__TOP__ysyxSoCFull__asic__0(VysyxSoCFull
 void VysyxSoCFull_ysyxSoCFull___nba_comb__TOP__ysyxSoCFull__0(VysyxSoCFull_ysyxSoCFull* vlSelf);
 void VysyxSoCFull_ysyxSoCFull___nba_comb__TOP__ysyxSoCFull__1(VysyxSoCFull_ysyxSoCFull* vlSelf);
 void VysyxSoCFull_ysyxSoCFull___nba_comb__TOP__ysyxSoCFull__2(VysyxSoCFull_ysyxSoCFull* vlSelf);
+void VysyxSoCFull_ysyxSoCASIC___nba_comb__TOP__ysyxSoCFull__asic__1(VysyxSoCFull_ysyxSoCASIC* vlSelf);
+void VysyxSoCFull_ysyxSoCFull___nba_comb__TOP__ysyxSoCFull__3(VysyxSoCFull_ysyxSoCFull* vlSelf);
 void VysyxSoCFull_ysyx_25080218___nba_sequent__TOP__ysyxSoCFull__asic__cpu__cpu__11(VysyxSoCFull_ysyx_25080218* vlSelf);
 void VysyxSoCFull_ysyx_25080218___nba_comb__TOP__ysyxSoCFull__asic__cpu__cpu__0(VysyxSoCFull_ysyx_25080218* vlSelf);
 void VysyxSoCFull_CPU___nba_comb__TOP__ysyxSoCFull__asic__cpu__0(VysyxSoCFull_CPU* vlSelf);
-void VysyxSoCFull_ysyxSoCASIC___nba_comb__TOP__ysyxSoCFull__asic__1(VysyxSoCFull_ysyxSoCASIC* vlSelf);
-void VysyxSoCFull_ysyx_25080218___nba_comb__TOP__ysyxSoCFull__asic__cpu__cpu__1(VysyxSoCFull_ysyx_25080218* vlSelf);
 void VysyxSoCFull_ysyxSoCASIC___nba_comb__TOP__ysyxSoCFull__asic__2(VysyxSoCFull_ysyxSoCASIC* vlSelf);
-void VysyxSoCFull_ysyxSoCFull___nba_sequent__TOP__ysyxSoCFull__7(VysyxSoCFull_ysyxSoCFull* vlSelf);
-void VysyxSoCFull_ysyxSoCFull___nba_comb__TOP__ysyxSoCFull__3(VysyxSoCFull_ysyxSoCFull* vlSelf);
+void VysyxSoCFull_ysyx_25080218___nba_comb__TOP__ysyxSoCFull__asic__cpu__cpu__1(VysyxSoCFull_ysyx_25080218* vlSelf);
 void VysyxSoCFull_ysyxSoCASIC___nba_comb__TOP__ysyxSoCFull__asic__3(VysyxSoCFull_ysyxSoCASIC* vlSelf);
 void VysyxSoCFull_ysyxSoCFull___nba_comb__TOP__ysyxSoCFull__4(VysyxSoCFull_ysyxSoCFull* vlSelf);
 void VysyxSoCFull_ysyxSoCASIC___nba_comb__TOP__ysyxSoCFull__asic__4(VysyxSoCFull_ysyxSoCASIC* vlSelf);
-void VysyxSoCFull_ysyx_25080218___nba_comb__TOP__ysyxSoCFull__asic__cpu__cpu__2(VysyxSoCFull_ysyx_25080218* vlSelf);
 void VysyxSoCFull_ysyxSoCFull___nba_comb__TOP__ysyxSoCFull__5(VysyxSoCFull_ysyxSoCFull* vlSelf);
 void VysyxSoCFull_ysyxSoCASIC___nba_comb__TOP__ysyxSoCFull__asic__5(VysyxSoCFull_ysyxSoCASIC* vlSelf);
+void VysyxSoCFull_ysyx_25080218___nba_comb__TOP__ysyxSoCFull__asic__cpu__cpu__2(VysyxSoCFull_ysyx_25080218* vlSelf);
 
 void VysyxSoCFull___024root___eval_nba(VysyxSoCFull___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    VysyxSoCFull___024root___eval_nba\n"); );
@@ -238,22 +237,22 @@ void VysyxSoCFull___024root___eval_nba(VysyxSoCFull___024root* vlSelf) {
         VysyxSoCFull___024root___nba_sequent__TOP__0(vlSelf);
         VysyxSoCFull_ysyx_25080218___nba_sequent__TOP__ysyxSoCFull__asic__cpu__cpu__8((&vlSymsp->TOP__ysyxSoCFull__asic__cpu__cpu));
     }
-    if ((1ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
+    if ((0x10ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VysyxSoCFull_ysyxSoCFull___nba_sequent__TOP__ysyxSoCFull__2((&vlSymsp->TOP__ysyxSoCFull));
+    }
+    if ((1ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
+        VysyxSoCFull_ysyxSoCFull___nba_sequent__TOP__ysyxSoCFull__3((&vlSymsp->TOP__ysyxSoCFull));
     }
     if ((0x60ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VysyxSoCFull_ysyxSoCASIC___nba_sequent__TOP__ysyxSoCFull__asic__2((&vlSymsp->TOP__ysyxSoCFull__asic));
-        VysyxSoCFull_ysyxSoCFull___nba_sequent__TOP__ysyxSoCFull__3((&vlSymsp->TOP__ysyxSoCFull));
+        VysyxSoCFull_ysyxSoCFull___nba_sequent__TOP__ysyxSoCFull__4((&vlSymsp->TOP__ysyxSoCFull));
         VysyxSoCFull___024root___nba_sequent__TOP__1(vlSelf);
     }
     if ((0xcULL & vlSelfRef.__VnbaTriggered.word(0U))) {
-        VysyxSoCFull_ysyxSoCFull___nba_sequent__TOP__ysyxSoCFull__4((&vlSymsp->TOP__ysyxSoCFull));
+        VysyxSoCFull_ysyxSoCFull___nba_sequent__TOP__ysyxSoCFull__5((&vlSymsp->TOP__ysyxSoCFull));
     }
     if ((0x300ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VysyxSoCFull_ysyx_25080218___nba_sequent__TOP__ysyxSoCFull__asic__cpu__cpu__9((&vlSymsp->TOP__ysyxSoCFull__asic__cpu__cpu));
-    }
-    if ((0x10ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
-        VysyxSoCFull_ysyxSoCFull___nba_sequent__TOP__ysyxSoCFull__5((&vlSymsp->TOP__ysyxSoCFull));
     }
     if ((0x80ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VysyxSoCFull_ysyxSoCASIC___nba_sequent__TOP__ysyxSoCFull__asic__3((&vlSymsp->TOP__ysyxSoCFull__asic));
@@ -273,8 +272,12 @@ void VysyxSoCFull___024root___eval_nba(VysyxSoCFull___024root* vlSelf) {
     if ((0x63ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VysyxSoCFull_ysyxSoCFull___nba_comb__TOP__ysyxSoCFull__1((&vlSymsp->TOP__ysyxSoCFull));
     }
-    if ((0x61ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
+    if ((0x70ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VysyxSoCFull_ysyxSoCFull___nba_comb__TOP__ysyxSoCFull__2((&vlSymsp->TOP__ysyxSoCFull));
+        VysyxSoCFull_ysyxSoCASIC___nba_comb__TOP__ysyxSoCFull__asic__1((&vlSymsp->TOP__ysyxSoCFull__asic));
+    }
+    if ((0x61ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
+        VysyxSoCFull_ysyxSoCFull___nba_comb__TOP__ysyxSoCFull__3((&vlSymsp->TOP__ysyxSoCFull));
     }
     if ((0x100ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VysyxSoCFull_ysyx_25080218___nba_sequent__TOP__ysyxSoCFull__asic__cpu__cpu__11((&vlSymsp->TOP__ysyxSoCFull__asic__cpu__cpu));
@@ -282,29 +285,22 @@ void VysyxSoCFull___024root___eval_nba(VysyxSoCFull___024root* vlSelf) {
     if ((0x300ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VysyxSoCFull_ysyx_25080218___nba_comb__TOP__ysyxSoCFull__asic__cpu__cpu__0((&vlSymsp->TOP__ysyxSoCFull__asic__cpu__cpu));
         VysyxSoCFull_CPU___nba_comb__TOP__ysyxSoCFull__asic__cpu__0((&vlSymsp->TOP__ysyxSoCFull__asic__cpu));
-        VysyxSoCFull_ysyxSoCASIC___nba_comb__TOP__ysyxSoCFull__asic__1((&vlSymsp->TOP__ysyxSoCFull__asic));
+        VysyxSoCFull_ysyxSoCASIC___nba_comb__TOP__ysyxSoCFull__asic__2((&vlSymsp->TOP__ysyxSoCFull__asic));
     }
     if ((0x320ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VysyxSoCFull_ysyx_25080218___nba_comb__TOP__ysyxSoCFull__asic__cpu__cpu__1((&vlSymsp->TOP__ysyxSoCFull__asic__cpu__cpu));
-        VysyxSoCFull_ysyxSoCASIC___nba_comb__TOP__ysyxSoCFull__asic__2((&vlSymsp->TOP__ysyxSoCFull__asic));
-    }
-    if ((0x60ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
-        VysyxSoCFull_ysyxSoCFull___nba_sequent__TOP__ysyxSoCFull__7((&vlSymsp->TOP__ysyxSoCFull));
-    }
-    if ((0x6cULL & vlSelfRef.__VnbaTriggered.word(0U))) {
-        VysyxSoCFull_ysyxSoCFull___nba_comb__TOP__ysyxSoCFull__3((&vlSymsp->TOP__ysyxSoCFull));
         VysyxSoCFull_ysyxSoCASIC___nba_comb__TOP__ysyxSoCFull__asic__3((&vlSymsp->TOP__ysyxSoCFull__asic));
     }
-    if ((0x63ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
+    if ((0x6cULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VysyxSoCFull_ysyxSoCFull___nba_comb__TOP__ysyxSoCFull__4((&vlSymsp->TOP__ysyxSoCFull));
         VysyxSoCFull_ysyxSoCASIC___nba_comb__TOP__ysyxSoCFull__asic__4((&vlSymsp->TOP__ysyxSoCFull__asic));
     }
-    if ((0x120ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
-        VysyxSoCFull_ysyx_25080218___nba_comb__TOP__ysyxSoCFull__asic__cpu__cpu__2((&vlSymsp->TOP__ysyxSoCFull__asic__cpu__cpu));
-    }
-    if ((0x70ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
+    if ((0x63ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VysyxSoCFull_ysyxSoCFull___nba_comb__TOP__ysyxSoCFull__5((&vlSymsp->TOP__ysyxSoCFull));
         VysyxSoCFull_ysyxSoCASIC___nba_comb__TOP__ysyxSoCFull__asic__5((&vlSymsp->TOP__ysyxSoCFull__asic));
+    }
+    if ((0x120ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
+        VysyxSoCFull_ysyx_25080218___nba_comb__TOP__ysyxSoCFull__asic__cpu__cpu__2((&vlSymsp->TOP__ysyxSoCFull__asic__cpu__cpu));
     }
 }
 

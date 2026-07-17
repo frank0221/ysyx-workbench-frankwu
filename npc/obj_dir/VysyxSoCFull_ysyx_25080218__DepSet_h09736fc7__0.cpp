@@ -300,12 +300,14 @@ VL_INLINE_OPT void VysyxSoCFull_ysyx_25080218___ico_sequent__TOP__ysyxSoCFull__a
     // Body
     vlSelfRef.IFU_init__DOT__clk = vlSelfRef.clock;
     vlSelfRef.MAU_init__DOT__clk = vlSelfRef.clock;
+    vlSelfRef.Cache_init__DOT__clock = vlSelfRef.clock;
     vlSelfRef.xbar_init__DOT__clk = vlSelfRef.clock;
     vlSelfRef.clint_init__DOT__clk = vlSelfRef.clock;
     vlSelfRef.IDU_init__DOT__clk = vlSelfRef.clock;
     if (vlSelfRef.reset) {
         vlSelfRef.IFU_init__DOT__rst = 1U;
         vlSelfRef.MAU_init__DOT__rst = 1U;
+        vlSelfRef.Cache_init__DOT__reset = 1U;
         vlSelfRef.xbar_init__DOT__rst = 1U;
         vlSelfRef.clint_init__DOT__rst = 1U;
         vlSelfRef.IDU_init__DOT__ysyx_25080218_GPR_init__DOT__j = 1U;
@@ -376,6 +378,7 @@ VL_INLINE_OPT void VysyxSoCFull_ysyx_25080218___ico_sequent__TOP__ysyxSoCFull__a
     } else {
         vlSelfRef.IFU_init__DOT__rst = 0U;
         vlSelfRef.MAU_init__DOT__rst = 0U;
+        vlSelfRef.Cache_init__DOT__reset = 0U;
         vlSelfRef.xbar_init__DOT__rst = 0U;
         vlSelfRef.clint_init__DOT__rst = 0U;
         if ((1U & (~ ((IData)(vlSelfRef.gpr_we) & (0U 
@@ -708,6 +711,7 @@ VL_INLINE_OPT void VysyxSoCFull_ysyx_25080218___nba_sequent__TOP__ysyxSoCFull__a
     vlSelfRef.xbar_init__DOT__s0_bvalid = vlSelfRef.io_master_bvalid;
     vlSelfRef.IFU_init__DOT__rst = vlSelfRef.reset;
     vlSelfRef.MAU_init__DOT__rst = vlSelfRef.reset;
+    vlSelfRef.Cache_init__DOT__reset = vlSelfRef.reset;
     vlSelfRef.xbar_init__DOT__rst = vlSelfRef.reset;
     vlSelfRef.clint_init__DOT__rst = vlSelfRef.reset;
     vlSelfRef.IDU_init__DOT__rst = vlSelfRef.reset;
@@ -790,7 +794,7 @@ VL_INLINE_OPT void VysyxSoCFull_ysyx_25080218___nba_sequent__TOP__ysyxSoCFull__a
     vlSelfRef.xbar_init__DOT__m1_arvalid = vlSelfRef.m1_arvalid;
     vlSelfRef.xbar_init__DOT__m1_rreq_s1 = ((IData)(vlSelfRef.m1_arvalid) 
                                             & (IData)(vlSelfRef.xbar_init__DOT__m1_r_s1));
-    vlSelfRef.IFU_init__DOT__ARVALID = vlSelfRef.m0_arvalid;
+    vlSelfRef.Cache_init__DOT__out_arvalid = vlSelfRef.m0_arvalid;
     vlSelfRef.xbar_init__DOT__m0_arvalid = vlSelfRef.m0_arvalid;
     vlSelfRef.xbar_init__DOT__m0_rreq_s1 = ((IData)(vlSelfRef.m0_arvalid) 
                                             & (IData)(vlSelfRef.xbar_init__DOT__m0_r_s1));
@@ -1426,9 +1430,9 @@ VL_INLINE_OPT void VysyxSoCFull_ysyx_25080218___nba_comb__TOP__ysyxSoCFull__asic
             = vlSelfRef.IDU_init__DOT__ysyx_25080218_GPR_init__DOT__GPR_diff
             [0x1fU];
     }
-    vlSelfRef.IFU_init__DOT__RDATA = vlSelfRef.m0_rdata;
+    vlSelfRef.Cache_init__DOT__out_rdata = vlSelfRef.m0_rdata;
     vlSelfRef.xbar_init__DOT__m0_rdata = vlSelfRef.m0_rdata;
-    vlSelfRef.IFU_init__DOT__RRESP = vlSelfRef.m0_rresp;
+    vlSelfRef.Cache_init__DOT__out_rresp = vlSelfRef.m0_rresp;
     vlSelfRef.xbar_init__DOT__m0_rresp = vlSelfRef.m0_rresp;
     vlSelfRef.MAU_init__DOT__RDATA = vlSelfRef.m1_rdata;
     vlSelfRef.xbar_init__DOT__m1_rdata = vlSelfRef.m1_rdata;
@@ -1438,11 +1442,11 @@ VL_INLINE_OPT void VysyxSoCFull_ysyx_25080218___nba_comb__TOP__ysyxSoCFull__asic
     vlSelfRef.xbar_init__DOT__m1_bresp = vlSelfRef.m1_bresp;
     vlSelfRef.MAU_init__DOT__BVALID = vlSelfRef.m1_bvalid;
     vlSelfRef.xbar_init__DOT__m1_bvalid = vlSelfRef.m1_bvalid;
-    vlSelfRef.IFU_init__DOT__RVALID = vlSelfRef.m0_rvalid;
+    vlSelfRef.Cache_init__DOT__out_rvalid = vlSelfRef.m0_rvalid;
     vlSelfRef.xbar_init__DOT__m0_rvalid = vlSelfRef.m0_rvalid;
     vlSelfRef.MAU_init__DOT__RVALID = vlSelfRef.m1_rvalid;
     vlSelfRef.xbar_init__DOT__m1_rvalid = vlSelfRef.m1_rvalid;
-    vlSelfRef.IFU_init__DOT__ARREADY = vlSelfRef.m0_arready;
+    vlSelfRef.Cache_init__DOT__out_arready = vlSelfRef.m0_arready;
     vlSelfRef.xbar_init__DOT__m0_arready = vlSelfRef.m0_arready;
     vlSelfRef.MAU_init__DOT__AWREADY = vlSelfRef.m1_awready;
     vlSelfRef.xbar_init__DOT__m1_awready = vlSelfRef.m1_awready;

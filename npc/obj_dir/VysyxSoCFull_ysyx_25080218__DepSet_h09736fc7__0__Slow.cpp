@@ -63,6 +63,22 @@ VL_ATTR_COLD void VysyxSoCFull_ysyx_25080218___eval_initial__TOP__ysyxSoCFull__a
     vlSelfRef.s1_bvalid = 0U;
 }
 
+VL_ATTR_COLD void VysyxSoCFull_ysyx_25080218___eval_final__TOP__ysyxSoCFull__asic__cpu__cpu(VysyxSoCFull_ysyx_25080218* vlSelf) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+            VysyxSoCFull_ysyx_25080218___eval_final__TOP__ysyxSoCFull__asic__cpu__cpu\n"); );
+    VysyxSoCFull__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    auto& vlSelfRef = std::ref(*vlSelf).get();
+    // Body
+    VL_WRITEF_NX("========== CACHE STAT ==========\n",0);
+    Verilated::runFlushCallbacks();
+    Verilated::runFlushCallbacks();
+    VL_WRITEF_NX("Cache hit = %0#\n",0,11,vlSelfRef.Cache_init__DOT__cache_hit);
+    Verilated::runFlushCallbacks();
+    Verilated::runFlushCallbacks();
+    VL_WRITEF_NX("================================\n",0);
+    Verilated::runFlushCallbacks();
+    Verilated::runFlushCallbacks();
+}
+
 VL_ATTR_COLD void VysyxSoCFull_ysyx_25080218___stl_sequent__TOP__ysyxSoCFull__asic__cpu__cpu__1(VysyxSoCFull_ysyx_25080218* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+            VysyxSoCFull_ysyx_25080218___stl_sequent__TOP__ysyxSoCFull__asic__cpu__cpu__1\n"); );
     VysyxSoCFull__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
@@ -168,19 +184,19 @@ VL_ATTR_COLD void VysyxSoCFull_ysyx_25080218___stl_sequent__TOP__ysyxSoCFull__as
     vlSelfRef.xbar_init__DOT__m1_awready = vlSelfRef.m1_awready;
     vlSelfRef.MAU_init__DOT__WREADY = vlSelfRef.m1_wready;
     vlSelfRef.xbar_init__DOT__m1_wready = vlSelfRef.m1_wready;
-    vlSelfRef.IFU_init__DOT__ARREADY = vlSelfRef.m0_arready;
+    vlSelfRef.Cache_init__DOT__out_arready = vlSelfRef.m0_arready;
     vlSelfRef.xbar_init__DOT__m0_arready = vlSelfRef.m0_arready;
     vlSelfRef.MAU_init__DOT__ARREADY = vlSelfRef.m1_arready;
     vlSelfRef.xbar_init__DOT__m1_arready = vlSelfRef.m1_arready;
-    vlSelfRef.IFU_init__DOT__RVALID = vlSelfRef.m0_rvalid;
+    vlSelfRef.Cache_init__DOT__out_rvalid = vlSelfRef.m0_rvalid;
     vlSelfRef.xbar_init__DOT__m0_rvalid = vlSelfRef.m0_rvalid;
     vlSelfRef.MAU_init__DOT__RVALID = vlSelfRef.m1_rvalid;
     vlSelfRef.xbar_init__DOT__m1_rvalid = vlSelfRef.m1_rvalid;
-    vlSelfRef.IFU_init__DOT__RRESP = vlSelfRef.m0_rresp;
+    vlSelfRef.Cache_init__DOT__out_rresp = vlSelfRef.m0_rresp;
     vlSelfRef.xbar_init__DOT__m0_rresp = vlSelfRef.m0_rresp;
     vlSelfRef.MAU_init__DOT__RRESP = vlSelfRef.m1_rresp;
     vlSelfRef.xbar_init__DOT__m1_rresp = vlSelfRef.m1_rresp;
-    vlSelfRef.IFU_init__DOT__RDATA = vlSelfRef.m0_rdata;
+    vlSelfRef.Cache_init__DOT__out_rdata = vlSelfRef.m0_rdata;
     vlSelfRef.xbar_init__DOT__m0_rdata = vlSelfRef.m0_rdata;
     vlSelfRef.MAU_init__DOT__RDATA = vlSelfRef.m1_rdata;
     vlSelfRef.xbar_init__DOT__m1_rdata = vlSelfRef.m1_rdata;
@@ -197,12 +213,14 @@ VL_ATTR_COLD void VysyxSoCFull_ysyx_25080218___stl_sequent__TOP__ysyxSoCFull__as
     // Body
     vlSelfRef.IFU_init__DOT__clk = vlSelfRef.clock;
     vlSelfRef.MAU_init__DOT__clk = vlSelfRef.clock;
+    vlSelfRef.Cache_init__DOT__clock = vlSelfRef.clock;
     vlSelfRef.xbar_init__DOT__clk = vlSelfRef.clock;
     vlSelfRef.clint_init__DOT__clk = vlSelfRef.clock;
     vlSelfRef.IDU_init__DOT__clk = vlSelfRef.clock;
     if (vlSelfRef.reset) {
         vlSelfRef.IFU_init__DOT__rst = 1U;
         vlSelfRef.MAU_init__DOT__rst = 1U;
+        vlSelfRef.Cache_init__DOT__reset = 1U;
         vlSelfRef.xbar_init__DOT__rst = 1U;
         vlSelfRef.clint_init__DOT__rst = 1U;
         vlSelfRef.IDU_init__DOT__rst = 1U;
@@ -273,6 +291,7 @@ VL_ATTR_COLD void VysyxSoCFull_ysyx_25080218___stl_sequent__TOP__ysyxSoCFull__as
     } else {
         vlSelfRef.IFU_init__DOT__rst = 0U;
         vlSelfRef.MAU_init__DOT__rst = 0U;
+        vlSelfRef.Cache_init__DOT__reset = 0U;
         vlSelfRef.xbar_init__DOT__rst = 0U;
         vlSelfRef.clint_init__DOT__rst = 0U;
         vlSelfRef.IDU_init__DOT__rst = 0U;
@@ -590,6 +609,13 @@ VL_ATTR_COLD void VysyxSoCFull_ysyx_25080218___ctor_var_reset(VysyxSoCFull_ysyx_
     vlSelf->s1_rresp = VL_RAND_RESET_I(2);
     vlSelf->s1_rvalid = VL_RAND_RESET_I(1);
     vlSelf->s1_rready = VL_RAND_RESET_I(1);
+    vlSelf->cache_rdata = VL_RAND_RESET_I(32);
+    vlSelf->cache_rresp = VL_RAND_RESET_I(2);
+    vlSelf->cache_rvalid = VL_RAND_RESET_I(1);
+    vlSelf->cache_rready = VL_RAND_RESET_I(1);
+    vlSelf->cache_araddr = VL_RAND_RESET_I(32);
+    vlSelf->cache_arvalid = VL_RAND_RESET_I(1);
+    vlSelf->cache_arready = VL_RAND_RESET_I(1);
     vlSelf->s2_awaddr = VL_RAND_RESET_I(32);
     vlSelf->s2_awvalid = VL_RAND_RESET_I(1);
     vlSelf->s2_awready = VL_RAND_RESET_I(1);
@@ -834,6 +860,35 @@ VL_ATTR_COLD void VysyxSoCFull_ysyx_25080218___ctor_var_reset(VysyxSoCFull_ysyx_
     vlSelf->WBU_init__DOT__gpr_wdata = VL_RAND_RESET_I(32);
     vlSelf->WBU_init__DOT__gpr_waddr = VL_RAND_RESET_I(5);
     vlSelf->WBU_init__DOT__ready_from_wbu = VL_RAND_RESET_I(1);
+    vlSelf->Cache_init__DOT__clock = VL_RAND_RESET_I(1);
+    vlSelf->Cache_init__DOT__reset = VL_RAND_RESET_I(1);
+    vlSelf->Cache_init__DOT__out_arvalid = VL_RAND_RESET_I(1);
+    vlSelf->Cache_init__DOT__out_arready = VL_RAND_RESET_I(1);
+    vlSelf->Cache_init__DOT__out_araddr = VL_RAND_RESET_I(32);
+    vlSelf->Cache_init__DOT__in_arvalid = VL_RAND_RESET_I(1);
+    vlSelf->Cache_init__DOT__in_arready = VL_RAND_RESET_I(1);
+    vlSelf->Cache_init__DOT__in_araddr = VL_RAND_RESET_I(32);
+    vlSelf->Cache_init__DOT__in_rready = VL_RAND_RESET_I(1);
+    vlSelf->Cache_init__DOT__in_rvalid = VL_RAND_RESET_I(1);
+    vlSelf->Cache_init__DOT__in_rdata = VL_RAND_RESET_I(32);
+    vlSelf->Cache_init__DOT__in_rresp = VL_RAND_RESET_I(2);
+    vlSelf->Cache_init__DOT__out_rready = VL_RAND_RESET_I(1);
+    vlSelf->Cache_init__DOT__out_rvalid = VL_RAND_RESET_I(1);
+    vlSelf->Cache_init__DOT__out_rdata = VL_RAND_RESET_I(32);
+    vlSelf->Cache_init__DOT__out_rresp = VL_RAND_RESET_I(2);
+    for (int __Vi0 = 0; __Vi0 < 16; ++__Vi0) {
+        vlSelf->Cache_init__DOT__cache_data[__Vi0] = VL_RAND_RESET_Q(33);
+    }
+    for (int __Vi0 = 0; __Vi0 < 16; ++__Vi0) {
+        vlSelf->Cache_init__DOT__cache_tag[__Vi0] = VL_RAND_RESET_I(26);
+    }
+    vlSelf->Cache_init__DOT__data = VL_RAND_RESET_I(32);
+    vlSelf->Cache_init__DOT__index = VL_RAND_RESET_I(4);
+    vlSelf->Cache_init__DOT__tag = VL_RAND_RESET_I(26);
+    vlSelf->Cache_init__DOT__cache_hit = VL_RAND_RESET_I(11);
+    vlSelf->Cache_init__DOT__state = VL_RAND_RESET_I(4);
+    vlSelf->Cache_init__DOT__addr = VL_RAND_RESET_I(32);
+    vlSelf->Cache_init__DOT__i = VL_RAND_RESET_I(32);
     vlSelf->xbar_init__DOT__clk = VL_RAND_RESET_I(1);
     vlSelf->xbar_init__DOT__rst = VL_RAND_RESET_I(1);
     vlSelf->xbar_init__DOT__m1_awaddr = VL_RAND_RESET_I(32);
@@ -946,9 +1001,9 @@ VL_ATTR_COLD void VysyxSoCFull_ysyx_25080218___ctor_var_reset(VysyxSoCFull_ysyx_
     vlSelf->clint_init__DOT__mtime = VL_RAND_RESET_Q(64);
     vlSelf->__VdfgRegularize_h628f4167_0_0 = VL_RAND_RESET_I(32);
     vlSelf->__Vdly__pc = VL_RAND_RESET_I(32);
-    vlSelf->__Vdly__m0_arvalid = VL_RAND_RESET_I(1);
     vlSelf->__Vdly__m1_arvalid = VL_RAND_RESET_I(1);
     vlSelf->__Vdly__m1_awvalid = VL_RAND_RESET_I(1);
     vlSelf->__Vdly__m1_wvalid = VL_RAND_RESET_I(1);
+    vlSelf->__Vdly__m0_arvalid = VL_RAND_RESET_I(1);
     vlSelf->__Vdly__s1_rvalid = VL_RAND_RESET_I(1);
 }

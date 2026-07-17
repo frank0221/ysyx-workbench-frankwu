@@ -9,12 +9,18 @@
 // Parameter definitions for VysyxSoCFull_ysyxSoCFull
 constexpr CData/*0:0*/ VysyxSoCFull_ysyxSoCFull::psram__DOT__WORK;
 constexpr CData/*0:0*/ VysyxSoCFull_ysyxSoCFull::psram__DOT__IDLE;
-constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCFull::sdram__DOT__idle;
-constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCFull::sdram__DOT__active;
-constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCFull::sdram__DOT__read;
-constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCFull::sdram__DOT__write;
-constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCFull::sdram__DOT__read_latency;
-constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCFull::sdram__DOT__read_latency_1;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCFull::sdram__DOT__sdram0__DOT__idle;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCFull::sdram__DOT__sdram0__DOT__active;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCFull::sdram__DOT__sdram0__DOT__read;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCFull::sdram__DOT__sdram0__DOT__write;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCFull::sdram__DOT__sdram0__DOT__read_latency;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCFull::sdram__DOT__sdram0__DOT__read_latency_1;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCFull::sdram__DOT__sdram1__DOT__idle;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCFull::sdram__DOT__sdram1__DOT__active;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCFull::sdram__DOT__sdram1__DOT__read;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCFull::sdram__DOT__sdram1__DOT__write;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCFull::sdram__DOT__sdram1__DOT__read_latency;
+constexpr IData/*31:0*/ VysyxSoCFull_ysyxSoCFull::sdram__DOT__sdram1__DOT__read_latency_1;
 
 
 void VysyxSoCFull_ysyxSoCFull___ctor_var_reset(VysyxSoCFull_ysyxSoCFull* vlSelf);

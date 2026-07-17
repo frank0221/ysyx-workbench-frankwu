@@ -96,6 +96,7 @@ void read_ID(){
 
 void _trm_init() {
   uart_init();
+  // printf("hello\n");
   read_ID();
   int ret = main(mainargs);
   halt(ret);

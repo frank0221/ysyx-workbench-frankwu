@@ -14,6 +14,14 @@ VL_INLINE_OPT void VysyxSoCFull___024unit____Vdpiimwrap_IFU_stastic_TOP____024un
     IFU_stastic();
 }
 
+extern "C" void cache_amat_analysis();
+
+VL_INLINE_OPT void VysyxSoCFull___024unit____Vdpiimwrap_cache_amat_analysis_TOP____024unit() {
+    VL_DEBUG_IF(VL_DBG_MSGF("+        VysyxSoCFull___024unit____Vdpiimwrap_cache_amat_analysis_TOP____024unit\n"); );
+    // Body
+    cache_amat_analysis();
+}
+
 extern "C" void LSU_stastic();
 
 VL_INLINE_OPT void VysyxSoCFull___024unit____Vdpiimwrap_LSU_stastic_TOP____024unit() {
@@ -92,6 +100,14 @@ VL_INLINE_OPT void VysyxSoCFull___024unit____Vdpiimwrap_U_inst_analysis_TOP____0
     VL_DEBUG_IF(VL_DBG_MSGF("+        VysyxSoCFull___024unit____Vdpiimwrap_U_inst_analysis_TOP____024unit\n"); );
     // Body
     U_inst_analysis();
+}
+
+extern "C" void cache_total();
+
+VL_INLINE_OPT void VysyxSoCFull___024unit____Vdpiimwrap_cache_total_TOP____024unit() {
+    VL_DEBUG_IF(VL_DBG_MSGF("+        VysyxSoCFull___024unit____Vdpiimwrap_cache_total_TOP____024unit\n"); );
+    // Body
+    cache_total();
 }
 
 extern "C" void flash_read(int addr, int* data);
